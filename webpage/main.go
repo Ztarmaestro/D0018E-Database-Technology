@@ -224,6 +224,12 @@ func checkoutHandler(w http.ResponseWriter, r *http.Request)  {
 		t.Execute(w, nil)
 	}}
 
+func getCar(w http.ResponseWriter, r *http.Request)  {
+	fmt.Println("tetwetwet")
+	w.Write([]byte("test"))
+
+}
+
 func showroomHandler(w http.ResponseWriter, r *http.Request) {
 
   // you access the cached templates with the defined name, not the filename
@@ -236,6 +242,48 @@ func showroomHandler(w http.ResponseWriter, r *http.Request) {
     result := strings.Split(data, "/")
 
 		if result[2] == "ferrari" {
+
+
+
+
+
+
+
+
+
+
+
+		//TEST FÖR HÄMTA DESCRIPTION I DATABAS
+				// Create an sql.DB and check for errors
+/*   db, err = sql.Open("mysql", "martin:persson@/mydb")
+    if err != nil {
+        panic(err.Error())
+    }
+
+    // Test the connection to the database
+    err = db.Ping()
+    if err != nil {
+        panic(err.Error())
+    }
+
+	var ProductDescription string
+	err := db.QueryRow("SELECT ProductDescription FROM products WHERE idProducts=47").Scan(&ProductDescription)
+
+	log.Printf("Description:", ProductDescription)
+	if err == nil {
+		} else {
+	}
+	defer db.Close()
+*/
+
+
+
+
+
+
+
+
+			
 
 			pageTemplate := "static/templates/ferrari.html"
 
@@ -293,53 +341,7 @@ func showroom_nologinHandler(w http.ResponseWriter, r *http.Request) {
 		result := strings.Split(data, "/")
 
 	if result[2] == "ferrari" {
-
-
-
-
-
-
-
-
-
-
-
-		//TEST FÖR HÄMTA DESCRIPTION I DATABAS
-				// Create an sql.DB and check for errors
-    db, err = sql.Open("mysql", "martin:persson@/mydb")
-    if err != nil {
-        panic(err.Error())
-    }
-
-    // Test the connection to the database
-    err = db.Ping()
-    if err != nil {
-        panic(err.Error())
-    }
-
-	var ProductDescription string
-	err := db.QueryRow("SELECT ProductDescription FROM products WHERE idProducts=47").Scan(&ProductDescription)
-
-/*
-	test2 := &Product{Description}
-	ProductDescription = test2
-*/
-
-	log.Printf("Description:", ProductDescription)
-	if err == nil {
-		} else {
-	}
-	defer db.Close()
-
-
-
-
-
-
-
-
-
-			pageTemplate := "static/templates/ferrari.html"
+		pageTemplate := "static/templates/ferrari.html"
 
 			if t, err := template.ParseFiles(pagePath, pageTemplate); err != nil {
 				// Something gnarly happened.
@@ -417,5 +419,9 @@ func main() {
 	http.HandleFunc("/showroom/camaro", showroomHandler)
 	http.HandleFunc("/showroom_nologin/camaro", showroom_nologinHandler)
 
+
+	// GET FUNCTIONS
+	http.HandleFunc("/car/", getCar)	
+	
 	fmt.Println("Server running on", bindAddr)
 	log.Fatal(http.ListenAndServe(bindAddr, nil))}
