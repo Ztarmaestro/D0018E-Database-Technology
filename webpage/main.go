@@ -6,12 +6,134 @@ import (
 	"log"
 	"net/http"
 	"strings"
-
+	"database/sql"
+	_ "github.com/go-sql-driver/mysql"
+//	"golang.org/x/crypto/bcrypt"
 	// Third party packages
 	//"github.com/julienschmidt/httprouter"
 	//"github.com/gorilla/mux"
 	//"github.com/gorilla/sessions"
 )
+
+type Product struct {
+	Description string
+}
+
+var db *sql.DB
+var err error
+
+
+func registerHandler(res http.ResponseWriter, req *http.Request) {
+	log.Printf("registerHandler")
+
+	Email := req.FormValue("Email")
+	password := req.FormValue("password")
+
+	var user string
+
+	// Create an sql.DB and check for errors
+    db, err = sql.Open("mysql", "martin:persson@/mydb")
+    if err != nil {
+        panic(err.Error())
+    }
+
+    // Test the connection to the database
+    err = db.Ping()
+    if err != nil {
+        panic(err.Error())
+    }
+
+
+    err := db.QueryRow("SELECT Email FROM customers WHERE Email=?", Email).Scan(&user)
+  	log.Printf("email", Email)
+   	log.Printf("password", password)
+
+    switch {
+    case err == sql.ErrNoRows:
+    	//hashedPassword, err := bcrypt.GenerateFromPassword([]byte(password), bcrypt.DefaultCost)
+        if err == nil {
+			http.Error(res, "Server error, unable to create your account.", 500)
+            return
+        }
+        _, err = db.Exec("INSERT INTO customers(Email, password) VALUES(?, ?)", Email, password)
+        if err != nil {
+			http.Error(res, "Server error, unable to create your account.", 500)
+            return
+        }
+       http.Redirect(res, req, "/startpage", 301)
+       return
+    case err != nil:
+		http.Error(res, "Server error, unable to create your account.", 500)
+        return
+    default:
+    	http.Redirect(res, req, "/login", 301)
+    }
+    defer db.Close()
+
+
+}
+
+
+func authHandler(w http.ResponseWriter, r *http.Request)  {
+	log.Printf("authHandler")
+    // Grab the username/password from the submitted post form
+    Email := r.FormValue("Email")
+    password := r.FormValue("password")
+
+
+
+    // Grab from the database
+    var databaseUsername  string
+    var databasePassword  string
+    var Admin string
+
+
+    // Create an sql.DB and check for errors
+    db, err = sql.Open("mysql", "martin:persson@/mydb")
+    if err != nil {
+        panic(err.Error())
+    }
+
+    // Test the connection to the database
+    err = db.Ping()
+    if err != nil {
+        panic(err.Error())
+    }
+    // Search the database for the username provided
+    // If it exists grab the password for validation
+    err := db.QueryRow("SELECT Email, Password, Admin FROM customers WHERE Email=?", Email).Scan(&databaseUsername, &databasePassword, &Admin)
+	if err == nil {
+    		if (Email == databaseUsername && password == databasePassword){
+    			if (Admin == "1"){
+    				http.Redirect(w, r, "/adminpage", 301)
+    			} else {
+        		http.Redirect(w, r, "/startpage", 301)
+        		}
+        	} else{
+        			http.Redirect(w,r,"/login",301)
+        	}
+    } else{
+        		http.Redirect(w,r,"/login",301)
+
+    //	}
+   	}
+   	    // sql.DB should be long lived "defer" closes it once this function ends
+    defer db.Close()
+
+    
+  /*  // Validate the password if hased
+    err = bcrypt.CompareHashAndPassword([]byte(databasePassword), []byte(password))
+    // If wrong password redirect to the login
+    if err != nil {
+        http.Redirect(w, r, "/login", 301)
+        return
+    }
+
+    // If the login succeeded
+    w.Write([]byte("Hello " + databaseUsername))
+*/
+
+ }
 
 func indexHandler(w http.ResponseWriter, r *http.Request) {
 
@@ -45,11 +167,11 @@ func loggedinHandler(w http.ResponseWriter, r *http.Request) {
 		t.Execute(w, nil)
 	}}
 
-func loginHandler(w http.ResponseWriter, r *http.Request)  {
+func loginHandler(w http.ResponseWriter, r *http.Request) {
 
-	// you access the cached templates with the defined name, not the filename
+  // you access the cached templates with the defined name, not the filename
 
-	pagePath := "static/templates/login.html"
+  pagePath := "static/templates/login.html"
 
 	if t, err := template.ParseFiles(pagePath); err != nil {
 		// Something gnarly happened.
@@ -58,6 +180,7 @@ func loginHandler(w http.ResponseWriter, r *http.Request)  {
 		// return to client via t.Execute
 		t.Execute(w, nil)
 	}}
+
 
 func adminLoginHandler(w http.ResponseWriter, r *http.Request) {
 
@@ -113,6 +236,7 @@ func showroomHandler(w http.ResponseWriter, r *http.Request) {
     result := strings.Split(data, "/")
 
 		if result[2] == "ferrari" {
+
 			pageTemplate := "static/templates/ferrari.html"
 
 			if t, err := template.ParseFiles(pagePath, pageTemplate); err != nil {
@@ -169,6 +293,52 @@ func showroom_nologinHandler(w http.ResponseWriter, r *http.Request) {
 		result := strings.Split(data, "/")
 
 	if result[2] == "ferrari" {
+
+
+
+
+
+
+
+
+
+
+
+		//TEST FÖR HÄMTA DESCRIPTION I DATABAS
+				// Create an sql.DB and check for errors
+    db, err = sql.Open("mysql", "martin:persson@/mydb")
+    if err != nil {
+        panic(err.Error())
+    }
+
+    // Test the connection to the database
+    err = db.Ping()
+    if err != nil {
+        panic(err.Error())
+    }
+
+	var ProductDescription string
+	err := db.QueryRow("SELECT ProductDescription FROM products WHERE idProducts=47").Scan(&ProductDescription)
+
+/*
+	test2 := &Product{Description}
+	ProductDescription = test2
+*/
+
+	log.Printf("Description:", ProductDescription)
+	if err == nil {
+		} else {
+	}
+	defer db.Close()
+
+
+
+
+
+
+
+
+
 			pageTemplate := "static/templates/ferrari.html"
 
 			if t, err := template.ParseFiles(pagePath, pageTemplate); err != nil {
@@ -214,6 +384,7 @@ func showroom_nologinHandler(w http.ResponseWriter, r *http.Request) {
 	}}
 
 func main() {
+
 	// Instantiate a new router
 
 	http.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.Dir("./static"))))
@@ -230,19 +401,21 @@ func main() {
    	http.HandleFunc("/login", loginHandler)
    	http.HandleFunc("/admin_login", adminLoginHandler)
    	http.HandleFunc("/adminpage", adminPageHandler)
-		http.HandleFunc("/checkout", checkoutHandler)
+	http.HandleFunc("/checkout", checkoutHandler)
+	http.HandleFunc("/auth", authHandler)
+	http.HandleFunc("/register", registerHandler)
 
-		http.HandleFunc("/showroom/ferrari", showroomHandler)
+	http.HandleFunc("/showroom/ferrari", showroomHandler)
    	http.HandleFunc("/showroom_nologin/ferrari", showroom_nologinHandler)
 
-		http.HandleFunc("/showroom/mustang", showroomHandler)
-		http.HandleFunc("/showroom_nologin/mustang", showroom_nologinHandler)
+	http.HandleFunc("/showroom/mustang", showroomHandler)
+	http.HandleFunc("/showroom_nologin/mustang", showroom_nologinHandler)
 
-		http.HandleFunc("/showroom/charger", showroomHandler)
-		http.HandleFunc("/showroom_nologin/charger", showroom_nologinHandler)
+	http.HandleFunc("/showroom/charger", showroomHandler)
+	http.HandleFunc("/showroom_nologin/charger", showroom_nologinHandler)
 
-		http.HandleFunc("/showroom/camaro", showroomHandler)
-		http.HandleFunc("/showroom_nologin/camaro", showroom_nologinHandler)
+	http.HandleFunc("/showroom/camaro", showroomHandler)
+	http.HandleFunc("/showroom_nologin/camaro", showroom_nologinHandler)
 
 	fmt.Println("Server running on", bindAddr)
 	log.Fatal(http.ListenAndServe(bindAddr, nil))}
