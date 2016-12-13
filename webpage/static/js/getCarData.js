@@ -1,35 +1,4 @@
-function getData(carname){
 
-getJSON('https://79.136.28.205:8000/carname', function(data) {alert('Your public IP address is: ' + data.ip); }, function(status) {  alert('Something went wrong.');});
-
-console.log("hej")
-console.log(carnumber);
-// var mysql = require('mysql'); 
- var connection = mysql({
-
-  host     : 'localhost',
-  user     : 'martin',
-  password : 'persson',
-  database : 'mydb'
-}
-);
-
-connection.connect();
-
-var queryString = 'SELECT * FROM Products WHERE ProductName = carname';
-
-connection.query(queryString, function(err, rows, fields) {
-        console.log('Post Titles: ', rows[0].idProducts);
-        console.log('Post Titles: ', rows[0].ProductName);
-        console.log('Post Titles: ', rows[0].Price);
-        console.log('Post Titles: ', rows[0].ProductDescription);
-        console.log('Post Titles: ', rows[0].UnitsInStock);
-});
-
-connection.end();
-DisplayCarData(rows)
-
-}
 
 // Puts the data from the DB into the rigth place on page
 function DisplayCarData(data){
@@ -71,20 +40,24 @@ function DisplayCarData(data){
 }
 
 function getCar(type) {
+  
   var xhr = typeof XMLHttpRequest != 'undefined'
     ? new XMLHttpRequest()
     : new ActiveXObject('Microsoft.XMLHTTP');
-  xhr.open('get','localhost:8000/car/'+type, true);
+  xhr.open('get',"/car/"+type, true);
   xhr.onreadystatechange = function() {
     var status;
     var data;
+    var obj;
     // https://xhr.spec.whatwg.org/#dom-xmlhttprequest-readystate
     if (xhr.readyState == 4) { // `DONE`
       status = xhr.status;
       if (status == 200) {
         console.log(xhr.response)
-        data = JSON.parse(xhr.responseText);
-        
+        data = JSON.parse(xhr.response);
+        obj = JSON.parse(data)
+        console.log(obj)
+            
       } else {
         console.log("error")
       }
@@ -92,3 +65,19 @@ function getCar(type) {
   };
   xhr.send();
 }
+
+var pathArray = window.location.pathname.split( '/showroom_nologin/' );
+var pathArray_login = window.location.pathname.split( '/showroom/' );
+if (pathArray[1] == 'ferrari' || pathArray_login[1] == 'ferrari'){
+  getCar('ferrari');  
+}
+if (pathArray[1] == 'camaro'  || pathArray_login[1] == 'camaro'){
+  getCar("camaro");  
+}
+if (pathArray[1] == 'mustang' || pathArray_login[1] == 'mustang'){
+  getCar("mustang");  
+}
+if (pathArray[1] == 'charger' || pathArray_login[1] == 'charger'){
+  getCar("charger");  
+}
+

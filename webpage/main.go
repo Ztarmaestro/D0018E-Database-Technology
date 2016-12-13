@@ -224,9 +224,57 @@ func checkoutHandler(w http.ResponseWriter, r *http.Request)  {
 		t.Execute(w, nil)
 	}}
 
-func getCar(w http.ResponseWriter, r *http.Request)  {
-	fmt.Println("tetwetwet")
-	w.Write([]byte("test"))
+func getCar(w http.ResponseWriter, r *http.Request) string {
+	result := r.URL.RequestURI()
+	substring := strings.Split(result,"/")
+
+	   // Grab from the database
+    var idProducts  string
+    var ProductName  string
+    var Price string
+    var ProductDescription string
+    var UnitsInStock string
+    var ProductAvailable string
+
+
+    // Create an sql.DB and check for errors
+    db, err = sql.Open("mysql", "martin:persson@/mydb")
+    if err != nil {
+        panic(err.Error())
+    }
+
+    // Test the connection to the database
+    err = db.Ping()
+    if err != nil {
+        panic(err.Error())
+    }
+    // Search the database for the username provided
+    // If it exists grab the password for validation
+    err := db.QueryRow("SELECT idProducts, ProductName, Price, ProductDescription, UnitsInStock, ProductAvailable FROM products WHERE ProductName=?", substring[2]).Scan(&idProducts, &ProductName, &Price, &ProductDescription, &UnitsInStock, &ProductAvailable)
+	if err != nil {
+		} else {
+
+		}
+	defer db.Close()
+
+	var cardetail []string
+	cardetail = append(cardetail, "idProducts;"+idProducts)
+	cardetail = append(cardetail, "ProductName;"+ProductName) 
+	cardetail = append(cardetail, "Price;"+Price)
+	cardetail = append(cardetail, "ProductDescription;"+ProductDescription)
+	cardetail = append(cardetail, "UnitsInStock;"+UnitsInStock)
+	cardetail = append(cardetail, "ProductAvailable;"+ProductAvailable)
+
+
+
+	fmt.Println(substring[2])
+	fmt.Println("productname:", ProductName)
+	fmt.Println("----------------")
+	fmt.Println("err:", err)
+
+	fmt.Println(cardetail)
+	
+	return cardetail
 
 }
 
@@ -395,7 +443,8 @@ func main() {
 	//bindAddr := "130.240.170.56:8080"
 
 	//Address for testing server on LAN
-	bindAddr := "127.0.0.1:8000"
+	//bindAddr := "127.0.0.1:8000"
+	bindAddr := "130.240.111.12:8000"
 
 	//Handlers for differnt pages
     http.HandleFunc("/", indexHandler)
