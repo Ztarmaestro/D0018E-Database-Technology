@@ -8,7 +8,7 @@ import (
 	"strings"
 
 	// Third party packages
-//	"github.com/julienschmidt/httprouter"
+	//"github.com/julienschmidt/httprouter"
 	//"github.com/gorilla/mux"
 	//"github.com/gorilla/sessions"
 )
@@ -155,8 +155,7 @@ func showroomHandler(w http.ResponseWriter, r *http.Request) {
 				// return to client via t.Execute
 				t.Execute(w, nil)
 			}
-		}
-}
+		}}
 
 func showroom_nologinHandler(w http.ResponseWriter, r *http.Request) {
 
@@ -212,8 +211,7 @@ func showroom_nologinHandler(w http.ResponseWriter, r *http.Request) {
 				// return to client via t.Execute
 				t.Execute(w, nil)
 			}
-	}
-}
+	}}
 
 func main() {
 	// Instantiate a new router
@@ -247,5 +245,4 @@ func main() {
 		http.HandleFunc("/showroom_nologin/camaro", showroom_nologinHandler)
 
 	fmt.Println("Server running on", bindAddr)
-	log.Fatal(http.ListenAndServe(bindAddr, nil))
-}
+	log.Fatal(http.ListenAndServe(bindAddr, nil))}
