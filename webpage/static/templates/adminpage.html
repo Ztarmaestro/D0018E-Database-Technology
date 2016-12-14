@@ -10,17 +10,17 @@
     <meta name="author" content="">
 
     <title>Heroic Features - Start Bootstrap Template</title>
-    
+
 <!-- Bootstrap Core CSS -->
 <link href="static/templates/css/bootstrap.min.css" rel="stylesheet">
 
 <!-- Custom CSS -->
 <link href="static/templates/css/admin.css" rel="stylesheet">
 
-    
+
 </head>
 
-<body>
+<body onload="getAllData()">
 
 
 <!-- Header -->
@@ -46,10 +46,10 @@
 <div class="row">
     <div class="col-md-3">
       <!-- Left column -->
-      <a href="#"><strong><i class="glyphicon glyphicon-wrench"></i> Tools</strong></a>  
-      
+      <a href="#"><strong><i class="glyphicon glyphicon-wrench"></i> Tools</strong></a>
+
       <hr>
-      
+
       <ul class="list-unstyled">
         <li class="nav-header"> <a href="#" data-toggle="collapse" data-target="#userMenu">
           <h5>Settings <i class="glyphicon glyphicon-chevron-down"></i></h5>
@@ -65,23 +65,23 @@
       <hr>
     </div> <!-- /col-3 -->
     <div class="col-md-9">
-      	
-      <!-- column 2 -->	
+
+      <!-- column 2 -->
       <ul class="list-inline pull-right">
          <li><a href="#"><i class="glyphicon glyphicon-cog"></i></a></li>
          <li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="glyphicon glyphicon-comment"></i><span class="count">3</span></a><ul class="dropdown-menu" role="menu"><li><a href="#">1. Is there a way..</a></li><li><a href="#">2. Hello, admin. I would..</a></li><li><a href="#"><strong>All messages</strong></a></li></ul></li>
          <li><a href="#"><i class="glyphicon glyphicon-user"></i></a></li>
          <li><a title="Add Widget" data-toggle="modal" href="#addWidgetModal"><span class="glyphicon glyphicon-plus-sign"></span> Add Widget</a></li>
       </ul>
-      <a href="#"><strong><i class="glyphicon glyphicon-dashboard"></i> My Dashboard</strong></a>  
-      
+      <a href="#"><strong><i class="glyphicon glyphicon-dashboard"></i> My Dashboard</strong></a>
+
 		<div class="row">
-           
-            <!-- center left-->	
+
+            <!-- center left-->
          	<div class="col-md-6">
-			 
+
               <hr>
-              
+
               <div class="panel panel-default">
                 <table class="table table-striped">
                       <thead>
@@ -94,7 +94,7 @@
                       </tbody>
                	</table>
               </div>
-                
+
           	</div><!--/col-->
             <hr>
         	<div class="col-md-6">
@@ -107,7 +107,7 @@
                   Visit the Bootstrap Playground at <a href="http://bootply.com">Bootply</a> to tweak this layout or discover more useful code snippets.
                   </div>
               	</div>
-              
+
               	<div class="panel panel-default">
                 	<div class="panel-heading">
                       	<div class="panel-title">
@@ -118,28 +118,28 @@
                 	<div class="panel-body">
 
                       <form class="form form-vertical">
-                       
+
                         <div class="control-group">
                           <label>Name</label>
                           <div class="controls">
                            <input type="text" class="form-control" placeholder="Enter Name">
                           </div>
-                        </div>      
-                        
+                        </div>
+
                         <div class="control-group">
                           <label>Message</label>
                           <div class="controls">
                           	<textarea class="form-control"></textarea>
                           </div>
-                        </div> 
-                             
+                        </div>
+
                         <div class="control-group">
                           <label>Category</label>
                           <div class="controls">
                              <select class="form-control"><option>options</option></select>
                           </div>
-                        </div>    
-                        
+                        </div>
+
                         <div class="control-group">
                           	<label></label>
                         	<div class="controls">
@@ -147,19 +147,19 @@
                               Post
                             </button>
                         	</div>
-                        </div>   
-                        
+                        </div>
+
                       </form>
-                             
+
                   </div><!--/panel content-->
                 </div><!--/panel-->
-              
+
 			</div><!--/col-span-6-->
-     
+
       </div><!--/row-->
-      
+
       <hr>
-      
+
 
 </div>
 </div>
@@ -188,13 +188,13 @@
 
 <!-- jQuery -->
 <script src="static/js/jquery.js"></script>
-    
+
 <!-- Bootstrap Core JavaScript -->
 <script src="static/js/admin.js"></script>
-    
+
 <!-- Bootstrap Core JavaScript -->
-<script src="static/js/bootstrap.min.js"></script>      
-    
+<script src="static/js/bootstrap.min.js"></script>
+
 </body>
 
 </html>

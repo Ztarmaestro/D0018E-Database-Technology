@@ -17,24 +17,23 @@ import (
 )
 
 type Car struct {
-	idProducts	string `json=idProducts`
-	ProductName string `json=ProductDescription`
-	Price		string `json=Price`
-	ProductDescription string `json=ProductDescription`
-	UnitsInStock string `json=UnitsInStock`
-	ProductAvailable string `json=ProductAvailable`
+	idProducts					string `json=idProducts`
+	ProductName 				string `json=ProductDescription`
+	Price								string `json=Price`
+	ProductDescription 	string `json=ProductDescription`
+	UnitsInStock 				string `json=UnitsInStock`
+	ProductAvailable 		string `json=ProductAvailable`
 }
 
 type Cart struct {
-	idProducts	string `json=idProducts`
-	idCustomers string `json=idCustomers`
-	Quantity string `json=Quantity`
-	TotalPrice		string `json=TotalPrice`
+	idProducts					string `json=idProducts`
+	idCustomers 				string `json=idCustomers`
+	Quantity 						string `json=Quantity`
+	TotalPrice					string `json=TotalPrice`
 }
 
 var db *sql.DB
 var err error
-
 
 func registerHandler(res http.ResponseWriter, req *http.Request) {
 	log.Printf("registerHandler")
@@ -55,7 +54,7 @@ func registerHandler(res http.ResponseWriter, req *http.Request) {
     err = db.Ping()
     if err != nil {
         panic(err.Error())
-    }
+  }
 
 
     err := db.QueryRow("SELECT Email FROM Customers WHERE Email=?", Email).Scan(&user)
@@ -82,11 +81,7 @@ func registerHandler(res http.ResponseWriter, req *http.Request) {
     default:
     	http.Redirect(res, req, "/login", 301)
     }
-    defer db.Close()
-
-
-}
-
+    defer db.Close()}
 
 func authHandler(w http.ResponseWriter, r *http.Request)  {
 	log.Printf("authHandler")
@@ -94,13 +89,10 @@ func authHandler(w http.ResponseWriter, r *http.Request)  {
     Email := r.FormValue("Email")
     password := r.FormValue("password")
 
-
-
     // Grab from the database
     var databaseUsername  string
     var databasePassword  string
     var Admin string
-
 
     // Create an sql.DB and check for errors
 		db, err = sql.Open("mysql", "pi:exoticpi@/mydb")
@@ -128,24 +120,9 @@ func authHandler(w http.ResponseWriter, r *http.Request)  {
         	}
     } else{
         		http.Redirect(w,r,"/login",301)
-
-    //	}
    	}
-   	    // sql.DB should be long lived "defer" closes it once this function ends
+   	// sql.DB should be long lived "defer" closes it once this function ends
     defer db.Close()
-
-
-  /*  // Validate the password if hased
-    err = bcrypt.CompareHashAndPassword([]byte(databasePassword), []byte(password))
-    // If wrong password redirect to the login
-    if err != nil {
-        http.Redirect(w, r, "/login", 301)
-        return
-    }
-
-    // If the login succeeded
-    w.Write([]byte("Hello " + databaseUsername))
-*/
 
  }
 
@@ -195,7 +172,6 @@ func loginHandler(w http.ResponseWriter, r *http.Request) {
 		t.Execute(w, nil)
 	}}
 
-
 func adminLoginHandler(w http.ResponseWriter, r *http.Request) {
 
 	// you access the cached templates with the defined name, not the filename
@@ -240,6 +216,7 @@ func checkoutHandler(w http.ResponseWriter, r *http.Request)  {
 
 func getCar(w http.ResponseWriter, r *http.Request) {
 	result := r.URL.RequestURI()
+	//substring[2] contains the car name
 	substring := strings.Split(result,"/")
 
 	   // Grab from the database
@@ -275,8 +252,210 @@ func getCar(w http.ResponseWriter, r *http.Request) {
 	car.UnitsInStock = UnitsInStock
 	car.ProductAvailable = ProductAvailable
 	cardetails,_ := json.Marshal(car)
-	w.Write(cardetails)
-}
+	w.Write(cardetails)}
+
+func getCart(w http.ResponseWriter, r *http.Request) {
+	result := r.URL.RequestURI()
+	//substring[2] contains the customerId
+	substring := strings.Split(result,"/")
+
+	   // Grab from the database
+    var idCustomers, idProducts, Quantity, TotalPrice string
+
+    // Create an sql.DB and check for errors
+		//db, err = sql.Open("mysql", "martin:persson@/mydb")
+		db, err = sql.Open("mysql", "pi:exoticpi@/mydb")
+    if err != nil {
+        panic(err.Error())
+    }
+
+    // Test the connection to the database
+    err = db.Ping()
+    if err != nil {
+        panic(err.Error())
+    }
+    // Search the database for the username provided
+    // If it exists grab the password for validation
+		// Need to grab every row with this id and add it to the struct in some way
+    err := db.QueryRow("SELECT idProducts, Quantity, TotalPrice FROM Cart WHERE idCustomers=?", substring[2]).Scan(&idProducts, &Quantity, &Price)
+	if err != nil {
+		} else {
+
+		}
+
+	defer db.Close()
+
+	cart := &Cart{}
+	cart.idProducts = idProducts
+	cart.Quantity = Quantity
+	cart.TotalPrice = TotalPrice
+	cartdetails,_ := json.Marshal(cart)
+	w.Write(cartdetails)}
+
+func addToCart(w http.ResponseWriter, r *http.Request) {
+	result := r.URL.RequestURI()
+	//substring[3] contains the customerId
+	//substring[2] contains the ProductName
+	substring := strings.Split(result,"/")
+
+	   // Grab from the database
+    var idCustomers, idProducts, Quantity, TotalPrice string
+
+		// Grab from the database
+	  var idProducts, Price, UnitsInStock, ProductAvailable string
+
+    // Create an sql.DB and check for errors
+		//db, err = sql.Open("mysql", "martin:persson@/mydb")
+		db, err = sql.Open("mysql", "pi:exoticpi@/mydb")
+    if err != nil {
+        panic(err.Error())
+    }
+
+    // Test the connection to the database
+    err = db.Ping()
+    if err != nil {
+        panic(err.Error())
+    }
+    // Search the database for the ProductName provided
+    // If it exists grab the password for validation
+    err := db.QueryRow("SELECT idProducts, Price, UnitsInStock, ProductAvailable FROM Products WHERE ProductName=?", substring[2]).Scan(&idProducts, &Price, &UnitsInStock, &ProductAvailable)
+		err := db.QueryRow("INSERT INTO mydb.Cart (idCustomers, idProducts, Quantity, TotalPrice") VALUES (substring[3], idProducts, '1', Price)
+
+	if err != nil {
+		} else {
+
+		}
+
+	defer db.Close()}
+
+/*func sendOrder(w http.ResponseWriter, r *http.Request)  {
+		log.Printf("sendHandler")
+		result := r.URL.RequestURI()
+		//substring[2] contains the customerId
+		substring := strings.Split(result,"/")
+
+		// Take the cart for this customer and create an order.
+		//	 Also remove what was bought from the DB and clear the cart
+
+	    // Grab the address, card, etc from the submitted post form
+	    Email := r.FormValue("Email")
+
+	    // Grab from the database
+	    var databaseUsername  string
+
+	    // Create an sql.DB and check for errors
+			db, err = sql.Open("mysql", "pi:exoticpi@/mydb")
+	    if err != nil {
+	        panic(err.Error())
+	    }
+
+	    // Test the connection to the database
+	    err = db.Ping()
+	    if err != nil {
+	        panic(err.Error())
+	    }
+	    // Search the database for the username provided
+	    // If it exists grab the password for validation
+	    err := db.QueryRow("SELECT Email, Password, Admin FROM Customers WHERE Email=?", Email).Scan(&databaseUsername, &databasePassword, &Admin)
+		if err == nil {
+	    		if (Email == databaseUsername && password == databasePassword){
+	    			if (Admin == "1"){
+	    				http.Redirect(w, r, "/adminpage", 301)
+	    			} else {
+	        		http.Redirect(w, r, "/startpage", 301)
+	        		}
+	        	} else{
+	        			http.Redirect(w,r,"/login",301)
+	        	}
+	    } else{
+	        		http.Redirect(w,r,"/login",301)
+	   	}
+	   	// sql.DB should be long lived "defer" closes it once this function ends
+	    defer db.Close()}
+*/
+/*func getAll(w http.ResponseWriter, r *http.Request) {
+
+				   // Grab everything from the database
+
+					// Orders
+					// Customers
+			    var idProducts, ProductName, Price, ProductDescription, UnitsInStock, ProductAvailable string
+
+			    // Create an sql.DB and check for errors
+					//db, err = sql.Open("mysql", "martin:persson@/mydb")
+					db, err = sql.Open("mysql", "pi:exoticpi@/mydb")
+			    if err != nil {
+			        panic(err.Error())
+			    }
+
+			    // Test the connection to the database
+			    err = db.Ping()
+			    if err != nil {
+			        panic(err.Error())
+			    }
+			    // Search the database for the username provided
+			    // If it exists grab the password for validation
+					// SELECT * FROM mydb
+			    err := db.QueryRow("SELECT idProducts, ProductName, Price, ProductDescription, UnitsInStock, ProductAvailable FROM Products WHERE ProductName=?", substring[2]).Scan(&idProducts, &ProductName, &Price, &ProductDescription, &UnitsInStock, &ProductAvailable)
+				if err != nil {
+					} else {
+
+					}
+
+				defer db.Close()
+
+				car := &Car{}
+				car.idProducts = idProducts
+				car.ProductName = ProductName
+				car.Price = Price
+				car.ProductDescription = ProductDescription
+				car.UnitsInStock = UnitsInStock
+				car.ProductAvailable = ProductAvailable
+				cardetails,_ := json.Marshal(car)
+				w.Write(cardetails)}
+*/
+/*func updateDB(w http.ResponseWriter, r *http.Request) {
+
+	log.Printf("authHandler")
+		// Grab the info from the submitted post form
+		Email := r.FormValue("Description")
+
+
+		// Grab from the database
+					result := r.URL.RequestURI()
+					//substring[2] contains the updatetype (delete,add,update)
+					substring := strings.Split(result,"/")
+
+					   // Grab from the database
+				    var idCustomers, idProducts, Quantity, TotalPrice string
+
+						// Grab from the database
+					  var idProducts, Price, UnitsInStock, ProductAvailable string
+
+				    // Create an sql.DB and check for errors
+						//db, err = sql.Open("mysql", "martin:persson@/mydb")
+						db, err = sql.Open("mysql", "pi:exoticpi@/mydb")
+				    if err != nil {
+				        panic(err.Error())
+				    }
+
+				    // Test the connection to the database
+				    err = db.Ping()
+				    if err != nil {
+				        panic(err.Error())
+				    }
+				    // Search the database for the ProductName provided
+				    // If it exists grab the password for validation
+				    err := db.QueryRow("SELECT idProducts, Price, UnitsInStock, ProductAvailable FROM Products WHERE ProductName=?", substring[2]).Scan(&idProducts, &Price, &UnitsInStock, &ProductAvailable)
+						err := db.QueryRow("INSERT INTO mydb.Cart (idCustomers, idProducts, Quantity, TotalPrice") VALUES (substring[3], idProducts, '1', Price)
+
+					if err != nil {
+						} else {
+
+						}
+
+					defer db.Close()}
+*/
 
 func showroomHandler(w http.ResponseWriter, r *http.Request) {
 
@@ -290,48 +469,6 @@ func showroomHandler(w http.ResponseWriter, r *http.Request) {
     result := strings.Split(data, "/")
 
 		if result[2] == "ferrari" {
-
-
-
-
-
-
-
-
-
-
-
-		//TEST FÖR HÄMTA DESCRIPTION I DATABAS
-				// Create an sql.DB and check for errors
-/*   db, err = sql.Open("mysql", "martin:persson@/mydb")
-    if err != nil {
-        panic(err.Error())
-    }
-
-    // Test the connection to the database
-    err = db.Ping()
-    if err != nil {
-        panic(err.Error())
-    }
-
-	var ProductDescription string
-	err := db.QueryRow("SELECT ProductDescription FROM products WHERE idProducts=47").Scan(&ProductDescription)
-
-	log.Printf("Description:", ProductDescription)
-	if err == nil {
-		} else {
-	}
-	defer db.Close()
-*/
-
-
-
-
-
-
-
-
-
 
 			pageTemplate := "static/templates/ferrari.html"
 
@@ -449,17 +586,17 @@ func main() {
 	//bindAddr := "130.240.110.93:8000"
 
 	//Handlers for differnt pages
-    http.HandleFunc("/", indexHandler)
-    http.HandleFunc("/startpage", loggedinHandler)
-   	http.HandleFunc("/login", loginHandler)
-   	http.HandleFunc("/admin_login", adminLoginHandler)
-   	http.HandleFunc("/adminpage", adminPageHandler)
+  http.HandleFunc("/", indexHandler)
+  http.HandleFunc("/startpage", loggedinHandler)
+  http.HandleFunc("/login", loginHandler)
+  http.HandleFunc("/admin_login", adminLoginHandler)
+  http.HandleFunc("/adminpage", adminPageHandler)
 	http.HandleFunc("/checkout", checkoutHandler)
 	http.HandleFunc("/auth", authHandler)
 	http.HandleFunc("/register", registerHandler)
 
 	http.HandleFunc("/showroom/ferrari", showroomHandler)
-   	http.HandleFunc("/showroom_nologin/ferrari", showroom_nologinHandler)
+  http.HandleFunc("/showroom_nologin/ferrari", showroom_nologinHandler)
 
 	http.HandleFunc("/showroom/mustang", showroomHandler)
 	http.HandleFunc("/showroom_nologin/mustang", showroom_nologinHandler)
@@ -470,9 +607,17 @@ func main() {
 	http.HandleFunc("/showroom/camaro", showroomHandler)
 	http.HandleFunc("/showroom_nologin/camaro", showroom_nologinHandler)
 
-
 	// GET FUNCTIONS
 	http.HandleFunc("/car/", getCar)
+	http.HandleFunc("/cart/", getCart)
+	http.HandleFunc("/addToCart/", addToCart)
+
+	/* sendOrder, clean up everything
+	http.HandleFunc("/done/", sendOrder)*/
+
+	/* For Admin
+	http.HandleFunc("/everything", getAll)
+	http.HandleFunc("/update/", updateDB)*/
 
 	fmt.Println("Server running on", bindAddr)
 	log.Fatal(http.ListenAndServe(bindAddr, nil))}

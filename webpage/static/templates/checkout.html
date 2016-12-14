@@ -10,16 +10,16 @@
     <meta name="author" content="">
 
     <title>Heroic Features - Start Bootstrap Template</title>
-    
+
 <!-- Bootstrap Core CSS -->
 <link href="static/templates/css/bootstrap.min.css" rel="stylesheet">
 
 <!-- Custom CSS -->
 <link href="static/templates/css/login.css" rel="stylesheet">
-    
+
 </head>
 
-<body>
+<body onload="getUserCart()">
 
 <div class='container'>
     <div class='row' style='padding-top:25px; padding-bottom:25px;'>
@@ -30,7 +30,7 @@
                         Review Your Order & Complete Checkout
                     </h2>
                     <hr/>
-                    <a href="index.html" class="btn btn-info" style="width: 100%;">Add More Products & Services</a>
+                    <a href="/" class="btn btn-info" style="width: 100%;">Add More Products & Services</a>
                     <hr/>
                     <div class="shopping_cart">
                         <form class="form-horizontal" role="form" action="" method="post" id="payment-form">
@@ -50,21 +50,20 @@
                                                         <tr>
                                                             <td colspan="2">
                                                                 <a class="btn btn-warning btn-sm pull-right"
-                                                                   href="http://www.startajobboard.com/"
-                                                                   title="Remove Item">X</a>
+                                                                   href="#"
+                                                                   title="Remove All Items">X</a>
                                                                 <b>
-                                                                    Premium Posting</b></td>
+                                                                    Your products</b></td>
                                                         </tr>
                                                         <tr>
-                                                            <td>
-                                                                <ul>
-                                                                    <li>One Job Posting Credit</li>
-                                                                    <li>Job Distribution*</li>
-                                                                    <li>Social Media Distribution</li>
-                                                                </ul>
+                                                            <td id="Product_Id">
+                                                                <b>Ferrari</b>
                                                             </td>
-                                                            <td>
-                                                                <b>$147.00</b>
+                                                            <td id="Quantity">
+                                                                <b>1 x </b>
+                                                            </td>
+                                                            <td id="TotalPrice">
+                                                                <b>$200000.00</b>
                                                             </td>
                                                         </tr>
                                                     </table>
@@ -72,13 +71,13 @@
                                                 <div class="col-md-3">
                                                     <div style="text-align: center;">
                                                         <h3>Order Total</h3>
-                                                        <h3><span style="color:green;">$147.00</span></h3>
+                                                        <h3 id="Totaltotalprice"><span style="color:green;"></span></h3>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
-                                    
+
                                 </div>
                             </div>
                             <div class="panel panel-default">
@@ -241,7 +240,7 @@
                                                                             data-parent="#accordion"
                                                                             href="#collapseThree"
                                                                             class=" btn   btn-success" id="payInfo"
-                                                                            style="width:100%;display: none;" onclick="$(this).fadeOut();  
+                                                                            style="width:100%;display: none;" onclick="$(this).fadeOut();
                    document.getElementById('collapseThree').scrollIntoView()">Enter Payment Information »</a>
                                         </div>
                                     </h4>
@@ -259,7 +258,7 @@
                                     <div class="panel-body">
                                         <span class='payment-errors'></span>
                                             <legend>What method would you like to pay with today?</legend>
-                                            
+
                                         <div class="row">
                                             <div class="col-md-12 col-md-offset-0">
                                                 <div class="panel panel-login">
@@ -278,28 +277,28 @@
                                                         <div class="row">
                                                             <div class="col-lg-12">
                                                                 <form></form>
-                                                                
-                                                                
+
+
                                                                 <form id="login-form" action="#" method="post" role="form" style="display: block;">
-                                                                    
-                                                                    
-                                                                    
+
+
+
                                                                     <div class="form-group">
                                                                         <input type="text" name="username" id="username" tabindex="1" class="form-control" placeholder="Username" value="">
                                                                     </div>
                                                                     <div class="form-group">
                                                                         <input type="password" name="password" id="password" tabindex="2" class="form-control" placeholder="Password">
                                                                     </div>
-                             
+
                                                                     <div class="form-group">
                                                                         <div class="row">
                                                                             <div class="col-sm-6 col-sm-offset-3">
-                                                                                <input type="submit" name="login-submit" id="login-submit" tabindex="4" class="form-control btn btn-success" value="Place order">
+                                                                                <input onclick="sendOrder" type="submit" name="login-submit" id="login-submit" tabindex="4" class="form-control btn btn-success" value="Place order">
                                                                             </div>
                                                                         </div>
                                                                     </div>
                                                                 </form>
-                                                                
+
                                         <form id="register-form" action="#" method="post" role="form" style="display: none;">
                                             <div class="form-group">
                                                 <hr>
@@ -316,12 +315,12 @@
                                                 <div class="col-sm-9">
                                                     <input type="text" class="form-control" stripe-data="number"
                                                            id="card-number" placeholder="Debit/Credit Card Number">
-                                                    
+
                                                     <br/>
-                                                    
+
                                                 </div>
                                                 <div class="form-group">
-                                                    
+
                                                     <label class="col-sm-3 control-label" for="expiry-month">Expiration
                                                         Date</label>
                                                     <div class="col-sm-9">
@@ -374,7 +373,7 @@
                                                 <div class="form-group">
                                                     <div class="row">
                                                         <div class="col-sm-6 col-sm-offset-3">
-                                                            <input type="submit" name="pay-submit" id="pay-submit" tabindex="4" class="form-control btn btn-success" value="Pay">
+                                                            <input onclick="sendOrder" type="submit" name="pay-submit" id="pay-submit" tabindex="4" class="form-control btn btn-success" value="Pay">
                                                         </div>
                                                     </div>
                                                 </div>
@@ -389,9 +388,9 @@
                             </div>
                         </div>
                     </div>
-                </div>                    
+                </div>
 
-                                                                                                       
+
                                         <div style="text-align: left;"><br/>
                                             By submiting this order you are agreeing to our <a href="/legal/billing/">universal
                                                 billing agreement</a>, and <a href="/legal/terms/">terms of service</a>.
@@ -404,12 +403,13 @@
 
     <!-- jQuery -->
     <script src="static/js/jquery.js"></script>
-    
+
     <!-- Bootstrap Core JavaScript -->
     <script src="static/js/login.js"></script>
-    
+
     <!-- Bootstrap Core JavaScript -->
     <script src="static/js/bootstrap.min.js"></script>
-                                
+    <script src="static/js/getCartData.js"></script>
+
         </body>
     </html>
