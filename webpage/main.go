@@ -25,6 +25,13 @@ type Car struct {
 	ProductAvailable string `json=ProductAvailable`
 }
 
+type Cart struct {
+	idProducts	string `json=idProducts`
+	idCustomers string `json=idCustomers`
+	Quantity string `json=Quantity`
+	TotalPrice		string `json=TotalPrice`
+}
+
 var db *sql.DB
 var err error
 
@@ -38,7 +45,8 @@ func registerHandler(res http.ResponseWriter, req *http.Request) {
 	var user string
 
 	// Create an sql.DB and check for errors
-    db, err = sql.Open("mysql", "martin:persson@/mydb")
+    //db, err = sql.Open("mysql", "martin:persson@/mydb")
+		db, err = sql.Open("mysql", "root:exoticpi@/mydb")
     if err != nil {
         panic(err.Error())
     }
@@ -95,7 +103,8 @@ func authHandler(w http.ResponseWriter, r *http.Request)  {
 
 
     // Create an sql.DB and check for errors
-    db, err = sql.Open("mysql", "martin:persson@/mydb")
+		//db, err = sql.Open("mysql", "martin:persson@/mydb")
+		db, err = sql.Open("mysql", "root:exoticpi@/mydb")
     if err != nil {
         panic(err.Error())
     }
@@ -126,7 +135,7 @@ func authHandler(w http.ResponseWriter, r *http.Request)  {
    	    // sql.DB should be long lived "defer" closes it once this function ends
     defer db.Close()
 
-    
+
   /*  // Validate the password if hased
     err = bcrypt.CompareHashAndPassword([]byte(databasePassword), []byte(password))
     // If wrong password redirect to the login
@@ -238,7 +247,8 @@ func getCar(w http.ResponseWriter, r *http.Request) {
     var idProducts, ProductName, Price, ProductDescription, UnitsInStock, ProductAvailable string
 
     // Create an sql.DB and check for errors
-    db, err = sql.Open("mysql", "martin:persson@/mydb")
+		//db, err = sql.Open("mysql", "martin:persson@/mydb")
+		db, err = sql.Open("mysql", "root:exoticpi@/mydb")
     if err != nil {
         panic(err.Error())
     }
@@ -257,7 +267,7 @@ func getCar(w http.ResponseWriter, r *http.Request) {
 		}
 
 	defer db.Close()
-	
+
 	car := &Car{}
 	car.idProducts = idProducts
 	car.ProductName = ProductName
@@ -322,7 +332,7 @@ func showroomHandler(w http.ResponseWriter, r *http.Request) {
 
 
 
-			
+
 
 			pageTemplate := "static/templates/ferrari.html"
 
@@ -431,11 +441,13 @@ func main() {
 	http.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.Dir("./static"))))
 
 	//Real address for server, change back before pushing to git
-	//bindAddr := "130.240.170.56:8080"
+	bindAddr := "192.168.1.242:8080"
 
 	//Address for testing server on LAN
 	//bindAddr := "127.0.0.1:8000"
-	bindAddr := "130.240.110.93:8000"
+
+  //Mox Address
+	//bindAddr := "130.240.110.93:8000"
 
 	//Handlers for differnt pages
     http.HandleFunc("/", indexHandler)
@@ -461,7 +473,7 @@ func main() {
 
 
 	// GET FUNCTIONS
-	http.HandleFunc("/car/", getCar)	
-	
+	http.HandleFunc("/car/", getCar)
+
 	fmt.Println("Server running on", bindAddr)
 	log.Fatal(http.ListenAndServe(bindAddr, nil))}
