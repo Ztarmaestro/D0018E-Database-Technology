@@ -257,17 +257,6 @@ func getCar(w http.ResponseWriter, r *http.Request) {
 		}
 
 	defer db.Close()
-
-	
-
-/*	var cardetail []string
-	cardetail = append(cardetail, "idProducts;"+idProducts)
-	cardetail = append(cardetail, "ProductName;"+ProductName) 
-	cardetail = append(cardetail, "Price;"+Price)
-	cardetail = append(cardetail, "ProductDescription;"+ProductDescription)
-	cardetail = append(cardetail, "UnitsInStock;"+UnitsInStock)
-	cardetail = append(cardetail, "ProductAvailable;"+ProductAvailable)
-*/
 	
 	car := &Car{}
 	car.idProducts = idProducts
