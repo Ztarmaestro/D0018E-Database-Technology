@@ -27,7 +27,7 @@ function getCart(type) {
 }
 
 // Puts the data from the DB into the rigth place on page
-function DisplayCartData(data){
+function DisplayCartData(data) {
 
   var b = document.createElement("b");
 
@@ -52,7 +52,7 @@ function DisplayCartData(data){
   }
 }
 
-getUserCart(){
+function getUserCart() {
 
   //Check if session exist and take the customerId and send with it
   //Else alert and do nothing
@@ -66,7 +66,7 @@ getUserCart(){
 
 }
 
-sendOrder(){
+function sendOrder() {
 
   //Check if session exist and take the customerId and send with it
   //Else alert and do nothing

@@ -316,7 +316,7 @@ func addToCart(w http.ResponseWriter, r *http.Request) {
     // Search the database for the ProductName provided
     // Insert to cart
     err := db.QueryRow("SELECT idProducts, Price, UnitsInStock, ProductAvailable FROM Products WHERE ProductName=?", substring[2]).Scan(&idProducts, &Price, &UnitsInStock, &ProductAvailable)
-		_, err := db.Exec("INSERT INTO Cart(idCustomers, idProducts, Quantity, TotalPrice) VALUES(?, ?, ?, ?)", substring[2], idCustomers, idProducts, '1', Price)
+		_, err = db.Exec("INSERT INTO Cart(idCustomers, idProducts, Quantity, TotalPrice) VALUES(?, ?, ?, ?)", substring[2], idCustomers, idProducts, '1', Price)
 
 	if err != nil {
 		} else {
