@@ -58,7 +58,7 @@ func registerHandler(res http.ResponseWriter, req *http.Request) {
     }
 
 
-    err := db.QueryRow("SELECT Email FROM customers WHERE Email=?", Email).Scan(&user)
+    err := db.QueryRow("SELECT Email FROM Customers WHERE Email=?", Email).Scan(&user)
   	log.Printf("email", Email)
    	log.Printf("password", password)
 
@@ -69,7 +69,7 @@ func registerHandler(res http.ResponseWriter, req *http.Request) {
 			http.Error(res, "Server error, unable to create your account.", 500)
             return
         }
-        _, err = db.Exec("INSERT INTO customers(Email, password) VALUES(?, ?)", Email, password)
+        _, err = db.Exec("INSERT INTO Customers(Email, password) VALUES(?, ?)", Email, password)
         if err != nil {
 			http.Error(res, "Server error, unable to create your account.", 500)
             return
@@ -115,7 +115,7 @@ func authHandler(w http.ResponseWriter, r *http.Request)  {
     }
     // Search the database for the username provided
     // If it exists grab the password for validation
-    err := db.QueryRow("SELECT Email, Password, Admin FROM customers WHERE Email=?", Email).Scan(&databaseUsername, &databasePassword, &Admin)
+    err := db.QueryRow("SELECT Email, Password, Admin FROM Customers WHERE Email=?", Email).Scan(&databaseUsername, &databasePassword, &Admin)
 	if err == nil {
     		if (Email == databaseUsername && password == databasePassword){
     			if (Admin == "1"){
@@ -259,7 +259,7 @@ func getCar(w http.ResponseWriter, r *http.Request) {
     }
     // Search the database for the username provided
     // If it exists grab the password for validation
-    err := db.QueryRow("SELECT idProducts, ProductName, Price, ProductDescription, UnitsInStock, ProductAvailable FROM products WHERE ProductName=?", substring[2]).Scan(&idProducts, &ProductName, &Price, &ProductDescription, &UnitsInStock, &ProductAvailable)
+    err := db.QueryRow("SELECT idProducts, ProductName, Price, ProductDescription, UnitsInStock, ProductAvailable FROM Products WHERE ProductName=?", substring[2]).Scan(&idProducts, &ProductName, &Price, &ProductDescription, &UnitsInStock, &ProductAvailable)
 	if err != nil {
 		} else {
 
