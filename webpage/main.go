@@ -46,7 +46,7 @@ func registerHandler(res http.ResponseWriter, req *http.Request) {
 
 	// Create an sql.DB and check for errors
     //db, err = sql.Open("mysql", "martin:persson@/mydb")
-		db, err = sql.Open("mysql", "root:exoticpi@/mydb")
+		db, err = sql.Open("mysql", "pi:exoticpi@/mydb")
     if err != nil {
         panic(err.Error())
     }
@@ -103,8 +103,7 @@ func authHandler(w http.ResponseWriter, r *http.Request)  {
 
 
     // Create an sql.DB and check for errors
-		//db, err = sql.Open("mysql", "martin:persson@/mydb")
-		db, err = sql.Open("mysql", "root:exoticpi@/mydb")
+		db, err = sql.Open("mysql", "pi:exoticpi@/mydb")
     if err != nil {
         panic(err.Error())
     }
@@ -248,7 +247,7 @@ func getCar(w http.ResponseWriter, r *http.Request) {
 
     // Create an sql.DB and check for errors
 		//db, err = sql.Open("mysql", "martin:persson@/mydb")
-		db, err = sql.Open("mysql", "root:exoticpi@/mydb")
+		db, err = sql.Open("mysql", "pi:exoticpi@/mydb")
     if err != nil {
         panic(err.Error())
     }
