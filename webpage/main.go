@@ -8,6 +8,7 @@ import (
 	"strings"
 	"database/sql"
 	_ "github.com/go-sql-driver/mysql"
+	"encoding/json"
 //	"golang.org/x/crypto/bcrypt"
 	// Third party packages
 	//"github.com/julienschmidt/httprouter"
@@ -15,8 +16,13 @@ import (
 	//"github.com/gorilla/sessions"
 )
 
-type Product struct {
-	Description string
+type Car struct {
+	idProducts	string `json=idProducts`
+	ProductName string `json=ProductDescription`
+	Price		string `json=Price`
+	ProductDescription string `json=ProductDescription`
+	UnitsInStock string `json=UnitsInStock`
+	ProductAvailable string `json=ProductAvailable`
 }
 
 var db *sql.DB
@@ -224,18 +230,12 @@ func checkoutHandler(w http.ResponseWriter, r *http.Request)  {
 		t.Execute(w, nil)
 	}}
 
-func getCar(w http.ResponseWriter, r *http.Request) string {
+func getCar(w http.ResponseWriter, r *http.Request) {
 	result := r.URL.RequestURI()
 	substring := strings.Split(result,"/")
 
 	   // Grab from the database
-    var idProducts  string
-    var ProductName  string
-    var Price string
-    var ProductDescription string
-    var UnitsInStock string
-    var ProductAvailable string
-
+    var idProducts, ProductName, Price, ProductDescription, UnitsInStock, ProductAvailable string
 
     // Create an sql.DB and check for errors
     db, err = sql.Open("mysql", "martin:persson@/mydb")
@@ -255,27 +255,29 @@ func getCar(w http.ResponseWriter, r *http.Request) string {
 		} else {
 
 		}
+
 	defer db.Close()
 
-	var cardetail []string
+	
+
+/*	var cardetail []string
 	cardetail = append(cardetail, "idProducts;"+idProducts)
 	cardetail = append(cardetail, "ProductName;"+ProductName) 
 	cardetail = append(cardetail, "Price;"+Price)
 	cardetail = append(cardetail, "ProductDescription;"+ProductDescription)
 	cardetail = append(cardetail, "UnitsInStock;"+UnitsInStock)
 	cardetail = append(cardetail, "ProductAvailable;"+ProductAvailable)
-
-
-
-	fmt.Println(substring[2])
-	fmt.Println("productname:", ProductName)
-	fmt.Println("----------------")
-	fmt.Println("err:", err)
-
-	fmt.Println(cardetail)
+*/
 	
-	return cardetail
-
+	car := &Car{}
+	car.idProducts = idProducts
+	car.ProductName = ProductName
+	car.Price = Price
+	car.ProductDescription = ProductDescription
+	car.UnitsInStock = UnitsInStock
+	car.ProductAvailable = ProductAvailable
+	cardetails,_ := json.Marshal(car)
+	w.Write(cardetails)
 }
 
 func showroomHandler(w http.ResponseWriter, r *http.Request) {
@@ -444,7 +446,7 @@ func main() {
 
 	//Address for testing server on LAN
 	//bindAddr := "127.0.0.1:8000"
-	bindAddr := "130.240.111.12:8000"
+	bindAddr := "130.240.110.93:8000"
 
 	//Handlers for differnt pages
     http.HandleFunc("/", indexHandler)

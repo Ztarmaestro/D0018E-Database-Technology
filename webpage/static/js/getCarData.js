@@ -8,16 +8,16 @@ function DisplayCarData(data){
   Description = document.getElementById('Description');
   UnitsInStock = document.getElementById('UnitsInStock');
 
-  if(data[0].ProductAvailable == 1){
+  if(data.ProductAvailable == 1){
 
     if(document.getElementById("Name") != null){
-        Product_name.innerHTML = data.Product_name;
+        Product_name.innerHTML = data.ProductName;
     }
     if(document.getElementById("Price") != null){
-        Price.innerHTML = data.Price;
+        Price.innerHTML = "$"+data.Price;
     }
     if(document.getElementById("Description") != null){
-        Description.innerHTML = data.Description;
+        Description.innerHTML = data.ProductDescription;
     }
     if(document.getElementById("UnitsInStock") != null){
         UnitsInStock.innerHTML = data.UnitsInStock;
@@ -25,13 +25,13 @@ function DisplayCarData(data){
   } else {
     
     if(document.getElementById("Name") != null){
-        Product_name.innerHTML = data.Product_name;
+        Product_name.innerHTML = data.ProductName;
     }
     if(document.getElementById("Price") != null){
         Price.innerHTML = "----";
     }
     if(document.getElementById("Description") != null){
-        Description.innerHTML = data.Description;
+        Description.innerHTML = data.ProductDescription;
     }
     if(document.getElementById("UnitsInStock") != null){
         UnitsInStock.innerHTML = "0";
@@ -53,10 +53,10 @@ function getCar(type) {
     if (xhr.readyState == 4) { // `DONE`
       status = xhr.status;
       if (status == 200) {
-        console.log(xhr.response)
         data = JSON.parse(xhr.response);
-        obj = JSON.parse(data)
-        console.log(obj)
+       // obj = JSON.parse(data)
+        console.log(data)
+        DisplayCarData(data)
             
       } else {
         console.log("error")
