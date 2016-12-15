@@ -336,7 +336,7 @@ func addToCart(w http.ResponseWriter, r *http.Request) {
 		log.Printf(substring[2])
 
 		   // Grab from the database
-	    var idCustomers, idProducts, Price, UnitsInStock, ProductAvailable string
+	    var idProducts, Price, UnitsInStock, ProductAvailable string
 
 	    // Create an sql.DB and check for errors
 			//db, err = sql.Open("mysql", "martin:persson@/mydb")
