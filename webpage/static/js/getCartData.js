@@ -29,11 +29,20 @@ function getCart(type) {
 // Puts the data from the DB into the rigth place on page
 function DisplayCartData(data) {
 
+  // get customerId from session and save to userId
+  //var userId = session.customerId
+
   var b = document.createElement("b");
+  var btn = document.createElement("BUTTON");
+  var t = document.createTextNode("Delete product");
+  btn.appendChild(t);
+  btn.href="/removeFromCart/"+data.ProductName /* +"/"+userId */
+  document.getElementById('TotalPrice').appendChild(btn);
 
 	Product_Id = document.getElementById('Product_Id').appendChild(b);
-	TotalPrice = document.getElementById('TotalPrice').appendChild(b);
 	Quantity = document.getElementById('Quantity').appendChild(b);
+  TotalPrice = document.getElementById('TotalPrice').appendChild(b);
+  Totaltotalprice = document.getElementById('Totaltotalprice').appendChild(b);
 
   //This is the total cost of all product. Need to calulate it somehow!!
   TotatlTotalPrice = document.getElementById('Totaltotalprice');
@@ -48,7 +57,8 @@ function DisplayCartData(data) {
       TotalPrice.innerHTML = "$"+data.TotalPrice;
   }
   if(document.getElementById("TotaltotalPrice") != null){
-      TotalPrice.innerHTML = "$"+data.TotalPrice;
+    // add all the prices together with Quantity
+      Totaltotalprice.innerHTML = "$"+data.TotalPrice;
   }
 }
 

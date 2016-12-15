@@ -292,7 +292,7 @@ func getCart(w http.ResponseWriter, r *http.Request) {
 	cartdetails,_ := json.Marshal(cart)
 	w.Write(cartdetails)}
 
-func addToCart(w http.ResponseWriter, r *http.Request) {
+func removeFromCart(w http.ResponseWriter, r *http.Request) {
 	result := r.URL.RequestURI()
 	//substring[3] contains the customerId
 	//substring[2] contains the ProductName
@@ -301,7 +301,7 @@ func addToCart(w http.ResponseWriter, r *http.Request) {
 	log.Printf(substring[2])
 
 	   // Grab from the database
-    var idCustomers, idProducts, Price, UnitsInStock, ProductAvailable string
+    //var idCustomers, idProducts, Price, UnitsInStock, ProductAvailable string
 
     // Create an sql.DB and check for errors
 		//db, err = sql.Open("mysql", "martin:persson@/mydb")
@@ -317,8 +317,8 @@ func addToCart(w http.ResponseWriter, r *http.Request) {
     }
     // Search the database for the ProductName provided
     // Insert to cart
-    err := db.QueryRow("SELECT idProducts, Price, UnitsInStock, ProductAvailable FROM Products WHERE ProductName=?", substring[2]).Scan(&idProducts, &Price, &UnitsInStock, &ProductAvailable)
-		_, err = db.Exec("INSERT INTO Cart(idCustomers, idProducts, Quantity, TotalPrice) VALUES(?, ?, ?, ?)", substring[3], idCustomers, idProducts, '1', Price)
+
+		_, err = db.Exec("DELETE FROM Cart WHERE idProducts=? AND ProductName=?", substring[3], substring[2])
 
 	if err != nil {
 		} else {
@@ -326,6 +326,42 @@ func addToCart(w http.ResponseWriter, r *http.Request) {
 		}
 
 	defer db.Close()}
+
+func addToCart(w http.ResponseWriter, r *http.Request) {
+		result := r.URL.RequestURI()
+		//substring[3] contains the customerId
+		//substring[2] contains the ProductName
+		substring := strings.Split(result,"/")
+		log.Printf(substring[3])
+		log.Printf(substring[2])
+
+		   // Grab from the database
+	    var idCustomers, idProducts, Price, UnitsInStock, ProductAvailable string
+
+	    // Create an sql.DB and check for errors
+			//db, err = sql.Open("mysql", "martin:persson@/mydb")
+			db, err = sql.Open("mysql", "pi:exoticpi@/mydb")
+	    if err != nil {
+	        panic(err.Error())
+	    }
+
+	    // Test the connection to the database
+	    err = db.Ping()
+	    if err != nil {
+	        panic(err.Error())
+	    }
+	    // Search the database for the ProductName provided
+	    // Insert to cart
+	    err := db.QueryRow("SELECT idProducts, Price, UnitsInStock, ProductAvailable FROM Products WHERE ProductName=?", substring[2]).Scan(&idProducts, &Price, &UnitsInStock, &ProductAvailable)
+			_, err = db.Exec("INSERT INTO Cart(idCustomers, idProducts, Quantity, TotalPrice) VALUES(?, ?, ?, ?)", substring[3], idProducts, '1', Price)
+
+		if err != nil {
+			} else {
+
+			}
+
+		defer db.Close()}
+
 
 /*func sendOrder(w http.ResponseWriter, r *http.Request)  {
 		log.Printf("sendHandler")
@@ -372,6 +408,7 @@ func addToCart(w http.ResponseWriter, r *http.Request) {
 	   	// sql.DB should be long lived "defer" closes it once this function ends
 	    defer db.Close()}
 */
+
 /*func getAll(w http.ResponseWriter, r *http.Request) {
 
 				   // Grab everything from the database
@@ -413,6 +450,7 @@ func addToCart(w http.ResponseWriter, r *http.Request) {
 				cardetails,_ := json.Marshal(car)
 				w.Write(cardetails)}
 */
+
 /*func updateDB(w http.ResponseWriter, r *http.Request) {
 
 	log.Printf("authHandler")
@@ -610,6 +648,7 @@ func main() {
 	http.HandleFunc("/car/", getCar)
 	http.HandleFunc("/cart/", getCart)
 	http.HandleFunc("/addToCart/", addToCart)
+	http.HandleFunc("/removeFromCart/", removeFromCart)
 
 	/* sendOrder, clean up everything
 	http.HandleFunc("/done/", sendOrder)*/
