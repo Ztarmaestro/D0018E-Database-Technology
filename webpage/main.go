@@ -9,6 +9,7 @@ import (
 	"database/sql"
 	_ "github.com/go-sql-driver/mysql"
 	"encoding/json"
+	"strconv"
 //	"golang.org/x/crypto/bcrypt"
 	// Third party packages
 	//"github.com/julienschmidt/httprouter"
@@ -349,7 +350,7 @@ func addToCart(w http.ResponseWriter, r *http.Request) {
 
 		   // Grab from the database
 	    var idProducts, Price, UnitsInStock, ProductAvailable string
-			var Quantity uint64
+			var Quantity int
 
 	    // Create an sql.DB and check for errors
 			//db, err = sql.Open("mysql", "martin:persson@/mydb")
@@ -364,11 +365,13 @@ func addToCart(w http.ResponseWriter, r *http.Request) {
 	        panic(err.Error())
 	    }
 	    // Search the database for the ProductName provided
-			err = db.QueryRow("SELECT idProducts FROM Products WHERE ProductName=?)", substring[2]).Scan(&idProducts)
-			err = db.QueryRow("SELECT Quantity FROM Cart WHERE idProducts=? AND idCustomers=?)", idProducts, substring[3]).Scan(&Quantity)
 
-			fmt.Sprintf("%d", Quantity)
-			if Quantity > 0 {
+			err = db.QueryRow("SELECT idProducts FROM Products WHERE ProductName=?)", substring[2]).Scan(&idProducts)
+			log.Printf(idProducts)
+			err = db.QueryRow("SELECT Quantity FROM Cart WHERE idProducts=? AND idCustomers=?)", idProducts, substring[3]).Scan(&Quantity)
+			t := strconv.Itoa(Quantity)
+			log.Printf(t)
+			if Quantity >= 0 {
 
 				var newQuantity = Quantity + 1
 				fmt.Sprintf("%d", newQuantity)
