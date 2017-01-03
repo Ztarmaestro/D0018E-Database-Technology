@@ -485,7 +485,6 @@ func getReview(w http.ResponseWriter, r *http.Request) {
 	result := r.URL.RequestURI()
 	//substring[2] contains the car name
 	substring := strings.Split(result,"/")
-	log.Printf(substring[2])
 
 				  // Grab everything from the database
 
@@ -531,7 +530,6 @@ func getReview(w http.ResponseWriter, r *http.Request) {
 
 				defer db.Close()
 				reviewdetails,_ := json.Marshal(Review_result)
-				log.Printf("2", reviewdetails)
 				w.Write(reviewdetails)}
 
 func getAll(w http.ResponseWriter, r *http.Request) {

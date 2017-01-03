@@ -118,10 +118,10 @@ function DisplayReviewData(data){
   for( var i=0, l=data.length; i<l; i++ ) {
 
     var r = document.createElement("b");
-    r.id = "r"+i
+    r.id = "r"+i;
 
-  	Product_rating = document.getElementById('Product_rating').appendChild(b);
-  	Product_review = document.getElementById('Product_review').appendChild(b);
+  	Product_rating = document.getElementById('Product_rating').appendChild(r);
+  	Product_review = document.getElementById('Product_review').appendChild(r);
 
   	if(document.getElementById("r"+i) != null){
       	Product_rating.innerHTML = data.Rating;
