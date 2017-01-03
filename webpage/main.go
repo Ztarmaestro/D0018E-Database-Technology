@@ -446,6 +446,40 @@ func addToCart(w http.ResponseWriter, r *http.Request) {
 	    defer db.Close()}
 */
 
+/* func addReview(w http.ResponseWriter, r *http.Request) {
+
+	result := r.URL.RequestURI()
+	//substring[2] contains the Rating
+	//substring[3] contains the Review
+	//substring[4] contains the customerId
+	//substring[5] contains the ProductName
+	substring := strings.Split(result,"/")
+
+				  // Grab everything from the database
+					var idProducts string
+
+			    // Create an sql.DB and check for errors
+					//db, err = sql.Open("mysql", "martin:persson@/mydb")
+					db, err = sql.Open("mysql", "pi:exoticpi@/mydb")
+			    if err != nil {
+			        panic(err.Error())
+			    }
+
+			    // Test the connection to the database
+			    err = db.Ping()
+			    if err != nil {
+			        panic(err.Error())
+			    }
+					err := db.QueryRow("SELECT idProducts FROM Products WHERE ProductName=?", substring[5]).Scan(&idProducts)
+					_, err = db.Exec("INSERT INTO Review(idCustomers, idProducts, Rating, Review) VALUES(?, ?, ?, ?)", substring[4], idProducts, substring[2], substring[3])
+
+				if err != nil {
+					} else {
+
+					}
+
+				defer db.Close()} */
+
 func getReview(w http.ResponseWriter, r *http.Request) {
 
 	result := r.URL.RequestURI()
@@ -476,17 +510,17 @@ func getReview(w http.ResponseWriter, r *http.Request) {
 					rows, err := db.Query("SELECT Rating, Review FROM Review WHERE idProducts=?", idProducts)
 
 					for rows.Next() {
-					    Review := &Review{}
+					    Reviewlist := &Review{}
 							err := rows.Scan(&Rating, &Review)
 
 							if err != nil {
 								panic(err.Error())
 							}
 
-							Review.Rating = Rating
-							Review.Review = Review
+							Reviewlist.Rating = Rating
+							Reviewlist.Review = Review
 
-							Review_result = append(Review_result, *Review)
+							Review_result = append(Review_result, *Reviewlist)
 					}
 
 				if err != nil {
@@ -499,7 +533,7 @@ func getReview(w http.ResponseWriter, r *http.Request) {
 				reviewdetails,_ := json.Marshal(Review_result)
 				w.Write(reviewdetails)}
 
-				func getAll(w http.ResponseWriter, r *http.Request) {
+func getAll(w http.ResponseWriter, r *http.Request) {
 
 								  // Grab everything from the database
 
@@ -569,8 +603,8 @@ func updateDB(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Insert to cart
-	err := db.Exec("DELETE Sent FROM Orders WHERE idOrders=?", substring[2])
-	_, err = db.Exec("INSERT INTO idOrders(Sent) VALUES(?) WHERE idOrders=?", 1, substring[2])
+	err := db.Exec("UPDATE Orders SET Sent=? WHERE idOrders=?", 1, substring[2])
+
 	if err != nil {
 			panic(err.Error())
 	}
@@ -761,6 +795,7 @@ func main() {
 
 	/* For review */
 	http.HandleFunc("/getReview", getReview)
+	/* http.HandleFunc("/addReview", addReview) */
 
 	fmt.Println("Server running on", bindAddr)
 	log.Fatal(http.ListenAndServe(bindAddr, nil))}
