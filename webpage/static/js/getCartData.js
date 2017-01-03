@@ -63,6 +63,7 @@ function DisplayCartData(data) {
       // add all the prices together with Quantity
         Totaltotalprice.innerHTML = "$"+data.TotalPrice;
     }
+    document.write("\n");
  }
 }
 
