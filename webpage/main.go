@@ -363,12 +363,12 @@ func addToCart(w http.ResponseWriter, r *http.Request) {
 	        panic(err.Error())
 	    }
 	    // Search the database for the ProductName provided
-			err := db.QueryRow("SELECT EXISTS(SELECT Quantity FROM Cart WHERE ProductName=? AND idCustomers)", substring[2], substring[3]).Scan(&Quantity)
+			err := db.QueryRow("SELECT EXISTS(SELECT Quantity FROM Cart WHERE ProductName=? AND idCustomers=?)", substring[2], substring[3]).Scan(&Quantity)
 			if err == nil {
 				var newQuantity = Quantity + 1
 				// Insert to cart
 				err := db.QueryRow("SELECT idProducts, Price, UnitsInStock, ProductAvailable FROM Products WHERE ProductName=?", substring[2]).Scan(&idProducts, &Price, &UnitsInStock, &ProductAvailable)
-				_, err = db.Exec("INSERT INTO Cart(idCustomers, idProducts, Quantity, TotalPrice) VALUES(?, ?, ?, ?)", substring[3], idProducts, newQuantity, Price)
+				_, err = db.Exec("UPDATE Cart SET Quantity=? WHERE idCustomers=? AND idProducts=?)", newQuantity, substring[3], idProducts)
 				if err != nil {
 						panic(err.Error())
 				}
