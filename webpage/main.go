@@ -364,8 +364,13 @@ func addToCart(w http.ResponseWriter, r *http.Request) {
 	    if err != nil {
 	        panic(err.Error())
 	    }
-	    // Search the database for the ProductName provided
 
+			err = db.QueryRow("SELECT idProducts, Price, UnitsInStock, ProductAvailable FROM Products WHERE ProductName=?", substring[2]).Scan(&idProducts, &Price, &UnitsInStock, &ProductAvailable)
+			_, err = db.Exec("INSERT INTO Cart(idCustomers, idProducts, Quantity, TotalPrice) VALUES(?, ?, ?, ?)", substring[3], idProducts, '1', Price)
+			log.Printf("First time inserting")
+
+	    // Search the database for the ProductName provided
+/*
 			err = db.QueryRow("SELECT idProducts FROM Products WHERE ProductName=?)", substring[2]).Scan(&idProducts)
 			log.Printf(idProducts)
 			err = db.QueryRow("SELECT Quantity FROM Cart WHERE idProducts=? AND idCustomers=?)", idProducts, substring[3]).Scan(&Quantity)
@@ -377,7 +382,7 @@ func addToCart(w http.ResponseWriter, r *http.Request) {
 				fmt.Sprintf("%d", newQuantity)
 				// Insert to cart
 				err := db.QueryRow("SELECT idProducts, Price, UnitsInStock, ProductAvailable FROM Products WHERE ProductName=?", substring[2]).Scan(&idProducts, &Price, &UnitsInStock, &ProductAvailable)
-				_, err = db.Exec("DELETE * FROM Cart WHERE idCustomers=? AND idProducts=?", substring[3], idProducts)
+				_, err = db.Exec("DELETE FROM Cart WHERE idCustomers=? AND idProducts=?", substring[3], idProducts)
 				_, err = db.Exec("INSERT INTO Cart(idCustomers, idProducts, Quantity, TotalPrice) VALUES(?, ?, ?, ?)", substring[3], idProducts, newQuantity, Price)
 				if err != nil {
 						panic(err.Error())
@@ -388,7 +393,7 @@ func addToCart(w http.ResponseWriter, r *http.Request) {
 					_, err = db.Exec("INSERT INTO Cart(idCustomers, idProducts, Quantity, TotalPrice) VALUES(?, ?, ?, ?)", substring[3], idProducts, '1', Price)
 					log.Printf("First time inserting")
 
-				}
+				}*/
 
 		defer db.Close()}
 
