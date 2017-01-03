@@ -369,13 +369,13 @@ func addToCart(w http.ResponseWriter, r *http.Request) {
 			err = db.QueryRow("SELECT idProducts FROM Products WHERE ProductName=?)", substring[2]).Scan(&idProducts)
 			log.Printf("productid",idProducts)
 			err = db.QueryRow("SELECT Quantity FROM Cart WHERE idProducts=? AND idCustomers=?)", idProducts, substring[3]).Scan(&Quantity)
-			t := strconv.Itoa("existing Quantity in cart ", Quantity)
-			log.Printf(t)
+			t := strconv.Itoa(Quantity)
+			log.Printf("existing Quantity in cart ", t)
 			if Quantity > 0 {
 
 				var newQuantity = Quantity + 1
-				t2 := strconv.Itoa("New Quantity ", newQuantity)
-				log.Printf(t2)
+				t2 := strconv.Itoa(newQuantity)
+				log.Printf("New Quantity ", t2)
 				// Insert to cart
 				err := db.QueryRow("SELECT idProducts, Price, UnitsInStock, ProductAvailable FROM Products WHERE ProductName=?", substring[2]).Scan(&idProducts, &Price, &UnitsInStock, &ProductAvailable)
 				_, err = db.Exec("DELETE FROM Cart WHERE idCustomers=? AND idProducts=?", substring[3], idProducts)
