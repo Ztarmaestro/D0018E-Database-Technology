@@ -9,7 +9,6 @@ import (
 	"database/sql"
 	_ "github.com/go-sql-driver/mysql"
 	"encoding/json"
-	"strconv"
 //	"golang.org/x/crypto/bcrypt"
 	// Third party packages
 	//"github.com/julienschmidt/httprouter"
@@ -31,6 +30,11 @@ type Cart struct {
 	idCustomers 				string `json=idCustomers`
 	Quantity 						string `json=Quantity`
 	TotalPrice					string `json=TotalPrice`
+}
+
+type Orders struct {
+	idOrders						string `json=idOrders`
+	Sent 								string `json=Sent`
 }
 
 var db *sql.DB
@@ -367,16 +371,12 @@ func addToCart(w http.ResponseWriter, r *http.Request) {
 	    // Search the database for the ProductName provided
 
 			err = db.QueryRow("SELECT idProducts FROM Products WHERE ProductName=?", substring[2]).Scan(&idProducts)
-			log.Printf("productid",idProducts)
 			err = db.QueryRow("SELECT Quantity FROM Cart WHERE idProducts=? AND idCustomers=?", idProducts, substring[3]).Scan(&Quantity)
 
-			t := strconv.Itoa(Quantity)
-			log.Printf("existing Quantity in cart ", t)
 			if Quantity > 0 {
 
 				var newQuantity = Quantity + 1
-				t2 := strconv.Itoa(newQuantity)
-				log.Printf("New Quantity ", t2)
+
 				// Insert to cart
 				err := db.QueryRow("SELECT idProducts, Price, UnitsInStock, ProductAvailable FROM Products WHERE ProductName=?", substring[2]).Scan(&idProducts, &Price, &UnitsInStock, &ProductAvailable)
 				_, err = db.Exec("DELETE FROM Cart WHERE idCustomers=? AND idProducts=?", substring[3], idProducts)
@@ -441,13 +441,12 @@ func addToCart(w http.ResponseWriter, r *http.Request) {
 	    defer db.Close()}
 */
 
-/*func getAll(w http.ResponseWriter, r *http.Request) {
+func getAll(w http.ResponseWriter, r *http.Request) {
 
-				   // Grab everything from the database
+				  // Grab everything from the database
 
-					// Orders
-					// Customers
-			    var idProducts, ProductName, Price, ProductDescription, UnitsInStock, ProductAvailable string
+					var Orders_result []Orders // create an array of Orders
+			    var idOrders, Sent int
 
 			    // Create an sql.DB and check for errors
 					//db, err = sql.Open("mysql", "martin:persson@/mydb")
@@ -461,10 +460,23 @@ func addToCart(w http.ResponseWriter, r *http.Request) {
 			    if err != nil {
 			        panic(err.Error())
 			    }
-			    // Search the database for the username provided
-			    // If it exists grab the password for validation
-					// SELECT * FROM mydb
-			    err := db.QueryRow("SELECT idProducts, ProductName, Price, ProductDescription, UnitsInStock, ProductAvailable FROM Products WHERE ProductName=?", substring[2]).Scan(&idProducts, &ProductName, &Price, &ProductDescription, &UnitsInStock, &ProductAvailable)
+
+					rows, err := db.Query("SELECT idOrders, Sent FROM Orders")
+
+					for rows.Next() {
+					    Orders := &Orders{}
+							err := rows.Scan(&idOrders, &Sent)
+
+							if err != nil {
+								panic(err.Error())
+							}
+
+							Orders.idOrders = idOrders
+							Orders.Sent = Sent
+
+							Orders_result = append(Orders_result, *Orders)
+					}
+
 				if err != nil {
 					} else {
 
@@ -472,16 +484,8 @@ func addToCart(w http.ResponseWriter, r *http.Request) {
 
 				defer db.Close()
 
-				car := &Car{}
-				car.idProducts = idProducts
-				car.ProductName = ProductName
-				car.Price = Price
-				car.ProductDescription = ProductDescription
-				car.UnitsInStock = UnitsInStock
-				car.ProductAvailable = ProductAvailable
-				cardetails,_ := json.Marshal(car)
-				w.Write(cardetails)}
-*/
+				orderdetails,_ := json.Marshal(Orders_result)
+				w.Write(orderdetails)}
 
 /*func updateDB(w http.ResponseWriter, r *http.Request) {
 
@@ -699,9 +703,9 @@ func main() {
 	/* sendOrder, clean up everything
 	http.HandleFunc("/done/", sendOrder)*/
 
-	/* For Admin
+	/* For Admin */
 	http.HandleFunc("/everything", getAll)
-	http.HandleFunc("/update/", updateDB)*/
+	/*http.HandleFunc("/update/", updateDB)*/
 
 	fmt.Println("Server running on", bindAddr)
 	log.Fatal(http.ListenAndServe(bindAddr, nil))}
