@@ -364,24 +364,25 @@ func addToCart(w http.ResponseWriter, r *http.Request) {
 	        panic(err.Error())
 	    }
 	    // Search the database for the ProductName provided
-			err := db.QueryRow("SELECT EXISTS(SELECT Quantity FROM Cart WHERE ProductName=? AND idCustomers=?)", substring[2], substring[3]).Scan(&Quantity)
+			err := db.QueryRow("SELECT Quantity FROM Cart WHERE ProductName=? AND idCustomers=?)", substring[2], substring[3]).Scan(&Quantity)
 			fmt.Sprintf("%d", Quantity)
-			if err != nil {
+			if Quantity > 0 {
 
-				err = db.QueryRow("SELECT idProducts, Price, UnitsInStock, ProductAvailable FROM Products WHERE ProductName=?", substring[2]).Scan(&idProducts, &Price, &UnitsInStock, &ProductAvailable)
-				_, err = db.Exec("INSERT INTO Cart(idCustomers, idProducts, Quantity, TotalPrice) VALUES(?, ?, ?, ?)", substring[3], idProducts, '1', Price)
-				log.Printf("First time inserting")
+				var newQuantity = Quantity + 1
+				fmt.Sprintf("%d", newQuantity)
+				// Insert to cart
+				err := db.QueryRow("SELECT idProducts, Price, UnitsInStock, ProductAvailable FROM Products WHERE ProductName=?", substring[2]).Scan(&idProducts, &Price, &UnitsInStock, &ProductAvailable)
+				_, err = db.Exec("DELETE FROM Cart WHERE idCustomers=? AND idProducts=?", substring[3], idProducts)
+				_, err = db.Exec("INSERT INTO Cart (idCustomers, idProducts, Quantity, TotalPrice) VALUES(?, ?, ?, ?)", substring[3], idProducts, newQuantity, Price)
+				if err != nil {
+						panic(err.Error())
+				}
 
 				} else {
-					log.Printf(">= 2nd time inserting")
-					var newQuantity = Quantity + 1
-					fmt.Sprintf("%d", newQuantity)
-					// Insert to cart
-					err := db.QueryRow("SELECT idProducts, Price, UnitsInStock, ProductAvailable FROM Products WHERE ProductName=?", substring[2]).Scan(&idProducts, &Price, &UnitsInStock, &ProductAvailable)
-					_, err = db.Exec("UPDATE Cart SET Quantity=? WHERE idCustomers=? AND idProducts=?", newQuantity, substring[3], idProducts)
-					if err != nil {
-							panic(err.Error())
-					}
+					err = db.QueryRow("SELECT idProducts, Price, UnitsInStock, ProductAvailable FROM Products WHERE ProductName=?", substring[2]).Scan(&idProducts, &Price, &UnitsInStock, &ProductAvailable)
+					_, err = db.Exec("INSERT INTO Cart(idCustomers, idProducts, Quantity, TotalPrice) VALUES(?, ?, ?, ?)", substring[3], idProducts, '1', Price)
+					log.Printf("First time inserting")
+
 				}
 
 		defer db.Close()}
