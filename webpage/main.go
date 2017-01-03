@@ -286,6 +286,10 @@ func getCart(w http.ResponseWriter, r *http.Request) {
 		    cart := &Cart{}
 				err := rows.Scan(&idProducts, &Quantity, &TotalPrice)
 
+				if err != nil {
+					panic(err.Error())
+				}
+
 				cart.idProducts = idProducts
 				cart.Quantity = Quantity
 				cart.TotalPrice = TotalPrice
@@ -361,6 +365,7 @@ func addToCart(w http.ResponseWriter, r *http.Request) {
 	    // Search the database for the ProductName provided
 			err := db.QueryRow("SELECT EXISTS(SELECT Quantity FROM Cart WHERE ProductName=? AND idCustomers)", substring[2], substring[3]).Scan(&Quantity)
 			if err != nil {
+				panic(err.Error())
 				} else {
 					var newQuantity = Quantity + 1
 					// Insert to cart
