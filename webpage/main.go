@@ -489,38 +489,33 @@ func getAll(w http.ResponseWriter, r *http.Request) {
 
 /*func updateDB(w http.ResponseWriter, r *http.Request) {
 
-	log.Printf("authHandler")
-		// Grab the info from the submitted post form
-		Email := r.FormValue("Description")
+result := r.URL.RequestURI()
+//substring[2] contains the idOrders
+substring := strings.Split(result,"/")
+log.Printf(substring[2])
 
+// Grab from the database
+var idOrders, Sent int
 
-		// Grab from the database
-					result := r.URL.RequestURI()
-					//substring[2] contains the updatetype (delete,add,update)
-					substring := strings.Split(result,"/")
+// Create an sql.DB and check for errors
+//db, err = sql.Open("mysql", "martin:persson@/mydb")
+db, err = sql.Open("mysql", "pi:exoticpi@/mydb")
+if err != nil {
+	 panic(err.Error())
+}
 
-					   // Grab from the database
-				    var idCustomers, idProducts, Quantity, TotalPrice string
+// Test the connection to the database
+err = db.Ping()
+if err != nil {
+		panic(err.Error())
+}
 
-						// Grab from the database
-					  var idProducts, Price, UnitsInStock, ProductAvailable string
-
-				    // Create an sql.DB and check for errors
-						//db, err = sql.Open("mysql", "martin:persson@/mydb")
-						db, err = sql.Open("mysql", "pi:exoticpi@/mydb")
-				    if err != nil {
-				        panic(err.Error())
-				    }
-
-				    // Test the connection to the database
-				    err = db.Ping()
-				    if err != nil {
-				        panic(err.Error())
-				    }
-				    // Search the database for the ProductName provided
-				    // If it exists grab the password for validation
-				    err := db.QueryRow("SELECT idProducts, Price, UnitsInStock, ProductAvailable FROM Products WHERE ProductName=?", substring[2]).Scan(&idProducts, &Price, &UnitsInStock, &ProductAvailable)
-						err := db.QueryRow("INSERT INTO mydb.Cart (idCustomers, idProducts, Quantity, TotalPrice") VALUES (substring[3], idProducts, '1', Price)
+// Insert to cart
+err := db.Exec("DELETE Sent FROM Orders WHERE idOrders=?, substring[2])
+_, err = db.Exec("INSERT INTO idOrders(Sent) VALUES(?)", 1)
+if err != nil {
+		panic(err.Error())
+}
 
 					if err != nil {
 						} else {

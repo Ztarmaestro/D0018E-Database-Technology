@@ -35,11 +35,12 @@ function DisplayCartData(data) {
   for( var i=0, l=data.length; i<l; i++ ) {
 
     var b = document.createElement("b");
+    b.id = "p"+i
     var btn = document.createElement("BUTTON");
     var t = document.createTextNode("Delete product");
     btn.appendChild(t);
     btn.href="/removeFromCart/"+data.ProductName /* +"/"+userId */
-    document.getElementById('TotalPrice').appendChild(btn);
+    document.getElementById('p'+i).appendChild(btn);
 
   	Product_Id = document.getElementById('Product_Id').appendChild(b);
   	Quantity = document.getElementById('Quantity').appendChild(b);

@@ -33,13 +33,23 @@ function DisplayAllData(data){
   for( var i=0, l=data.length; i<l; i++ ) {
 
     var b = document.createElement("b");
+    b.id = "o"+i
     var btn = document.createElement("BUTTON");
-    var t = document.createTextNode("Update order to sent");
-    btn.appendChild(t);
-    btn.href="/update/"+data.IdOrders
-    document.getElementById('orderlist').appendChild(btn);
+    if (data.Sent == 1) {
+      var t = document.createTextNode("Sent");
+      btn.appendChild(t);
+      document.getElementById('o'+i).appendChild(btn);
 
-  	IdOrders = document.getElementById('orderlist').appendChild(b);
+      IdOrders = document.getElementById('orderlist').appendChild(b);
+
+    } else {
+      var t = document.createTextNode("Update order to sent");
+      btn.appendChild(t);
+      btn.href="/update/"+data.IdOrders
+      document.getElementById('o'+i).appendChild(btn);
+
+      IdOrders = document.getElementById('orderlist').appendChild(b);
+    }
 
   	if(document.getElementById("orderlist") != null){
       	IdOrders.innerHTML = data.IdOrders;
@@ -73,19 +83,4 @@ function updateData(type) {
       }
     };
     xhr.send();
-}
-
-//Filter the admin update (delete, add, update)
-function whatUpdate(type) {
-
-  if (delete){
-    updateData('delete');
-  }
-  if (add){
-    updateData('add');
-  }
-  if (update){
-    updateData('update');
-  }
-
 }
