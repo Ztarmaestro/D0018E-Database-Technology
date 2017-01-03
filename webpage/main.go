@@ -367,17 +367,19 @@ func addToCart(w http.ResponseWriter, r *http.Request) {
 	    // Search the database for the ProductName provided
 
 			err = db.QueryRow("SELECT idProducts FROM Products WHERE ProductName=?)", substring[2]).Scan(&idProducts)
-			log.Printf(idProducts)
+			log.Printf("productid",idProducts)
 			err = db.QueryRow("SELECT Quantity FROM Cart WHERE idProducts=? AND idCustomers=?)", idProducts, substring[3]).Scan(&Quantity)
-			t := strconv.Itoa(Quantity)
+			t := strconv.Itoa("existing Quantity in cart ", Quantity)
 			log.Printf(t)
-			if Quantity >= 0 {
+			if Quantity > 0 {
 
 				var newQuantity = Quantity + 1
-				fmt.Sprintf("%d", newQuantity)
+				t2 := strconv.Itoa("New Quantity ", newQuantity)
+				log.Printf(t2)
 				// Insert to cart
 				err := db.QueryRow("SELECT idProducts, Price, UnitsInStock, ProductAvailable FROM Products WHERE ProductName=?", substring[2]).Scan(&idProducts, &Price, &UnitsInStock, &ProductAvailable)
 				_, err = db.Exec("DELETE FROM Cart WHERE idCustomers=? AND idProducts=?", substring[3], idProducts)
+				log.Printf("update cart")
 				_, err = db.Exec("INSERT INTO Cart(idCustomers, idProducts, Quantity, TotalPrice) VALUES(?, ?, ?, ?)", substring[3], idProducts, newQuantity, Price)
 				if err != nil {
 						panic(err.Error())
