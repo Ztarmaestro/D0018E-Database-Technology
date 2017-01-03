@@ -30,26 +30,21 @@ function getAllData() {
 // Put all data on the admin page Orders produkt etc.
 function DisplayAllData(data){
 
-  Product_name = document.getElementById('Name');
-  Price = document.getElementById('Price');
-  Description = document.getElementById('Description');
-  UnitsInStock = document.getElementById('UnitsInStock');
+  for( var i=0, l=data.length; i<l; i++ ) {
 
-  if(data.ProductAvailable == 1){
+    var b = document.createElement("b");
+    var btn = document.createElement("BUTTON");
+    var t = document.createTextNode("Update order to sent");
+    btn.appendChild(t);
+    btn.href="/update/"+data.IdOrders
+    document.getElementById('orderlist').appendChild(btn);
 
-    if(document.getElementById("Name") != null){
-        Product_name.innerHTML = data.ProductName;
-    }
-    if(document.getElementById("Price") != null){
-        Price.innerHTML = "$"+data.Price;
-    }
-    if(document.getElementById("Description") != null){
-        Description.innerHTML = data.ProductDescription;
-    }
-    if(document.getElementById("UnitsInStock") != null){
-        UnitsInStock.innerHTML = data.UnitsInStock;
-    }
-  }
+  	IdOrders = document.getElementById('orderlist').appendChild(b);
+
+  	if(document.getElementById("orderlist") != null){
+      	IdOrders.innerHTML = data.IdOrders;
+  	}
+ }
 }
 
 function updateData(type) {

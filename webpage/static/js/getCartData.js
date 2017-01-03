@@ -32,34 +32,37 @@ function DisplayCartData(data) {
   // get customerId from session and save to userId
   //var userId = session.customerId
 
-  var b = document.createElement("b");
-  var btn = document.createElement("BUTTON");
-  var t = document.createTextNode("Delete product");
-  btn.appendChild(t);
-  btn.href="/removeFromCart/"+data.ProductName /* +"/"+userId */
-  document.getElementById('TotalPrice').appendChild(btn);
+  for( var i=0, l=data.length; i<l; i++ ) {
 
-	Product_Id = document.getElementById('Product_Id').appendChild(b);
-	Quantity = document.getElementById('Quantity').appendChild(b);
-  TotalPrice = document.getElementById('TotalPrice').appendChild(b);
-  Totaltotalprice = document.getElementById('Totaltotalprice').appendChild(b);
+    var b = document.createElement("b");
+    var btn = document.createElement("BUTTON");
+    var t = document.createTextNode("Delete product");
+    btn.appendChild(t);
+    btn.href="/removeFromCart/"+data.ProductName /* +"/"+userId */
+    document.getElementById('TotalPrice').appendChild(btn);
 
-  //This is the total cost of all product. Need to calulate it somehow!!
-  TotatlTotalPrice = document.getElementById('Totaltotalprice');
+  	Product_Id = document.getElementById('Product_Id').appendChild(b);
+  	Quantity = document.getElementById('Quantity').appendChild(b);
+    TotalPrice = document.getElementById('TotalPrice').appendChild(b);
+    Totaltotalprice = document.getElementById('Totaltotalprice').appendChild(b);
 
-	if(document.getElementById("Product_Id") != null){
-    	Product_Id.innerHTML = data.idProducts;
-	}
-	if(document.getElementById("Quantity") != null){
-    	Quantity.innerHTML = data.Quantity;
-	}
-  if(document.getElementById("TotalPrice") != null){
-      TotalPrice.innerHTML = "$"+data.TotalPrice;
-  }
-  if(document.getElementById("TotaltotalPrice") != null){
-    // add all the prices together with Quantity
-      Totaltotalprice.innerHTML = "$"+data.TotalPrice;
-  }
+    //This is the total cost of all product. Need to calulate it somehow!!
+    AllTotalPrice = document.getElementById('Totaltotalprice');
+
+  	if(document.getElementById("Product_Id") != null){
+      	Product_Id.innerHTML = data.idProducts;
+  	}
+  	if(document.getElementById("Quantity") != null){
+      	Quantity.innerHTML = data.Quantity;
+  	}
+    if(document.getElementById("TotalPrice") != null){
+        TotalPrice.innerHTML = "$"+data.TotalPrice;
+    }
+    if(document.getElementById("TotaltotalPrice") != null){
+      // add all the prices together with Quantity
+        Totaltotalprice.innerHTML = "$"+data.TotalPrice;
+    }
+ }
 }
 
 function getUserCart() {
@@ -68,6 +71,8 @@ function getUserCart() {
   //Else alert and do nothing
 
   var customerId = "3"
+
+  //window.location = "/error";
 
   alert("You are not logged in and should not be here! Please register or login to an account");
 

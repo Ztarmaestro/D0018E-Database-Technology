@@ -1,10 +1,10 @@
 
-function addToCart(type, carmodel) {
+function addToCart(customerId, carmodel) {
   //Type is the users id that is saved in the session. carmodel is the car that is added to the cart
   var xhr = typeof XMLHttpRequest != 'undefined'
     ? new XMLHttpRequest()
     : new ActiveXObject('Microsoft.XMLHTTP');
-  xhr.open('post',"/addToCart/"+carmodel+"/"+type, true);
+  xhr.open('post',"/addToCart/"+carmodel+"/"+customerId, true);
   xhr.onreadystatechange = function() {
     var status;
     //var data;
@@ -33,6 +33,8 @@ function checkIfLogin(carmodel) {
 //Else alert and do nothing
 
 var customerId = "3"
+
+window.location = "/error";
 
 alert("You are not logged in and can't buy this product. Please register or login to an account");
 

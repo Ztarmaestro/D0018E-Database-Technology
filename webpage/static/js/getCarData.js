@@ -8,7 +8,7 @@ function DisplayCarData(data){
   Description = document.getElementById('Description');
   UnitsInStock = document.getElementById('UnitsInStock');
 
-  if(data.ProductAvailable == 1){
+  if(data.ProductAvailable >= 1){
 
     if(document.getElementById("Name") != null){
         Product_name.innerHTML = data.ProductName;
@@ -23,12 +23,13 @@ function DisplayCarData(data){
         UnitsInStock.innerHTML = data.UnitsInStock;
     }
   } else {
-    
+
     if(document.getElementById("Name") != null){
         Product_name.innerHTML = data.ProductName;
     }
     if(document.getElementById("Price") != null){
         Price.innerHTML = "----";
+        document.getElementById('BuyButton').href="/error"
     }
     if(document.getElementById("Description") != null){
         Description.innerHTML = data.ProductDescription;
@@ -40,7 +41,7 @@ function DisplayCarData(data){
 }
 
 function getCar(type) {
-  
+
   var xhr = typeof XMLHttpRequest != 'undefined'
     ? new XMLHttpRequest()
     : new ActiveXObject('Microsoft.XMLHTTP');
@@ -57,7 +58,7 @@ function getCar(type) {
        // obj = JSON.parse(data)
         console.log(data)
         DisplayCarData(data)
-            
+
       } else {
         console.log("error")
       }
@@ -69,15 +70,14 @@ function getCar(type) {
 var pathArray = window.location.pathname.split( '/showroom_nologin/' );
 var pathArray_login = window.location.pathname.split( '/showroom/' );
 if (pathArray[1] == 'ferrari' || pathArray_login[1] == 'ferrari'){
-  getCar('ferrari');  
+  getCar('ferrari');
 }
 if (pathArray[1] == 'camaro'  || pathArray_login[1] == 'camaro'){
-  getCar("camaro");  
+  getCar("camaro");
 }
 if (pathArray[1] == 'mustang' || pathArray_login[1] == 'mustang'){
-  getCar("mustang");  
+  getCar("mustang");
 }
 if (pathArray[1] == 'charger' || pathArray_login[1] == 'charger'){
-  getCar("charger");  
+  getCar("charger");
 }
-

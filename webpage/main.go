@@ -148,7 +148,7 @@ func loggedinHandler(w http.ResponseWriter, r *http.Request) {
 
   pagePath := "static/templates/navbar_logout.html"
 
-	pageTemplate := "static/templates/login_index.html"
+	pageTemplate := "static/templates/index.html"
 
 	if t, err := template.ParseFiles(pagePath, pageTemplate); err != nil {
 		// Something gnarly happened.
@@ -259,7 +259,8 @@ func getCart(w http.ResponseWriter, r *http.Request) {
 	//substring[2] contains the customerId
 	substring := strings.Split(result,"/")
 
-	   // Grab from the database
+	  // Grab from the database
+		var result []Event_table // create an array of Cart
     var idProducts, Quantity, TotalPrice string
 
     // Create an sql.DB and check for errors
@@ -277,7 +278,21 @@ func getCart(w http.ResponseWriter, r *http.Request) {
     // Search the database for the username provided
     // If it exists grab the password for validation
 		// Need to grab every row with this id and add it to the struct in some way
-    err := db.QueryRow("SELECT idProducts, Quantity, TotalPrice FROM Cart WHERE idCustomers=?", substring[2]).Scan(&idProducts, &Quantity, &TotalPrice)
+    //err := db.QueryRow("SELECT idProducts, Quantity, TotalPrice FROM Cart WHERE idCustomers=?", substring[2]).Scan(&idProducts, &Quantity, &TotalPrice)
+
+		rows, err := db.Query("SELECT idProducts, Quantity, TotalPrice FROM Cart WHERE idCustomers=?", substring[2])
+
+		for rows.Next() {
+		    cart := &Cart{}
+				err := rows.Scan(&idProducts, &Quantity, &TotalPrice)
+
+				cart.idProducts = idProducts
+				cart.Quantity = Quantity
+				cart.TotalPrice = TotalPrice
+
+				result = append(result, *cart)
+		}
+
 	if err != nil {
 		} else {
 
@@ -285,23 +300,16 @@ func getCart(w http.ResponseWriter, r *http.Request) {
 
 	defer db.Close()
 
-	cart := &Cart{}
-	cart.idProducts = idProducts
-	cart.Quantity = Quantity
-	cart.TotalPrice = TotalPrice
-	cartdetails,_ := json.Marshal(cart)
+	cartdetails,_ := json.Marshal(result)
 	w.Write(cartdetails)}
 
 func removeFromCart(w http.ResponseWriter, r *http.Request) {
 	result := r.URL.RequestURI()
-	//substring[3] contains the customerId
-	//substring[2] contains the ProductName
+	//substring[2] contains the CarName
+	//substring[3] contains the idProducts
 	substring := strings.Split(result,"/")
-	log.Printf(substring[3])
 	log.Printf(substring[2])
-
-	   // Grab from the database
-    //var idCustomers, idProducts, Price, UnitsInStock, ProductAvailable string
+	log.Printf(substring[3])
 
     // Create an sql.DB and check for errors
 		//db, err = sql.Open("mysql", "martin:persson@/mydb")
@@ -316,7 +324,7 @@ func removeFromCart(w http.ResponseWriter, r *http.Request) {
         panic(err.Error())
     }
     // Search the database for the ProductName provided
-    // Insert to cart
+    // Delete from cart
 
 		_, err = db.Exec("DELETE FROM Cart WHERE idProducts=? AND ProductName=?", substring[3], substring[2])
 
@@ -351,9 +359,18 @@ func addToCart(w http.ResponseWriter, r *http.Request) {
 	        panic(err.Error())
 	    }
 	    // Search the database for the ProductName provided
-	    // Insert to cart
-	    err := db.QueryRow("SELECT idProducts, Price, UnitsInStock, ProductAvailable FROM Products WHERE ProductName=?", substring[2]).Scan(&idProducts, &Price, &UnitsInStock, &ProductAvailable)
-			_, err = db.Exec("INSERT INTO Cart(idCustomers, idProducts, Quantity, TotalPrice) VALUES(?, ?, ?, ?)", substring[3], idProducts, '1', Price)
+			err := db.QueryRow("SELECT EXISTS(SELECT Quantity FROM Cart WHERE ProductName=? AND idCustomers)", substring[2], substring[3]).Scan(&Quantity)
+			if err != nil {
+				} else {
+					var newQuantity = Quantity + 1
+					// Insert to cart
+			    err := db.QueryRow("SELECT idProducts, Price, UnitsInStock, ProductAvailable FROM Products WHERE ProductName=?", substring[2]).Scan(&idProducts, &Price, &UnitsInStock, &ProductAvailable)
+					_, err = db.Exec("INSERT INTO Cart(idCustomers, idProducts, Quantity, TotalPrice) VALUES(?, ?, ?, ?)", substring[3], idProducts, newQuantity, Price)
+				}
+
+		err := db.QueryRow("SELECT idProducts, Price, UnitsInStock, ProductAvailable FROM Products WHERE ProductName=?", substring[2]).Scan(&idProducts, &Price, &UnitsInStock, &ProductAvailable)
+		_, err = db.Exec("INSERT INTO Cart(idCustomers, idProducts, Quantity, TotalPrice) VALUES(?, ?, ?, ?)", substring[3], idProducts, '1', Price)
+
 
 		if err != nil {
 			} else {
@@ -361,7 +378,6 @@ func addToCart(w http.ResponseWriter, r *http.Request) {
 			}
 
 		defer db.Close()}
-
 
 /*func sendOrder(w http.ResponseWriter, r *http.Request)  {
 		log.Printf("sendHandler")
@@ -607,6 +623,19 @@ func showroom_nologinHandler(w http.ResponseWriter, r *http.Request) {
 			}
 	}}
 
+func errorHandler(w http.ResponseWriter, r *http.Request)  {
+
+	// you access the cached templates with the defined name, not the filename
+
+	pagePath := "static/templates/error.html"
+
+	if t, err := template.ParseFiles(pagePath); err != nil {
+		// Something gnarly happened.
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+	} else {
+		// return to client via t.Execute
+		t.Execute(w, nil)}}
+
 func main() {
 
 	// Instantiate a new router
@@ -631,6 +660,7 @@ func main() {
 	http.HandleFunc("/checkout", checkoutHandler)
 	http.HandleFunc("/auth", authHandler)
 	http.HandleFunc("/register", registerHandler)
+	http.HandleFunc("/error", errorHandler)
 
 	http.HandleFunc("/showroom/ferrari", showroomHandler)
   http.HandleFunc("/showroom_nologin/ferrari", showroom_nologinHandler)
