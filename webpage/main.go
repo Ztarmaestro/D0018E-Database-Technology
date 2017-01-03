@@ -489,8 +489,8 @@ func getReview(w http.ResponseWriter, r *http.Request) {
 				  // Grab everything from the database
 
 					var Review_result []Review // create an array of Orders
-			    var Rating int
-					var Review, idProducts string
+			    var Ratings int
+					var Reviews, idProducts string
 
 			    // Create an sql.DB and check for errors
 					//db, err = sql.Open("mysql", "martin:persson@/mydb")
@@ -510,17 +510,17 @@ func getReview(w http.ResponseWriter, r *http.Request) {
 					rows, err := db.Query("SELECT Rating, Review FROM Review WHERE idProducts=?", idProducts)
 
 					for rows.Next() {
-					    Reviewlist := &Review{}
-							err := rows.Scan(&Rating, &Review)
+					    reviewlist := &Review{}
+							err := rows.Scan(&Ratings, &Reviews)
 
 							if err != nil {
 								panic(err.Error())
 							}
 
-							Reviewlist.Rating = Rating
-							Reviewlist.Review = Review
+							reviewlist.Rating = Ratings
+							reviewlist.Review = Reviews
 
-							Review_result = append(Review_result, *Reviewlist)
+							Review_result = append(Review_result, *reviewlist)
 					}
 
 				if err != nil {
@@ -603,7 +603,7 @@ func updateDB(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Insert to cart
-	err := db.Exec("UPDATE Orders SET Sent=? WHERE idOrders=?", 1, substring[2])
+	err := db.Exec("UPDATE Orders SET Sent=1 WHERE idOrders=?", substring[2])
 
 	if err != nil {
 			panic(err.Error())
