@@ -587,7 +587,7 @@ func updateDB(w http.ResponseWriter, r *http.Request) {
 	log.Printf(substring[2])
 
 	// Grab from the database
-	var idOrders, Sent int
+	//var idOrders, Sent int
 
 	// Create an sql.DB and check for errors
 	//db, err = sql.Open("mysql", "martin:persson@/mydb")
@@ -605,11 +605,17 @@ func updateDB(w http.ResponseWriter, r *http.Request) {
 	// update to sent to 1=sent
 
 	// update
-  stmt, err = db.Prepare("update Orders set Sent=? where idOrders=?")
-  checkErr(err)
+  stmt, err := db.Prepare("update Orders set Sent=? where idOrders=?")
+
+	if err != nil {
+			panic(err.Error())
+	}
 
 	_, err = stmt.Exec(1, substring[2])
-  checkErr(err)
+
+	if err != nil {
+			panic(err.Error())
+	}
 
 	/*err := db.Exec("UPDATE Orders SET Sent=? WHERE idOrders=?", substring[2])
 
