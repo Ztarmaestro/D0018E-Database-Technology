@@ -260,7 +260,7 @@ func getCart(w http.ResponseWriter, r *http.Request) {
 	substring := strings.Split(result,"/")
 
 	  // Grab from the database
-		var result []Cart // create an array of Cart
+		var Cart_result []Cart // create an array of Cart
     var idProducts, Quantity, TotalPrice string
 
     // Create an sql.DB and check for errors
@@ -290,7 +290,7 @@ func getCart(w http.ResponseWriter, r *http.Request) {
 				cart.Quantity = Quantity
 				cart.TotalPrice = TotalPrice
 
-				result = append(result, *cart)
+				Cart_result = append(Cart_result, *cart)
 		}
 
 	if err != nil {
@@ -300,7 +300,7 @@ func getCart(w http.ResponseWriter, r *http.Request) {
 
 	defer db.Close()
 
-	cartdetails,_ := json.Marshal(result)
+	cartdetails,_ := json.Marshal(Cart_result)
 	w.Write(cartdetails)}
 
 func removeFromCart(w http.ResponseWriter, r *http.Request) {
