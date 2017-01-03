@@ -81,3 +81,47 @@ if (pathArray[1] == 'mustang' || pathArray_login[1] == 'mustang'){
 if (pathArray[1] == 'charger' || pathArray_login[1] == 'charger'){
   getCar("charger");
 }
+
+function getReview(type) {
+
+  var xhr = typeof XMLHttpRequest != 'undefined'
+    ? new XMLHttpRequest()
+    : new ActiveXObject('Microsoft.XMLHTTP');
+  xhr.open('get',"/getReview/"+type, true);
+  xhr.onreadystatechange = function() {
+    var status;
+    var data;
+    var obj;
+    // https://xhr.spec.whatwg.org/#dom-xmlhttprequest-readystate
+    if (xhr.readyState == 4) { // `DONE`
+      status = xhr.status;
+      if (status == 200) {
+        data = JSON.parse(xhr.response);
+       // obj = JSON.parse(data)
+        console.log(data)
+        DisplayReviewData(data)
+
+      } else {
+        console.log("error")
+      }
+    }
+  };
+  xhr.send();
+}
+
+function DisplayReviewData(data){
+
+  for( var i=0, l=data.length; i<l; i++ ) {
+
+    var r = document.createElement("b");
+    r.id = "r"+i
+
+  	Product_rating = document.getElementById('Product_rating').appendChild(b);
+  	Product_review = document.getElementById('Product_review').appendChild(b);
+
+  	if(document.getElementById("r"+i) != null){
+      	Product_rating.innerHTML = data.Rating;
+        Product_review.innerHTML = data.Review;
+  	}
+ }
+}

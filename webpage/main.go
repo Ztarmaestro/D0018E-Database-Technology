@@ -33,8 +33,13 @@ type Cart struct {
 }
 
 type Orders struct {
-	idOrders						string `json=idOrders`
-	Sent 								string `json=Sent`
+	idOrders						int `json=idOrders`
+	Sent 								int `json=Sent`
+}
+
+type Review struct {
+	Rating							int `json=Rating`
+	Review							string `json=Review`
 }
 
 var db *sql.DB
@@ -441,12 +446,17 @@ func addToCart(w http.ResponseWriter, r *http.Request) {
 	    defer db.Close()}
 */
 
-func getAll(w http.ResponseWriter, r *http.Request) {
+func getReview(w http.ResponseWriter, r *http.Request) {
+
+	result := r.URL.RequestURI()
+	//substring[2] contains the car name
+	substring := strings.Split(result,"/")
 
 				  // Grab everything from the database
 
-					var Orders_result []Orders // create an array of Orders
-			    var idOrders, Sent int
+					var Review_result []Review // create an array of Orders
+			    var Rating int
+					var Review, idProducts string
 
 			    // Create an sql.DB and check for errors
 					//db, err = sql.Open("mysql", "martin:persson@/mydb")
@@ -461,20 +471,22 @@ func getAll(w http.ResponseWriter, r *http.Request) {
 			        panic(err.Error())
 			    }
 
-					rows, err := db.Query("SELECT idOrders, Sent FROM Orders")
+					err := db.QueryRow("SELECT idProducts FROM Products WHERE ProductName=?", substring[2]).Scan(&idProducts)
+
+					rows, err := db.Query("SELECT Rating, Review FROM Review WHERE idProducts=?", idProducts)
 
 					for rows.Next() {
-					    Orders := &Orders{}
-							err := rows.Scan(&idOrders, &Sent)
+					    Review := &Review{}
+							err := rows.Scan(&Rating, &Review)
 
 							if err != nil {
 								panic(err.Error())
 							}
 
-							Orders.idOrders = idOrders
-							Orders.Sent = Sent
+							Review.Rating = Rating
+							Review.Review = Review
 
-							Orders_result = append(Orders_result, *Orders)
+							Review_result = append(Review_result, *Review)
 					}
 
 				if err != nil {
@@ -484,46 +496,91 @@ func getAll(w http.ResponseWriter, r *http.Request) {
 
 				defer db.Close()
 
-				orderdetails,_ := json.Marshal(Orders_result)
-				w.Write(orderdetails)}
+				reviewdetails,_ := json.Marshal(Review_result)
+				w.Write(reviewdetails)}
 
-/*func updateDB(w http.ResponseWriter, r *http.Request) {
+				func getAll(w http.ResponseWriter, r *http.Request) {
 
-result := r.URL.RequestURI()
-//substring[2] contains the idOrders
-substring := strings.Split(result,"/")
-log.Printf(substring[2])
+								  // Grab everything from the database
 
-// Grab from the database
-var idOrders, Sent int
+									var Orders_result []Orders // create an array of Orders
+							    var idOrders, Sent int
 
-// Create an sql.DB and check for errors
-//db, err = sql.Open("mysql", "martin:persson@/mydb")
-db, err = sql.Open("mysql", "pi:exoticpi@/mydb")
-if err != nil {
-	 panic(err.Error())
-}
+							    // Create an sql.DB and check for errors
+									//db, err = sql.Open("mysql", "martin:persson@/mydb")
+									db, err = sql.Open("mysql", "pi:exoticpi@/mydb")
+							    if err != nil {
+							        panic(err.Error())
+							    }
 
-// Test the connection to the database
-err = db.Ping()
-if err != nil {
-		panic(err.Error())
-}
+							    // Test the connection to the database
+							    err = db.Ping()
+							    if err != nil {
+							        panic(err.Error())
+							    }
 
-// Insert to cart
-err := db.Exec("DELETE Sent FROM Orders WHERE idOrders=?, substring[2])
-_, err = db.Exec("INSERT INTO idOrders(Sent) VALUES(?)", 1)
-if err != nil {
-		panic(err.Error())
-}
+									rows, err := db.Query("SELECT idOrders, Sent FROM Orders")
 
-					if err != nil {
-						} else {
+									for rows.Next() {
+									    Orders := &Orders{}
+											err := rows.Scan(&idOrders, &Sent)
 
-						}
+											if err != nil {
+												panic(err.Error())
+											}
 
-					defer db.Close()}
-*/
+											Orders.idOrders = idOrders
+											Orders.Sent = Sent
+
+											Orders_result = append(Orders_result, *Orders)
+									}
+
+								if err != nil {
+									} else {
+
+									}
+
+								defer db.Close()
+
+								orderdetails,_ := json.Marshal(Orders_result)
+								w.Write(orderdetails)}
+
+func updateDB(w http.ResponseWriter, r *http.Request) {
+
+	result := r.URL.RequestURI()
+	//substring[2] contains the idOrders
+	substring := strings.Split(result,"/")
+	log.Printf(substring[2])
+
+	// Grab from the database
+	var idOrders, Sent int
+
+	// Create an sql.DB and check for errors
+	//db, err = sql.Open("mysql", "martin:persson@/mydb")
+	db, err = sql.Open("mysql", "pi:exoticpi@/mydb")
+	if err != nil {
+		 panic(err.Error())
+	}
+
+	// Test the connection to the database
+	err = db.Ping()
+	if err != nil {
+			panic(err.Error())
+	}
+
+	// Insert to cart
+	err := db.Exec("DELETE Sent FROM Orders WHERE idOrders=?", substring[2])
+	_, err = db.Exec("INSERT INTO idOrders(Sent) VALUES(?) WHERE idOrders=?", 1, substring[2])
+	if err != nil {
+			panic(err.Error())
+	}
+
+	if err != nil {
+		} else {
+
+		}
+
+	defer db.Close()}
 
 func showroomHandler(w http.ResponseWriter, r *http.Request) {
 
@@ -700,7 +757,10 @@ func main() {
 
 	/* For Admin */
 	http.HandleFunc("/everything", getAll)
-	/*http.HandleFunc("/update/", updateDB)*/
+	http.HandleFunc("/update/", updateDB)
+
+	/* For review */
+	http.HandleFunc("/getReview", getReview)
 
 	fmt.Println("Server running on", bindAddr)
 	log.Fatal(http.ListenAndServe(bindAddr, nil))}
