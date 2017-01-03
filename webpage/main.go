@@ -602,17 +602,20 @@ func updateDB(w http.ResponseWriter, r *http.Request) {
 			panic(err.Error())
 	}
 
-	// Insert to cart
-	err := db.Exec("UPDATE Orders SET Sent=1 WHERE idOrders=?", substring[2])
+	// update to sent to 1=sent
+
+	// update
+  stmt, err = db.Prepare("update Orders set Sent=? where idOrders=?")
+  checkErr(err)
+
+	_, err = stmt.Exec(1, substring[2])
+  checkErr(err)
+
+	/*err := db.Exec("UPDATE Orders SET Sent=? WHERE idOrders=?", substring[2])
 
 	if err != nil {
 			panic(err.Error())
-	}
-
-	if err != nil {
-		} else {
-
-		}
+	}*/
 
 	defer db.Close()}
 
