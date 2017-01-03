@@ -365,6 +365,9 @@ func addToCart(w http.ResponseWriter, r *http.Request) {
 	    }
 	    // Search the database for the ProductName provided
 			err := db.QueryRow("SELECT Quantity FROM Cart WHERE ProductName=? AND idCustomers=?)", substring[2], substring[3]).Scan(&Quantity)
+			if err != nil {
+					panic(err.Error())
+			}
 			fmt.Sprintf("%d", Quantity)
 			if Quantity > 0 {
 
