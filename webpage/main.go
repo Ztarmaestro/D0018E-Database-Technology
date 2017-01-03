@@ -260,7 +260,7 @@ func getCart(w http.ResponseWriter, r *http.Request) {
 	substring := strings.Split(result,"/")
 
 	  // Grab from the database
-		var result []Event_table // create an array of Cart
+		var result []Cart // create an array of Cart
     var idProducts, Quantity, TotalPrice string
 
     // Create an sql.DB and check for errors
@@ -345,7 +345,7 @@ func addToCart(w http.ResponseWriter, r *http.Request) {
 
 		   // Grab from the database
 	    var idProducts, Price, UnitsInStock, ProductAvailable string
-
+			var Quantity int
 	    // Create an sql.DB and check for errors
 			//db, err = sql.Open("mysql", "martin:persson@/mydb")
 			db, err = sql.Open("mysql", "pi:exoticpi@/mydb")
@@ -368,7 +368,7 @@ func addToCart(w http.ResponseWriter, r *http.Request) {
 					_, err = db.Exec("INSERT INTO Cart(idCustomers, idProducts, Quantity, TotalPrice) VALUES(?, ?, ?, ?)", substring[3], idProducts, newQuantity, Price)
 				}
 
-		err := db.QueryRow("SELECT idProducts, Price, UnitsInStock, ProductAvailable FROM Products WHERE ProductName=?", substring[2]).Scan(&idProducts, &Price, &UnitsInStock, &ProductAvailable)
+		err = db.QueryRow("SELECT idProducts, Price, UnitsInStock, ProductAvailable FROM Products WHERE ProductName=?", substring[2]).Scan(&idProducts, &Price, &UnitsInStock, &ProductAvailable)
 		_, err = db.Exec("INSERT INTO Cart(idCustomers, idProducts, Quantity, TotalPrice) VALUES(?, ?, ?, ?)", substring[3], idProducts, '1', Price)
 
 
