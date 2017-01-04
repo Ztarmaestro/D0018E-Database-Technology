@@ -41,16 +41,47 @@ function DisplayCartData(data) {
 
     var btn = document.createElement("BUTTON");
     var t = document.createTextNode("Delete product");
+    btn.id = "delete"+i;
     btn.appendChild(t);
-    btn.href="/removeFromCart/"+data.ProductName; /* +"/"+userId */
-    document.getElementById('p'+i).appendChild(btn);
+    //btn.href="/removeFromCart/"+data.ProductName; /* +"/"+userId */
 
   	if(document.getElementById("p"+i) != null){
       	Product_List.innerHTML = data[i].ProductName + ": " + data[i].Quantity + " x " + "$ " + data[i].TotalPrice;
   	}
+    document.getElementById('p'+i).appendChild(btn);
+    document.getElementById("delete"+i).onclick = deleteFromCart(data[i].ProductName)
     var mybr = document.createElement('br');
     document.getElementById('p'+i).appendChild(mybr);
  }
+}
+
+function deleteFromCart(car){
+  var customerId = "3"
+  //Type is the users id that is saved in the session. carmodel is the car that is added to the cart
+  var xhr = typeof XMLHttpRequest != 'undefined'
+    ? new XMLHttpRequest()
+    : new ActiveXObject('Microsoft.XMLHTTP');
+  xhr.open('post',"/removeFromCart/"+car+"/"+customerId, true);
+  xhr.onreadystatechange = function() {
+    var status;
+    //var data;
+    //var obj;
+    // https://xhr.spec.whatwg.org/#dom-xmlhttprequest-readystate
+    if (xhr.readyState == 4) { // `DONE`
+      status = xhr.status;
+      if (status == 200) {
+        //data = JSON.parse(xhr.response);
+        // obj = JSON.parse(data)
+        //console.log(data)
+        //Sends user to cart
+        window.location = "/checkout";
+
+      } else {
+        console.log("error")
+      }
+    }
+  };
+  xhr.send();
 }
 
 function getUserCart() {

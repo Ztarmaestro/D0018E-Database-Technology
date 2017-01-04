@@ -325,10 +325,12 @@ func getCart(w http.ResponseWriter, r *http.Request) {
 func removeFromCart(w http.ResponseWriter, r *http.Request) {
 	result := r.URL.RequestURI()
 	//substring[2] contains the CarName
-	//substring[3] contains the idProducts
+	//substring[3] contains the idCustomer
 	substring := strings.Split(result,"/")
 	log.Printf(substring[2])
 	log.Printf(substring[3])
+
+	var idProducts string
 
     // Create an sql.DB and check for errors
 		//db, err = sql.Open("mysql", "martin:persson@/mydb")
@@ -342,10 +344,15 @@ func removeFromCart(w http.ResponseWriter, r *http.Request) {
     if err != nil {
         panic(err.Error())
     }
-    // Search the database for the ProductName provided
+    // Search the database for the ProductId provided
     // Delete from cart
 
-		_, err = db.Exec("DELETE FROM Cart WHERE idProducts=? AND ProductName=?", substring[3], substring[2])
+		err := db.QueryRow("SELECT idProducts FROM Products WHERE ProductName=?", substring[2]).Scan(&idProducts)
+		if err != nil {
+				panic(err.Error())
+		}
+
+		_, err = db.Exec("DELETE FROM Cart WHERE idProducts=? AND idCustomers=?", idProducts, substring[2])
 
 	if err != nil {
 		} else {
