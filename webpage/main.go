@@ -301,10 +301,7 @@ func getCart(w http.ResponseWriter, r *http.Request) {
 					panic(err.Error())
 				}
 
-				err := db.QueryRow("SELECT ProductName FROM Products WHERE idProducts=?", idProducts).Scan(&ProductName)
-				if err != nil {
-						panic(err.Error())
-				}
+				err = db.QueryRow("SELECT ProductName FROM Products WHERE idProducts=?", idProducts).Scan(&ProductName)
 
 				cart.idProducts = idProducts
 				cart.Quantity = Quantity
@@ -313,6 +310,7 @@ func getCart(w http.ResponseWriter, r *http.Request) {
 
 				Cart_result = append(Cart_result, *cart)
 		}
+		log.Printf("1", Cart_result)
 
 	if err != nil {
 		} else {
@@ -574,7 +572,7 @@ func getAll(w http.ResponseWriter, r *http.Request) {
 
 											Orders_result = append(Orders_result, *Orders)
 									}
-
+								log.Printf("1", Orders_result)
 								if err != nil {
 									} else {
 
