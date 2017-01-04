@@ -51,7 +51,7 @@ function DisplayCartData(data) {
       	Product_List.innerHTML = data[i].ProductName + ": " + data[i].Quantity + " x " + "$ " + data[i].TotalPrice + "          ";
         document.getElementById('p'+i).appendChild(btn);
     }
-    document.getElementById("delete"+i).addEventListener("click", function(){ deleteFromCart(CarName); }
+    document.getElementById("delete"+i).addEventListener("click", function(){ deleteFromCart(CarName); });
     var mybr = document.createElement('br');
     document.getElementById('p'+i).appendChild(mybr);
  }

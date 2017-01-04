@@ -353,10 +353,8 @@ func removeFromCart(w http.ResponseWriter, r *http.Request) {
 				panic(err.Error())
 		}
 
-		log.Printf("removing ", idProducts)
-
 		_, err = db.Exec("DELETE FROM Cart WHERE idProducts=? AND idCustomers=?", idProducts, substring[3])
-		log.Printf("delete from cart ", substring[2])
+		log.Printf("delete ", idProducts ," from this users cart ", substring[3])
 	if err != nil {
 		} else {
 
