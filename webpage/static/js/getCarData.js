@@ -135,7 +135,8 @@ function check_info(){
   var customerId = "3"
   document.getElementById('userId').value = customerId;
 
-  window.location.replace("/addReview/");
-  return false;
+  return true
+
+
 
 }
