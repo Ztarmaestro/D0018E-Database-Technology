@@ -117,20 +117,19 @@ function DisplayReviewData(data){
 
   for( var i=0, l=data.length; i<l; i++ ) {
 
-    var r1 = document.createElement("b");
-    r1.id = "r1"+i;
+    var rat = document.createElement("b");
+    rat.id = "rat"+i;
 
-    var r2 = document.createElement("b");
-    r2.id = "r2"+i;
+    var rew = document.createElement("b");
+    rew.id = "rew"+i;
 
-  	Product_rating = document.getElementById('Product_rating').appendChild(r1);
-  	Product_review = document.getElementById('Product_review').appendChild(r2);
+  	Product_rating = document.getElementById('Product_rating').appendChild(rat);
+  	Product_review = document.getElementById('Product_review').appendChild(rew);
 
-  	if(document.getElementById("r1"+i) != null){
-      	Product_rating.innerHTML = data.Rating;
-        Product_review.innerHTML = data.Review;
+  	if(document.getElementById("rat"+i) != null){
+      	Product_rating.innerHTML = data.Rating + " ";
   	}
-    if(document.getElementById("r2"+i) != null){
+    if(document.getElementById("rew"+i) != null){
         Product_review.innerHTML = data.Review;
   	}
     document.write("\n");
