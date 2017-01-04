@@ -28,27 +28,24 @@
                         <p id="Description">
                     </div>
 
-                        <div class="text-right">
-                          <form id="review-form" action="/addReview/" method="POST" onsubmit="return check_info();" role="form" style="display: none;">
-                            <div class="form-group">
-                              <input type="hidden" name="cartype" id="cartype" value="ferrari">
-                              <input type="hidden" name="userId" id="userId">
-                              <input type="number" name="Rating" id="Rating" tabindex="1" class="form-control" placeholder="Rating" value="">
-                            </div>
-                            <div class="form-group">
-                              <input type="text" name="Review" id="Review" tabindex="2" class="form-control" placeholder="Review">
-                            </div>
-                                <input type="submit" name="review-submit" id="review-submit" tabindex="4" class="form-control btn btn-register" value="Add a review">
-                            <div class="form-group">
-                              <div class="row">
-                                <div class="col-sm-6 col-sm-offset-3">
-                                </div>
-                              </div>
-                            </div>
-                          </form>
-                        </div>
-
                     <div class="ratings">
+                      <form id="review-form" action="/addReview/" method="POST" onsubmit="return check_info();" role="form" style="display: none;">
+                        <div class="form-group">
+                          <input type="hidden" name="cartype" id="cartype" value="ferrari">
+                          <input type="hidden" name="userId" id="userId">
+                          <input type="number" name="Rating" id="Rating" tabindex="1" class="form-control" placeholder="Rating" value="">
+                        </div>
+                        <div class="form-group">
+                          <input type="text" name="Review" id="Review" tabindex="2" class="form-control" placeholder="Review">
+                        </div>
+                            <input type="submit" name="review-submit" id="review-submit" tabindex="4" class="form-control btn btn-register" value="Add a review">
+                        <div class="form-group">
+                          <div class="row">
+                            <div class="col-sm-6 col-sm-offset-3">
+                            </div>
+                          </div>
+                        </div>
+                      </form>
                       <div class="text-left">
                         <p class="pull-right">Reviews</p>
                           <h4 class="pull-left" id="Product_review"></h4>
