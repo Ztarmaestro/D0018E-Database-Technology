@@ -29,16 +29,13 @@ function addToCart(customerId, carmodel) {
 
 function checkIfLogin(carmodel) {
 
-//Check if session exist and take the customerId and send with it
-//Else alert and do nothing
+  var customerId = "3"
 
-var customerId = "3"
+  //window.location = "/error";
 
-//window.location = "/error";
+  alert("You are not logged in and can't buy this product. Please register or login to an account");
 
-alert("You are not logged in and can't buy this product. Please register or login to an account");
-
-//should only run if you are loggedin. Need session to check!
-addToCart(customerId, carmodel)
+  //should only run if you are loggedin. Need session to check!
+  addToCart(customerId, carmodel)
 
 }

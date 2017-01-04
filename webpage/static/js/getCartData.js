@@ -48,7 +48,7 @@ function DisplayCartData(data) {
     btn.appendChild(t);
 
   	if(document.getElementById("p"+i) != null){
-      	Product_List.innerHTML = data[i].ProductName + ": " + data[i].Quantity + " x " + "$ " + data[i].TotalPrice + "          ";
+      	Product_List.innerHTML = data[i].ProductName + ": " + data[i].Quantity + " x " + "$ " + data[i].TotalPrice + " ";
         document.getElementById('p'+i).appendChild(btn);
     }
     document.getElementById("delete"+i).addEventListener("click", function(){ deleteFromCart(CarName); });

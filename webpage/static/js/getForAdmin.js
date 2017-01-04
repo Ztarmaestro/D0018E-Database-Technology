@@ -32,29 +32,55 @@ function DisplayAllData(data){
 
   for( var i=0, l=data.length; i<l; i++ ) {
 
-    var b = document.createElement("b");
-    b.id = "o"+i
+    var orderid = data[i].IdOrders;
+    var orderlist = document.createElement("b");
+    orderlist.id = "o"+i;
     var btn = document.createElement("BUTTON");
-    if (data.Sent == 1) {
-      IdOrders = document.getElementById('orderlist').appendChild(b);
 
+    if (data[i].Sent == '1') {
+      IdOrders = document.getElementById('orderlist').appendChild(orderlist);
       var t = document.createTextNode("Sent");
       btn.appendChild(t);
+      IdOrders.innerHTML = data[i].IdOrders;
       document.getElementById('o'+i).appendChild(btn);
-
     } else {
       IdOrders = document.getElementById('orderlist').appendChild(b);
-
-      var t = document.createTextNode("Update order to sent");
+      var t = document.createTextNode("Click to update order to sent");
       btn.appendChild(t);
-      btn.href="/update/"+data.IdOrders
+      btn.id = "send"+i;
+      IdOrders.innerHTML = data[i].IdOrders;
       document.getElementById('o'+i).appendChild(btn);
-
+      document.getElementById("send"+i).addEventListener("click", function(){ updateOrder(orderid); });
     }
-
-  	if(document.getElementById("o"+i) != null){
-      	IdOrders.innerHTML = data.IdOrders;
-  	}
-    document.write("\n");
+    var mybr = document.createElement('br');
+    document.getElementById('o'+i).appendChild(mybr);
  }
+}
+
+function updateOrder(orderid){
+  //Type is the users id that is saved in the session. carmodel is the car that is added to the cart
+  var xhr = typeof XMLHttpRequest != 'undefined'
+    ? new XMLHttpRequest()
+    : new ActiveXObject('Microsoft.XMLHTTP');
+  xhr.open('post',"/update/"+orderid, true);
+  xhr.onreadystatechange = function() {
+    var status;
+    //var data;
+    //var obj;
+    // https://xhr.spec.whatwg.org/#dom-xmlhttprequest-readystate
+    if (xhr.readyState == 4) { // `DONE`
+      status = xhr.status;
+      if (status == 200) {
+        //data = JSON.parse(xhr.response);
+        // obj = JSON.parse(data)
+        //console.log(data)
+        //Sends user to cart
+        window.location = "/adminpage";
+
+      } else {
+        console.log("error")
+      }
+    }
+  };
+  xhr.send();
 }
