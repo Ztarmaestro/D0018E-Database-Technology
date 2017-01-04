@@ -30,6 +30,7 @@ type Cart struct {
 	idCustomers 				string `json=idCustomers`
 	Quantity 						string `json=Quantity`
 	TotalPrice					string `json=TotalPrice`
+	ProductName					string `json=ProductName`
 }
 
 type Orders struct {
@@ -271,7 +272,7 @@ func getCart(w http.ResponseWriter, r *http.Request) {
 
 	  // Grab from the database
 		var Cart_result []Cart // create an array of Cart
-    var idProducts, Quantity, TotalPrice string
+    var idProducts, Quantity, TotalPrice, ProductName string
 
     // Create an sql.DB and check for errors
 		//db, err = sql.Open("mysql", "martin:persson@/mydb")
@@ -300,9 +301,15 @@ func getCart(w http.ResponseWriter, r *http.Request) {
 					panic(err.Error())
 				}
 
+				err := db.QueryRow("SELECT ProductName FROM Products WHERE idProducts=?", idProducts).Scan(&ProductName)
+				if err != nil {
+						panic(err.Error())
+				}
+
 				cart.idProducts = idProducts
 				cart.Quantity = Quantity
 				cart.TotalPrice = TotalPrice
+				cart.ProductName = ProductName
 
 				Cart_result = append(Cart_result, *cart)
 		}
@@ -552,7 +559,7 @@ func getAll(w http.ResponseWriter, r *http.Request) {
 							        panic(err.Error())
 							    }
 
-									rows, err := db.Query("SELECT idOrders, Sent FROM Orders")
+									rows, err := db.Query("SELECT * FROM Orders")
 
 									for rows.Next() {
 									    Orders := &Orders{}

@@ -17,7 +17,7 @@ function getAllData() {
           // obj = JSON.parse(data)
           console.log(data)
           //Sends user to cart
-          DisplayAllData(data)
+          window.onload = DisplayAllData(data)
 
         } else {
           console.log("error")
@@ -36,23 +36,25 @@ function DisplayAllData(data){
     b.id = "o"+i
     var btn = document.createElement("BUTTON");
     if (data.Sent == 1) {
+      IdOrders = document.getElementById('orderlist').appendChild(b);
+
       var t = document.createTextNode("Sent");
       btn.appendChild(t);
       document.getElementById('o'+i).appendChild(btn);
 
+    } else {
       IdOrders = document.getElementById('orderlist').appendChild(b);
 
-    } else {
       var t = document.createTextNode("Update order to sent");
       btn.appendChild(t);
       btn.href="/update/"+data.IdOrders
       document.getElementById('o'+i).appendChild(btn);
 
-      IdOrders = document.getElementById('orderlist').appendChild(b);
     }
 
-  	if(document.getElementById("orderlist") != null){
+  	if(document.getElementById("o"+i) != null){
       	IdOrders.innerHTML = data.IdOrders;
   	}
+    document.write("\n");
  }
 }

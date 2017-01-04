@@ -34,34 +34,33 @@ function DisplayCartData(data) {
 
   for( var i=0, l=data.length; i<l; i++ ) {
 
-    var b = document.createElement("b");
-    b.id = "p"+i;
+    var pid = document.createElement("b");
+    pid.id = "p"+i;
+    var pq = document.createElement("b");
+    pq.id = "q"+i;
+    var ptp = document.createElement("b");
+    ptp.id = "tp"+i;
+    var pttp = document.createElement("b");
+    pttp.id = "ttp"+i;
+
+    Product_Id = document.getElementById('p'+i).appendChild(pid);
+    Quantity = document.getElementById('q'+i).appendChild(pq);
+    TotalPrice = document.getElementById('tp'+i).appendChild(ptp);
+
     var btn = document.createElement("BUTTON");
     var t = document.createTextNode("Delete product");
     btn.appendChild(t);
     btn.href="/removeFromCart/"+data.ProductName; /* +"/"+userId */
-    document.getElementById('p'+i).appendChild(btn);
+    document.getElementById('tp'+i).appendChild(btn);
 
-  	Product_Id = document.getElementById('Product_Id').appendChild(b);
-  	Quantity = document.getElementById('Quantity').appendChild(b);
-    TotalPrice = document.getElementById('TotalPrice').appendChild(b);
-    Totaltotalprice = document.getElementById('Totaltotalprice').appendChild(b);
-
-    //This is the total cost of all product. Need to calulate it somehow!!
-    AllTotalPrice = document.getElementById('Totaltotalprice');
-
-  	if(document.getElementById("Product_Id") != null){
+  	if(document.getElementById("p"+i) != null){
       	Product_Id.innerHTML = data.idProducts;
   	}
-  	if(document.getElementById("Quantity") != null){
+  	if(document.getElementById("q"+i) != null){
       	Quantity.innerHTML = data.Quantity;
   	}
-    if(document.getElementById("TotalPrice") != null){
+    if(document.getElementById("tp"+i) != null){
         TotalPrice.innerHTML = "$"+data.TotalPrice;
-    }
-    if(document.getElementById("TotaltotalPrice") != null){
-      // add all the prices together with Quantity
-        Totaltotalprice.innerHTML = "$"+data.TotalPrice;
     }
     document.write("\n");
  }

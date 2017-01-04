@@ -71,19 +71,19 @@ var pathArray = window.location.pathname.split( '/showroom_nologin/' );
 var pathArray_login = window.location.pathname.split( '/showroom/' );
 if (pathArray[1] == 'ferrari' || pathArray_login[1] == 'ferrari'){
   getCar('ferrari');
-  window.onload = getReview('ferrari');
+  getReview('ferrari');
 }
 if (pathArray[1] == 'camaro'  || pathArray_login[1] == 'camaro'){
   getCar("camaro");
-  window.onload = getReview('camaro');
+  getReview('camaro');
 }
 if (pathArray[1] == 'mustang' || pathArray_login[1] == 'mustang'){
   getCar("mustang");
-  window.onload = getReview('mustang');
+  getReview('mustang');
 }
 if (pathArray[1] == 'charger' || pathArray_login[1] == 'charger'){
   getCar("charger");
-  window.onload = getReview('charger');
+  getReview('charger');
 }
 
 function getReview(type) {
@@ -103,7 +103,7 @@ function getReview(type) {
         data = JSON.parse(xhr.response);
        // obj = JSON.parse(data)
         console.log(data)
-        DisplayReviewData(data)
+        window.onload = DisplayReviewData(data)
 
       } else {
         console.log("error")
