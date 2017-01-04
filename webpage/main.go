@@ -327,6 +327,7 @@ func removeFromCart(w http.ResponseWriter, r *http.Request) {
 	//substring[2] contains the CarName
 	//substring[3] contains the idCustomer
 	substring := strings.Split(result,"/")
+	log.Printf("time to remove car")
 	log.Printf(substring[2])
 	log.Printf(substring[3])
 
@@ -352,8 +353,10 @@ func removeFromCart(w http.ResponseWriter, r *http.Request) {
 				panic(err.Error())
 		}
 
-		_, err = db.Exec("DELETE FROM Cart WHERE idProducts=? AND idCustomers=?", idProducts, substring[2])
+		log.Printf("removing ", idProducts)
 
+		_, err = db.Exec("DELETE FROM Cart WHERE idProducts=? AND idCustomers=?", idProducts, substring[2])
+		log.Printf("delete from cart ", substring[2])
 	if err != nil {
 		} else {
 
