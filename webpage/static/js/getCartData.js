@@ -54,15 +54,17 @@ function DisplayCartData(data) {
     document.getElementById('tp'+i).appendChild(btn);
 
   	if(document.getElementById("p"+i) != null){
-      	Product_Id.innerHTML = data[i].idProducts;
+      	Product_Id.innerHTML = data[i].ProductName;
   	}
   	if(document.getElementById("q"+i) != null){
-      	Quantity.innerHTML = data[i].Quantity;
+      	Quantity.innerHTML = data[i].Quantity + " x ";
   	}
     if(document.getElementById("tp"+i) != null){
         TotalPrice.innerHTML = "$ "+data[i].TotalPrice;
     }
     var mybr = document.createElement('br');
+    document.getElementById('p'+i).appendChild(mybr);
+    document.getElementById('q'+i).appendChild(mybr);
     document.getElementById('tp'+i).appendChild(mybr);
  }
 }
