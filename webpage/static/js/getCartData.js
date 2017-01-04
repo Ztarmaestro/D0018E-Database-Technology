@@ -43,9 +43,9 @@ function DisplayCartData(data) {
     var pttp = document.createElement("b");
     pttp.id = "ttp"+i;
 
-    Product_Id = document.getElementById('p'+i).appendChild(pid);
-    Quantity = document.getElementById('q'+i).appendChild(pq);
-    TotalPrice = document.getElementById('tp'+i).appendChild(ptp);
+    Product_Id = document.getElementById('Product_Id').appendChild(pid);
+    Quantity = document.getElementById('Quantity').appendChild(pq);
+    TotalPrice = document.getElementById('TotalPrice').appendChild(ptp);
 
     var btn = document.createElement("BUTTON");
     var t = document.createTextNode("Delete product");
@@ -54,15 +54,16 @@ function DisplayCartData(data) {
     document.getElementById('tp'+i).appendChild(btn);
 
   	if(document.getElementById("p"+i) != null){
-      	Product_Id.innerHTML = data.idProducts;
+      	Product_Id.innerHTML = data[i].idProducts;
   	}
   	if(document.getElementById("q"+i) != null){
-      	Quantity.innerHTML = data.Quantity;
+      	Quantity.innerHTML = data[i].Quantity;
   	}
     if(document.getElementById("tp"+i) != null){
-        TotalPrice.innerHTML = "$"+data.TotalPrice;
+        TotalPrice.innerHTML = "$ "+data[i].TotalPrice;
     }
-    document.write("\n");
+    var mybr = document.createElement('br');
+    document.getElementById('tp'+i).appendChild(mybr);
  }
 }
 
