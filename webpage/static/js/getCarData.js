@@ -67,6 +67,7 @@ function getCar(type) {
   xhr.send();
 }
 
+window.onload = function {
 var pathArray = window.location.pathname.split( '/showroom_nologin/' );
 var pathArray_login = window.location.pathname.split( '/showroom/' );
 if (pathArray[1] == 'ferrari' || pathArray_login[1] == 'ferrari'){
@@ -84,6 +85,7 @@ if (pathArray[1] == 'mustang' || pathArray_login[1] == 'mustang'){
 if (pathArray[1] == 'charger' || pathArray_login[1] == 'charger'){
   getCar("charger");
   getReview('charger');
+}
 }
 
 function getReview(type) {
@@ -103,7 +105,7 @@ function getReview(type) {
         data = JSON.parse(xhr.response);
        // obj = JSON.parse(data)
         console.log(data)
-        window.onload = DisplayReviewData(data)
+        DisplayReviewData(data)
 
       } else {
         console.log("error")
