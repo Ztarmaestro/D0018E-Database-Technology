@@ -36,36 +36,20 @@ function DisplayCartData(data) {
 
     var pid = document.createElement("b");
     pid.id = "p"+i;
-    var pq = document.createElement("b");
-    pq.id = "q"+i;
-    var ptp = document.createElement("b");
-    ptp.id = "tp"+i;
-    var pttp = document.createElement("b");
-    pttp.id = "ttp"+i;
 
-    Product_Id = document.getElementById('Product_Id').appendChild(pid);
-    Quantity = document.getElementById('Quantity').appendChild(pq);
-    TotalPrice = document.getElementById('TotalPrice').appendChild(ptp);
+    Product_List = document.getElementById('Product_List').appendChild(pid);
 
     var btn = document.createElement("BUTTON");
     var t = document.createTextNode("Delete product");
     btn.appendChild(t);
     btn.href="/removeFromCart/"+data.ProductName; /* +"/"+userId */
-    document.getElementById('tp'+i).appendChild(btn);
+    document.getElementById('p'+i).appendChild(btn);
 
   	if(document.getElementById("p"+i) != null){
-      	Product_Id.innerHTML = data[i].ProductName;
+      	Product_List.innerHTML = data[i].ProductName + ": " + data[i].Quantity + " x " + "$ " + data[i].TotalPrice;
   	}
-  	if(document.getElementById("q"+i) != null){
-      	Quantity.innerHTML = data[i].Quantity + " x ";
-  	}
-    if(document.getElementById("tp"+i) != null){
-        TotalPrice.innerHTML = "$ "+data[i].TotalPrice;
-    }
     var mybr = document.createElement('br');
     document.getElementById('p'+i).appendChild(mybr);
-    document.getElementById('q'+i).appendChild(mybr);
-    document.getElementById('tp'+i).appendChild(mybr);
  }
 }
 
