@@ -67,7 +67,7 @@ function getCar(type) {
   xhr.send();
 }
 
-window.onload = function {
+window.onload = function() {
 var pathArray = window.location.pathname.split( '/showroom_nologin/' );
 var pathArray_login = window.location.pathname.split( '/showroom/' );
 if (pathArray[1] == 'ferrari' || pathArray_login[1] == 'ferrari'){
@@ -122,9 +122,9 @@ function DisplayReviewData(data){
   	Product_review = document.getElementById('Product_review')
 
   	if(document.getElementById("Product_review") != null){
-        Product_review.innerHTML = data.Review;
+        Product_review.innerHTML = data[i].Review;
         document.write("\n");
-      	Product_review.innerHTML = data.Rating + " ";
+      	Product_review.innerHTML = data[i].Rating;
         var x = document.createElement("HR");
         document.getElementById('Product_review').appendChild(x);
   	}
