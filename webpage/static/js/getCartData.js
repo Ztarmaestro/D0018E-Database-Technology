@@ -95,7 +95,7 @@ function getUserCart() {
 
   //window.location = "/error";
 
-  alert("You are not logged in and should not be here! Please register or login to an account");
+  //alert("You are not logged in and should not be here! Please register or login to an account");
 
   //should only run if you are loggedin. Need session to check!
   getCart(customerId)

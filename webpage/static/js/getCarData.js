@@ -127,3 +127,13 @@ function DisplayReviewData(data){
           document.getElementById('r'+i).appendChild(mybr);
     }
 }
+
+function check_info(){
+
+  // get the users customerid
+
+  var customerId = "3"
+  document.getElementById('userId').value = customerId;
+
+  return true
+}

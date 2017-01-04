@@ -459,14 +459,13 @@ func addToCart(w http.ResponseWriter, r *http.Request) {
 	    defer db.Close()}
 */
 
-/* func addReview(w http.ResponseWriter, r *http.Request) {
+func addReview(w http.ResponseWriter, r *http.Request) {
 
-	result := r.URL.RequestURI()
-	//substring[2] contains the Rating
-	//substring[3] contains the Review
-	//substring[4] contains the customerId
-	//substring[5] contains the ProductName
-	substring := strings.Split(result,"/")
+
+	Rating := req.FormValue("Rating")
+	Review := req.FormValue("Review")
+	carmodel := req.FormValue("cartype")
+	userId := req.FormValue("userId")
 
 				  // Grab everything from the database
 					var idProducts string
@@ -483,15 +482,15 @@ func addToCart(w http.ResponseWriter, r *http.Request) {
 			    if err != nil {
 			        panic(err.Error())
 			    }
-					err := db.QueryRow("SELECT idProducts FROM Products WHERE ProductName=?", substring[5]).Scan(&idProducts)
-					_, err = db.Exec("INSERT INTO Review(idCustomers, idProducts, Rating, Review) VALUES(?, ?, ?, ?)", substring[4], idProducts, substring[2], substring[3])
+					err := db.QueryRow("SELECT idProducts FROM Products WHERE ProductName=?", carmodel).Scan(&idProducts)
+					_, err = db.Exec("INSERT INTO Review(idCustomers, idProducts, Rating, Review) VALUES(?, ?, ?, ?)", userId, idProducts, Rating, Review)
 
 				if err != nil {
 					} else {
 
 					}
 
-				defer db.Close()} */
+				defer db.Close()}
 
 func getReview(w http.ResponseWriter, r *http.Request) {
 
@@ -816,7 +815,7 @@ func main() {
 
 	/* For review */
 	http.HandleFunc("/getReview/", getReview)
-	/* http.HandleFunc("/addReview", addReview) */
+	http.HandleFunc("/addReview/", addReview)
 
 	fmt.Println("Server running on", bindAddr)
 	log.Fatal(http.ListenAndServe(bindAddr, nil))}
