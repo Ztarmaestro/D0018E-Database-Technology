@@ -15,6 +15,10 @@ import (
 	//"github.com/gorilla/mux"
 	//"github.com/gorilla/sessions"
 )
+type Cookie struct{
+	Name 	string
+	Value 	string
+}
 
 type Car struct {
 	idProducts					string `json=idProducts`
@@ -43,8 +47,12 @@ type Review struct {
 	Review							string `json=Review`
 }
 
+
+var cookie = &Cookie{}
 var db *sql.DB
 var err error
+
+
 
 func registerHandler(res http.ResponseWriter, req *http.Request) {
 	log.Printf("registerHandler")
@@ -56,7 +64,8 @@ func registerHandler(res http.ResponseWriter, req *http.Request) {
 
 	// Create an sql.DB and check for errors
     //db, err = sql.Open("mysql", "martin:persson@/mydb")
-		db, err = sql.Open("mysql", "pi:exoticpi@/mydb")
+    //	db, err = sql.Open("mysql", "root:@/mydb")
+		db, err = sql.Open("mysql", "root:@/mydb")
     if err != nil {
         panic(err.Error())
     }
@@ -75,15 +84,22 @@ func registerHandler(res http.ResponseWriter, req *http.Request) {
     switch {
     case err == sql.ErrNoRows:
     	//hashedPassword, err := bcrypt.GenerateFromPassword([]byte(password), bcrypt.DefaultCost)
-        if err == nil {
+        if err == nil { 
 			http.Error(res, "Server error, unable to create your account.", 500)
             return
         }
+
         _, err = db.Exec("INSERT INTO Customers(Email, password) VALUES(?, ?)", Email, password)
         if err != nil {
 			http.Error(res, "Server error, unable to create your account.", 500)
             return
         }
+
+
+		http.SetCookie(res, &http.Cookie{
+		Name:	Email,
+		Value:	"1",
+		})
        http.Redirect(res, req, "/startpage", 301)
        return
     case err != nil:
@@ -106,7 +122,7 @@ func authHandler(w http.ResponseWriter, r *http.Request)  {
     var Admin string
 
     // Create an sql.DB and check for errors
-		db, err = sql.Open("mysql", "pi:exoticpi@/mydb")
+		db, err = sql.Open("mysql", "root:@/mydb")
     if err != nil {
         panic(err.Error())
     }
@@ -235,7 +251,7 @@ func getCar(w http.ResponseWriter, r *http.Request) {
 
     // Create an sql.DB and check for errors
 		//db, err = sql.Open("mysql", "martin:persson@/mydb")
-		db, err = sql.Open("mysql", "pi:exoticpi@/mydb")
+		db, err = sql.Open("mysql", "root:@/mydb")
     if err != nil {
         panic(err.Error())
     }
@@ -276,7 +292,7 @@ func getCart(w http.ResponseWriter, r *http.Request) {
 
     // Create an sql.DB and check for errors
 		//db, err = sql.Open("mysql", "martin:persson@/mydb")
-		db, err = sql.Open("mysql", "pi:exoticpi@/mydb")
+		db, err = sql.Open("mysql", "root:@/mydb")
     if err != nil {
         panic(err.Error())
     }
@@ -335,7 +351,7 @@ func removeFromCart(w http.ResponseWriter, r *http.Request) {
 
     // Create an sql.DB and check for errors
 		//db, err = sql.Open("mysql", "martin:persson@/mydb")
-		db, err = sql.Open("mysql", "pi:exoticpi@/mydb")
+		db, err = sql.Open("mysql", "root:@/mydb")
     if err != nil {
         panic(err.Error())
     }
@@ -376,7 +392,7 @@ func addToCart(w http.ResponseWriter, r *http.Request) {
 
 	    // Create an sql.DB and check for errors
 			//db, err = sql.Open("mysql", "martin:persson@/mydb")
-			db, err = sql.Open("mysql", "pi:exoticpi@/mydb")
+			db, err = sql.Open("mysql", "root:@/mydb")
 	    if err != nil {
 	        panic(err.Error())
 	    }
@@ -413,23 +429,15 @@ func addToCart(w http.ResponseWriter, r *http.Request) {
 
 		defer db.Close()}
 
-/*func sendOrder(w http.ResponseWriter, r *http.Request)  {
+func  sendOrder(w http.ResponseWriter, r *http.Request)  {
 		log.Printf("sendHandler")
-		result := r.URL.RequestURI()
+		//result := r.URL.RequestURI()
 		//substring[2] contains the customerId
-		substring := strings.Split(result,"/")
+		//substring := strings.Split(result,"/")
 
-		// Take the cart for this customer and create an order.
-		//	 Also remove what was bought from the DB and clear the cart
 
-	    // Grab the address, card, etc from the submitted post form
-	    Email := r.FormValue("Email")
 
-	    // Grab from the database
-	    var databaseUsername  string
-
-	    // Create an sql.DB and check for errors
-			db, err = sql.Open("mysql", "pi:exoticpi@/mydb")
+		db, err = sql.Open("mysql", "root:@/mydb")
 	    if err != nil {
 	        panic(err.Error())
 	    }
@@ -441,23 +449,26 @@ func addToCart(w http.ResponseWriter, r *http.Request) {
 	    }
 	    // Search the database for the username provided
 	    // If it exists grab the password for validation
-	    err := db.QueryRow("SELECT Email, Password, Admin FROM Customers WHERE Email=?", Email).Scan(&databaseUsername, &databasePassword, &Admin)
+	    var idProducts int
+	    var idCustomers int
+	    var Quantity int
+	    var TotalPrice int
+	    var idOrders string
+	    var ProductName string
+	    var Price int
+
+ 		err := db.QueryRow("SELECT * FROM Cart WHERE idCustomers=?", idCustomers).Scan(&idCustomers,&idProducts,&Quantity,&TotalPrice)
+ 		_, err = db.Exec("INSERT INTO OrderDetails(idOrders, idProducts, ProductName, Quantity, Price) VALUES(?,?,?,?,?)", idOrders, idProducts, ProductName, Quantity, Price)
+ 	
+
+	    err = db.QueryRow("DROP * FROM Cart WHERE idCustomers=?", idCustomers).Scan(&idCustomers,&idProducts,&Quantity,&TotalPrice)
 		if err == nil {
-	    		if (Email == databaseUsername && password == databasePassword){
-	    			if (Admin == "1"){
-	    				http.Redirect(w, r, "/adminpage", 301)
-	    			} else {
-	        		http.Redirect(w, r, "/startpage", 301)
-	        		}
-	        	} else{
-	        			http.Redirect(w,r,"/login",301)
-	        	}
-	    } else{
+			} else{
 	        		http.Redirect(w,r,"/login",301)
-	   	}
+	   		}
 	   	// sql.DB should be long lived "defer" closes it once this function ends
-	    defer db.Close()}
-*/
+		defer db.Close()
+		}
 
 func addReview(w http.ResponseWriter, req *http.Request) {
 
@@ -472,7 +483,7 @@ func addReview(w http.ResponseWriter, req *http.Request) {
 
 			    // Create an sql.DB and check for errors
 					//db, err = sql.Open("mysql", "martin:persson@/mydb")
-					db, err = sql.Open("mysql", "pi:exoticpi@/mydb")
+					db, err = sql.Open("mysql", "root:@/mydb")
 			    if err != nil {
 			        panic(err.Error())
 			    }
@@ -506,7 +517,7 @@ func getReview(w http.ResponseWriter, r *http.Request) {
 
 			    // Create an sql.DB and check for errors
 					//db, err = sql.Open("mysql", "martin:persson@/mydb")
-					db, err = sql.Open("mysql", "pi:exoticpi@/mydb")
+					db, err = sql.Open("mysql", "root:@/mydb")
 			    if err != nil {
 			        panic(err.Error())
 			    }
@@ -553,7 +564,7 @@ func getAll(w http.ResponseWriter, r *http.Request) {
 
 							    // Create an sql.DB and check for errors
 									//db, err = sql.Open("mysql", "martin:persson@/mydb")
-									db, err = sql.Open("mysql", "pi:exoticpi@/mydb")
+									db, err = sql.Open("mysql", "root:@/mydb")
 							    if err != nil {
 							        panic(err.Error())
 							    }
@@ -602,7 +613,7 @@ func updateDB(w http.ResponseWriter, r *http.Request) {
 
 	// Create an sql.DB and check for errors
 	//db, err = sql.Open("mysql", "martin:persson@/mydb")
-	db, err = sql.Open("mysql", "pi:exoticpi@/mydb")
+	db, err = sql.Open("mysql", "root:@/mydb")
 	if err != nil {
 		 panic(err.Error())
 	}
@@ -769,10 +780,10 @@ func main() {
 	http.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.Dir("./static"))))
 
 	//Real address for server, change back before pushing to git
-	bindAddr := "192.168.1.242:8080"
+	//bindAddr := "192.168.1.242:8080"
 
 	//Address for testing server on LAN
-	//bindAddr := "127.0.0.1:8000"
+	bindAddr := "127.0.0.1:8000"
 
   //Mox Address
 	//bindAddr := "130.240.110.93:8000"
