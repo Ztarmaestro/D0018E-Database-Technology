@@ -117,8 +117,6 @@ function getReview(type) {
 
 function DisplayReviewData(data){
 
-  function DisplayReviewData(data){
-
     for( var i=0, l=data.length; i<l; i++ ) {
           var pr = document.createElement("b");
           pr.id = "r"+i;
