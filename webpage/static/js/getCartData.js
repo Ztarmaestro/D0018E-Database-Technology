@@ -41,15 +41,17 @@ function DisplayCartData(data) {
 
     //btn.href="/removeFromCart/"+data.ProductName; /* +"/"+userId */
 
-  	if(document.getElementById("p"+i) != null){
-      	Product_List.innerHTML = data[i].ProductName + ": " + data[i].Quantity + " x " + "$ " + data[i].TotalPrice + " ";
-  	}
     var btn = document.createElement("BUTTON");
     var t = document.createTextNode("Delete product");
     btn.id = "delete"+i;
     btn.appendChild(t);
-    document.getElementById('p'+i).appendChild(btn);
-    document.getElementById("delete"+i).addEventListener("click", deleteFromCart(data[i].ProductName));
+
+    //document.getElementById("delete"+i).addEventListener("click", deleteFromCart(data[i].ProductName));
+
+  	if(document.getElementById("p"+i) != null){
+      	Product_List.innerHTML = data[i].ProductName + ": " + data[i].Quantity + " x " + "$ " + data[i].TotalPrice + " ";
+        document.getElementById('p'+i).appendChild(btn);
+    }
     var mybr = document.createElement('br');
     document.getElementById('delete'+i).appendChild(mybr);
  }
