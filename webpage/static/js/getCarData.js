@@ -128,7 +128,7 @@ function DisplayReviewData(data){
     }
 }
 
-function check_info(){
+function check_info(car){
 
   // get the users customerid
 
@@ -136,4 +136,7 @@ function check_info(){
   document.getElementById('userId').value = customerId;
 
   return true
+
+  window.location = "/showroom_nologin/car";
+
 }

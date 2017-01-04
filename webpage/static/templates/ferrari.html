@@ -30,14 +30,14 @@
 
                     <div class="ratings">
                       <div class="text-left">
-                        <p class="pull-left">Reviews</p>
-                        <form id="review-form" action="/addReview/" method="POST" onsubmit="return check_info();" role="form">
+                        <form id="review-form" action="/addReview/" method="POST" onsubmit="return check_info(ferrari);" role="form">
                             <input type="hidden" name="cartype" id="cartype" value="ferrari">
                             <input type="hidden" name="userId" id="userId">
                             <input type="number" name="Rating" id="Rating" tabindex="1" class="form-control" placeholder="Rating" value="" min="1" max="5">
                             <input type="text" name="Review" id="Review" tabindex="2" class="form-control" placeholder="Review">
                             <input type="submit" name="review-submit" id="review-submit" tabindex="4" class="form-control btn btn-register" value="Add a review">
                         </form>
+                        <p class="pull-left">Reviews</p>
                           <h4 class="pull-left" id="Product_review"></h4>
                       </div>
                     </div>
