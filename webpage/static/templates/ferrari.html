@@ -30,7 +30,7 @@
 
                     <div class="ratings">
                       <div class="text-left">
-                        <form id="review-form" action="/addReview/" method="POST" onsubmit="return check_info(ferrari);" role="form">
+                        <form id="review-form" method="POST" onsubmit="return check_info();" role="form">
                             <input type="hidden" name="cartype" id="cartype" value="ferrari">
                             <input type="hidden" name="userId" id="userId">
                             <input type="number" name="Rating" id="Rating" tabindex="1" class="form-control" placeholder="Rating" value="" min="1" max="5">

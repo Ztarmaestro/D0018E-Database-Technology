@@ -128,15 +128,14 @@ function DisplayReviewData(data){
     }
 }
 
-function check_info(car){
+function check_info(){
 
   // get the users customerid
 
   var customerId = "3"
   document.getElementById('userId').value = customerId;
 
-  return true
-
-  window.location = "/showroom_nologin/car";
+  window.location.replace("/addReview/");
+  return false;
 
 }
