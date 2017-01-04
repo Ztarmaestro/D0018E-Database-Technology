@@ -71,19 +71,19 @@ var pathArray = window.location.pathname.split( '/showroom_nologin/' );
 var pathArray_login = window.location.pathname.split( '/showroom/' );
 if (pathArray[1] == 'ferrari' || pathArray_login[1] == 'ferrari'){
   getCar('ferrari');
-  getReview('ferrari');
+  window.onload = getReview('ferrari');
 }
 if (pathArray[1] == 'camaro'  || pathArray_login[1] == 'camaro'){
   getCar("camaro");
-  getReview('camaro');
+  window.onload = getReview('camaro');
 }
 if (pathArray[1] == 'mustang' || pathArray_login[1] == 'mustang'){
   getCar("mustang");
-  getReview('mustang');
+  window.onload = getReview('mustang');
 }
 if (pathArray[1] == 'charger' || pathArray_login[1] == 'charger'){
   getCar("charger");
-  getReview('charger');
+  window.onload = getReview('charger');
 }
 
 function getReview(type) {
