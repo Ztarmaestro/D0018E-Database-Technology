@@ -459,7 +459,7 @@ func addToCart(w http.ResponseWriter, r *http.Request) {
 	    defer db.Close()}
 */
 
-func addReview(w http.ResponseWriter, r *http.Request) {
+func addReview(w http.ResponseWriter, req *http.Request) {
 
 
 	Rating := req.FormValue("Rating")
