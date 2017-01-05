@@ -1,5 +1,6 @@
 
-function getAllData() {
+//function getAllData() {
+window.onload = function() {
     //Type is the users id that is saved in the session. carmodel is the car that is added to the cart
     var xhr = typeof XMLHttpRequest != 'undefined'
       ? new XMLHttpRequest()
