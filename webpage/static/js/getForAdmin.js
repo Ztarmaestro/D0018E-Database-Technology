@@ -52,7 +52,7 @@ function DisplayAllData(data){
       } else {
         var isPaid = "Not Paid";
       }
-    var IdOrders = document.getElementById('orderlist');
+      var IdOrders = document.getElementById('orderlist');
       if (IdOrders != null) {
         IdOrders.appendChild(orderlist);
         var t = document.createTextNode("Click to update order to sent");
@@ -64,8 +64,11 @@ function DisplayAllData(data){
       }
     }
     var mybr = document.createElement('br');
-    document.getElementById('o'+i).appendChild(mybr);
- }
+    var addmybr = document.getElementById('o'+i);
+      if (addmybr != null) {
+        addmybr.appendChild(mybr);
+      }
+  }
 }
 
 function updateOrder(orderid){
