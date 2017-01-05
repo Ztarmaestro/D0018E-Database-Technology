@@ -116,11 +116,11 @@ func registerHandler(res http.ResponseWriter, req *http.Request) {
     }
     defer db.Close()}
 
-func authHandler(w http.ResponseWriter, r *http.Request)  {
+func authHandler(res http.ResponseWriter, req *http.Request)  {
 	log.Printf("authHandler")
     // Grab the username/password from the submitted post form
-    Email := r.FormValue("Email")
-    password := r.FormValue("password")
+    Email := req.FormValue("Email")
+    password := req.FormValue("password")
 
     // Grab from the database
     var databaseUsername  string
@@ -145,24 +145,24 @@ func authHandler(w http.ResponseWriter, r *http.Request)  {
     		if (Email == databaseUsername && password == databasePassword){
 					_, err = db.Exec("SELECT idCustomers FROM Customers WHERE Email=?", Email).Scan(&idCustomers)
 					if err != nil {
-				http.Error(r, "Server error, unable to create your account.", 500)
+				http.Error(res, "Server error, unable to create your account.", 500)
 							return
 					}
 
-					http.SetCookie(r, &http.Cookie{
+					http.SetCookie(res, &http.Cookie{
 					Name:	idCustomers,
 					Value:	"1",
 					})
     			if (Admin == "1"){
-    				http.Redirect(w, r, "/adminpage", 301)
+    				http.Redirect(res, req, "/adminpage", 301)
     			} else {
-        		http.Redirect(w, r, "/startpage", 301)
+        		http.Redirect(res, req, "/startpage", 301)
         		}
         	} else{
-        			http.Redirect(w,r,"/login",301)
+        			http.Redirect(res,req,"/login",301)
         	}
     } else{
-        		http.Redirect(w,r,"/login",301)
+        		http.Redirect(res,req,"/login",301)
    	}
    	// sql.DB should be long lived "defer" closes it once this function ends
     defer db.Close()
