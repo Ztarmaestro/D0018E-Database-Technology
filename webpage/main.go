@@ -95,7 +95,7 @@ func registerHandler(res http.ResponseWriter, req *http.Request) {
             return
         }
 
-				_, err = db.Exec("SELECT idCustomers FROM Customers WHERE Email=?", Email).Scan(&idCustomers)
+				_, err = db.QueryRow("SELECT idCustomers FROM Customers WHERE Email=?", Email).Scan(&idCustomers)
 				if err != nil {
 			http.Error(res, "Server error, unable to create your account.", 500)
 						return
@@ -143,7 +143,7 @@ func authHandler(res http.ResponseWriter, req *http.Request)  {
     err := db.QueryRow("SELECT Email, Password, Admin FROM Customers WHERE Email=?", Email).Scan(&databaseUsername, &databasePassword, &Admin)
 	if err == nil {
     		if (Email == databaseUsername && password == databasePassword){
-					_, err = db.Exec("SELECT idCustomers FROM Customers WHERE Email=?", Email).Scan(&idCustomers)
+					_, err = db.QueryRow("SELECT idCustomers FROM Customers WHERE Email=?", Email).Scan(&idCustomers)
 					if err != nil {
 				http.Error(res, "Server error, unable to create your account.", 500)
 							return
