@@ -40,6 +40,8 @@ type Cart struct {
 type Orders struct {
 	idOrders						int `json=idOrders`
 	Sent 								int `json=Sent`
+	Paid 								int `json=Paid`
+	PaymentType					string `json=PaymentType`
 }
 
 type Review struct {
@@ -125,7 +127,7 @@ func authHandler(w http.ResponseWriter, r *http.Request)  {
     // Grab from the database
     var databaseUsername  string
     var databasePassword  string
-    var Admin, idCustomers tring
+    var Admin, idCustomers string
 
     // Create an sql.DB and check for errors
 		db, err = sql.Open("mysql", "pi:exoticpi@/mydb")
@@ -145,11 +147,11 @@ func authHandler(w http.ResponseWriter, r *http.Request)  {
     		if (Email == databaseUsername && password == databasePassword){
 					_, err = db.Exec("SELECT idCustomers FROM Customers WHERE Email=?", Email).Scan(&idCustomers)
 					if err != nil {
-				http.Error(res, "Server error, unable to create your account.", 500)
+				http.Error(r, "Server error, unable to create your account.", 500)
 							return
 					}
 
-					http.SetCookie(res, &http.Cookie{
+					http.SetCookie(r, &http.Cookie{
 					Name:	idCustomers,
 					Value:	"1",
 					})
@@ -597,16 +599,22 @@ func getAll(w http.ResponseWriter, r *http.Request) {
 									for rows.Next() {
 									    Orders := &Orders{}
 											err := rows.Scan(&idOrders, &Sent, &Paid)
-											err := db.QueryRow("SELECT PaymentType FROM Payment WHERE idPayment=?", idOrders).Scan(&PaymentType)
+
+											Orders.idOrders = idOrders
+											Orders.Sent = Sent
+											Orders.Paid = Paid
+
+											if err != nil {
+												panic(err.Error())
+											}
+
+											err = db.QueryRow("SELECT PaymentType FROM Payment WHERE idPayment=?", idOrders).Scan(&PaymentType)
 
 											if err != nil {
 												panic(err.Error())
 											}
 
 											Orders.PaymentType = PaymentType
-											Orders.idOrders = idOrders
-											Orders.Sent = Sent
-											Orders.Paid = Paid
 
 											Orders_result = append(Orders_result, *Orders)
 									}
