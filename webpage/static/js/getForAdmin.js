@@ -38,24 +38,30 @@ function DisplayAllData(data){
     var btn = document.createElement("BUTTON");
 
     if (data[i].Sent == '1') {
-      IdOrders = document.getElementById('orderlist').appendChild(orderlist);
-      var t = document.createTextNode("Sent");
-      btn.appendChild(t);
-      IdOrders.innerHTML = data[i].IdOrders + " | PaymentType: " + data[i].PaymentType + " ";
-      document.getElementById('o'+i).appendChild(btn);
+      var IdOrders = document.getElementById('orderlist');
+      if (IdOrders != null) {
+        IdOrders.appendChild(orderlist);
+        var t = document.createTextNode("Sent");
+        btn.appendChild(t);
+        IdOrders.innerHTML = data[i].IdOrders + " | PaymentType: " + data[i].PaymentType + " ";
+        document.getElementById('o'+i).appendChild(btn);
+      }
     } else {
       if (data[i].Paid == 1){
         var isPaid = "Paid";
       } else {
         var isPaid = "Not Paid";
       }
-      IdOrders = document.getElementById('orderlist').appendChild(orderlist);
-      var t = document.createTextNode("Click to update order to sent");
-      btn.appendChild(t);
-      btn.id = "send"+i;
-      IdOrders.innerHTML = "OrderId: " + data[i].IdOrders + " | " + paid + " | PaymentType: " + data[i].PaymentType + " ";
-      document.getElementById('o'+i).appendChild(btn);
-      document.getElementById("send"+i).addEventListener("click", function(){ updateOrder(orderid); });
+    var IdOrders = document.getElementById('orderlist');
+      if (IdOrders != null) {
+        IdOrders.appendChild(orderlist);
+        var t = document.createTextNode("Click to update order to sent");
+        btn.appendChild(t);
+        btn.id = "send"+i;
+        IdOrders.innerHTML = "OrderId: " + data[i].IdOrders + " | " + paid + " | PaymentType: " + data[i].PaymentType + " ";
+        document.getElementById('o'+i).appendChild(btn);
+        document.getElementById("send"+i).addEventListener("click", function(){ updateOrder(orderid); });
+      }
     }
     var mybr = document.createElement('br');
     document.getElementById('o'+i).appendChild(mybr);
