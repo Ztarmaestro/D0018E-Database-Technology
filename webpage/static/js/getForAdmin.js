@@ -30,17 +30,19 @@ window.onload = function() {
 
 // Put all data on the admin page Orders produkt etc.
 function DisplayAllData(data){
-
+console.log("Time to display data");
   for( var i=0, l=data.length; i<l; i++ ) {
-
+    console.log("Row "+i);
     var orderid = data[i].IdOrders;
     var orderlist = document.createElement("b");
     orderlist.id = "o"+i;
     var btn = document.createElement("BUTTON");
 
     if (data[i].Sent == '1') {
+      console.log("Order "+ i +" sent");
       var IdOrders = document.getElementById('Orderlist');
       if (IdOrders != null) {
+        console.log("Orderlist Not null");
         IdOrders.appendChild(orderlist);
         var t = document.createTextNode("Sent");
         btn.appendChild(t);
@@ -48,6 +50,7 @@ function DisplayAllData(data){
         document.getElementById('o'+i).appendChild(btn);
       }
     } else {
+      console.log("Order "+ i +" not sent");
       if (data[i].Paid == 1){
         var isPaid = "Paid";
       } else {
@@ -55,6 +58,7 @@ function DisplayAllData(data){
       }
       var IdOrders = document.getElementById('Orderlist');
       if (IdOrders != null) {
+        console.log("Orderlist Not null");
         IdOrders.appendChild(orderlist);
         var t = document.createTextNode("Click to update order to sent");
         btn.appendChild(t);
@@ -67,8 +71,10 @@ function DisplayAllData(data){
     var mybr = document.createElement('br');
     var addmybr = document.getElementById('o'+i);
       if (addmybr != null) {
+        console.log("addmybr not null");
         addmybr.appendChild(mybr);
       }
+    console.log("Done");
   }
 }
 
