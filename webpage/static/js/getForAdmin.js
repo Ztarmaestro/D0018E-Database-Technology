@@ -49,7 +49,7 @@ function DisplayAllData(data){
       } else {
         var isPaid = "Not Paid";
       }
-      IdOrders = document.getElementById('orderlist').appendChild(b);
+      IdOrders = document.getElementById('orderlist').appendChild(orderlist);
       var t = document.createTextNode("Click to update order to sent");
       btn.appendChild(t);
       btn.id = "send"+i;
