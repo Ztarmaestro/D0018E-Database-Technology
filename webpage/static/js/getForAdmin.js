@@ -38,7 +38,7 @@ function DisplayAllData(data){
     var btn = document.createElement("BUTTON");
 
     if (data[i].Sent == '1') {
-      var IdOrders = document.getElementById('orderlist');
+      var IdOrders = document.getElementById('Orderlist');
       if (IdOrders != null) {
         IdOrders.appendChild(orderlist);
         var t = document.createTextNode("Sent");
@@ -52,7 +52,7 @@ function DisplayAllData(data){
       } else {
         var isPaid = "Not Paid";
       }
-      var IdOrders = document.getElementById('orderlist');
+      var IdOrders = document.getElementById('Orderlist');
       if (IdOrders != null) {
         IdOrders.appendChild(orderlist);
         var t = document.createTextNode("Click to update order to sent");
