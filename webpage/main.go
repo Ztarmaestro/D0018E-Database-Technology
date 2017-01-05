@@ -15,6 +15,7 @@ import (
 	//"github.com/gorilla/mux"
 	//"github.com/gorilla/sessions"
 )
+
 type Cookie struct{
 	Name 	string
 	Value 	string
@@ -49,12 +50,9 @@ type Review struct {
 	Review							string `json=Review`
 }
 
-
 var cookie = &Cookie{}
 var db *sql.DB
 var err error
-
-
 
 func registerHandler(res http.ResponseWriter, req *http.Request) {
 	log.Printf("registerHandler")
