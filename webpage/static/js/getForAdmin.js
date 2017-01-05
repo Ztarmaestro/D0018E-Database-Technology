@@ -63,7 +63,7 @@ console.log("Time to display data");
         var t = document.createTextNode("Click to update order to sent");
         btn.appendChild(t);
         btn.id = "send"+i;
-        IdOrders.innerHTML = "OrderId: " + data[i].IdOrders + " | " + paid + " | PaymentType: " + data[i].PaymentType + " ";
+        IdOrders.innerHTML = "OrderId: " + data[i].IdOrders + " | " + isPaid + " | PaymentType: " + data[i].PaymentType + " ";
         document.getElementById('o'+i).appendChild(btn);
         document.getElementById("send"+i).addEventListener("click", function(){ updateOrder(orderid); });
       }
