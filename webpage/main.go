@@ -60,7 +60,7 @@ func registerHandler(res http.ResponseWriter, req *http.Request) {
 	Email := req.FormValue("Email")
 	password := req.FormValue("password")
 
-	var user string
+	var user, idCustomers string
 
 	// Create an sql.DB and check for errors
     //db, err = sql.Open("mysql", "martin:persson@/mydb")
@@ -84,7 +84,7 @@ func registerHandler(res http.ResponseWriter, req *http.Request) {
     switch {
     case err == sql.ErrNoRows:
     	//hashedPassword, err := bcrypt.GenerateFromPassword([]byte(password), bcrypt.DefaultCost)
-        if err == nil { 
+        if err == nil {
 			http.Error(res, "Server error, unable to create your account.", 500)
             return
         }
@@ -95,9 +95,15 @@ func registerHandler(res http.ResponseWriter, req *http.Request) {
             return
         }
 
+				_, err = db.Exec("SELECT idCustomers FROM Customers WHERE Email=?", Email).Scan(&idCustomers)
+				if err != nil {
+			http.Error(res, "Server error, unable to create your account.", 500)
+						return
+				}
+
 
 		http.SetCookie(res, &http.Cookie{
-		Name:	Email,
+		Name:	idCustomers,
 		Value:	"1",
 		})
        http.Redirect(res, req, "/startpage", 301)
@@ -119,7 +125,7 @@ func authHandler(w http.ResponseWriter, r *http.Request)  {
     // Grab from the database
     var databaseUsername  string
     var databasePassword  string
-    var Admin string
+    var Admin, idCustomers tring
 
     // Create an sql.DB and check for errors
 		db, err = sql.Open("mysql", "pi:exoticpi@/mydb")
@@ -137,6 +143,16 @@ func authHandler(w http.ResponseWriter, r *http.Request)  {
     err := db.QueryRow("SELECT Email, Password, Admin FROM Customers WHERE Email=?", Email).Scan(&databaseUsername, &databasePassword, &Admin)
 	if err == nil {
     		if (Email == databaseUsername && password == databasePassword){
+					_, err = db.Exec("SELECT idCustomers FROM Customers WHERE Email=?", Email).Scan(&idCustomers)
+					if err != nil {
+				http.Error(res, "Server error, unable to create your account.", 500)
+							return
+					}
+
+					http.SetCookie(res, &http.Cookie{
+					Name:	idCustomers,
+					Value:	"1",
+					})
     			if (Admin == "1"){
     				http.Redirect(w, r, "/adminpage", 301)
     			} else {
@@ -429,7 +445,7 @@ func addToCart(w http.ResponseWriter, r *http.Request) {
 
 		defer db.Close()}
 
-func  sendOrder(w http.ResponseWriter, r *http.Request)  {
+func sendOrder(w http.ResponseWriter, r *http.Request)  {
 		log.Printf("sendHandler")
 		//result := r.URL.RequestURI()
 		//substring[2] contains the customerId
@@ -459,7 +475,7 @@ func  sendOrder(w http.ResponseWriter, r *http.Request)  {
 
  		err := db.QueryRow("SELECT * FROM Cart WHERE idCustomers=?", idCustomers).Scan(&idCustomers,&idProducts,&Quantity,&TotalPrice)
  		_, err = db.Exec("INSERT INTO OrderDetails(idOrders, idProducts, ProductName, Quantity, Price) VALUES(?,?,?,?,?)", idOrders, idProducts, ProductName, Quantity, Price)
- 	
+
 
 	    err = db.QueryRow("DROP * FROM Cart WHERE idCustomers=?", idCustomers).Scan(&idCustomers,&idProducts,&Quantity,&TotalPrice)
 		if err == nil {
@@ -560,7 +576,8 @@ func getAll(w http.ResponseWriter, r *http.Request) {
 								  // Grab everything from the database
 
 									var Orders_result []Orders // create an array of Orders
-							    var idOrders, Sent int
+							    var idOrders, Sent, Paid int
+									var PaymentType string
 
 							    // Create an sql.DB and check for errors
 									//db, err = sql.Open("mysql", "martin:persson@/mydb")
@@ -575,18 +592,21 @@ func getAll(w http.ResponseWriter, r *http.Request) {
 							        panic(err.Error())
 							    }
 
-									rows, err := db.Query("SELECT * FROM Orders")
+									rows, err := db.Query("SELECT idOrders, Sent, Paid FROM Orders")
 
 									for rows.Next() {
 									    Orders := &Orders{}
-											err := rows.Scan(&idOrders, &Sent)
+											err := rows.Scan(&idOrders, &Sent, &Paid)
+											err := db.QueryRow("SELECT PaymentType FROM Payment WHERE idPayment=?", idOrders).Scan(&PaymentType)
 
 											if err != nil {
 												panic(err.Error())
 											}
 
+											Orders.PaymentType = PaymentType
 											Orders.idOrders = idOrders
 											Orders.Sent = Sent
+											Orders.Paid = Paid
 
 											Orders_result = append(Orders_result, *Orders)
 									}
@@ -780,10 +800,10 @@ func main() {
 	http.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.Dir("./static"))))
 
 	//Real address for server, change back before pushing to git
-	//bindAddr := "192.168.1.242:8080"
+	bindAddr := "192.168.1.242:8080"
 
 	//Address for testing server on LAN
-	bindAddr := "127.0.0.1:8000"
+	//bindAddr := "127.0.0.1:8000"
 
   //Mox Address
 	//bindAddr := "130.240.110.93:8000"
@@ -817,8 +837,8 @@ func main() {
 	http.HandleFunc("/addToCart/", addToCart)
 	http.HandleFunc("/removeFromCart/", removeFromCart)
 
-	/* sendOrder, clean up everything
-	http.HandleFunc("/done/", sendOrder)*/
+	/* sendOrder, clean up everything */
+	http.HandleFunc("/done/", sendOrder)
 
 	/* For Admin */
 	http.HandleFunc("/everything", getAll)

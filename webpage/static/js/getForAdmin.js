@@ -17,7 +17,7 @@ function getAllData() {
           // obj = JSON.parse(data)
           console.log(data)
           //Sends user to cart
-          window.onload = DisplayAllData(data)
+          DisplayAllData(data)
 
         } else {
           console.log("error")
@@ -41,14 +41,19 @@ function DisplayAllData(data){
       IdOrders = document.getElementById('orderlist').appendChild(orderlist);
       var t = document.createTextNode("Sent");
       btn.appendChild(t);
-      IdOrders.innerHTML = data[i].IdOrders;
+      IdOrders.innerHTML = data[i].IdOrders + " | PaymentType: " + data[i].PaymentType + " ";
       document.getElementById('o'+i).appendChild(btn);
     } else {
+      if (data[i].Paid == 1){
+        var isPaid = "Paid";
+      } else {
+        var isPaid = "Not Paid";
+      }
       IdOrders = document.getElementById('orderlist').appendChild(b);
       var t = document.createTextNode("Click to update order to sent");
       btn.appendChild(t);
       btn.id = "send"+i;
-      IdOrders.innerHTML = data[i].IdOrders;
+      IdOrders.innerHTML = "OrderId: " + data[i].IdOrders + " | " + paid + " | PaymentType: " + data[i].PaymentType + " ";
       document.getElementById('o'+i).appendChild(btn);
       document.getElementById("send"+i).addEventListener("click", function(){ updateOrder(orderid); });
     }
