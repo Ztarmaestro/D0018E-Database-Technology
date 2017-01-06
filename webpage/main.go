@@ -9,6 +9,7 @@ import (
 	"database/sql"
 	_ "github.com/go-sql-driver/mysql"
 	"encoding/json"
+	"strconv"
 //	"golang.org/x/crypto/bcrypt"
 	// Third party packages
 	//"github.com/julienschmidt/httprouter"
@@ -598,7 +599,8 @@ func getAll(w http.ResponseWriter, r *http.Request) {
 									    Orders := &Orders{}
 											err := rows.Scan(&idOrders, &Sent, &Paid)
 
-											Orders.idOrders = idOrders
+											ids := strconv.Itoa(idOrders)
+											Orders.idOrders = ids
 											Orders.Sent = Sent
 											Orders.Paid = Paid
 
