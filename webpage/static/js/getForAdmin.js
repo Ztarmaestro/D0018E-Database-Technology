@@ -34,23 +34,29 @@ function DisplayAllData(data){
 console.log("Time to display data");
   for( var i=0, l=data.length; i<l; i++ ) {
     console.log("Row "+i);
-    var orderid = data[i].IdOrders;
+
     var orderlist = document.createElement("b");
     orderlist.id = 'o'+i;
     var btn = document.createElement("BUTTON");
 
-    var str = data[i].Payme;
+    var str = data[i].PaymentType;
     var res = str.split("/");
+    var orderid = res[1];
 
     IdOrders = document.getElementById('Orderlist').appendChild(orderlist);
 
     if (data[i].Sent == '1') {
       console.log("Order "+ i +" sent");
       if (IdOrders != null) {
+        if (data[i].Paid == 1){
+          var isPaid = "Paid";
+        } else {
+          var isPaid = "Not Paid";
+        }
         console.log("Orderlist Not null");
         var t = document.createTextNode("Sent");
         btn.appendChild(t);
-        IdOrders.innerHTML = "OrderID: " + res[1] + " | PaymentType: " + res[0] + " ";
+        IdOrders.innerHTML = "OrderID: " + res[1]+ " | " + isPaid +  " | " + "PaymentType: " + res[0] + " ";
         document.getElementById('o'+i).appendChild(btn);
       }
     } else {
