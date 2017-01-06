@@ -42,6 +42,7 @@ console.log("Time to display data");
     var str = data[i].PaymentType;
     var res = str.split("/");
     var orderid = res[1];
+    console.log(res[1]);
 
     IdOrders = document.getElementById('Orderlist').appendChild(orderlist);
 
@@ -75,6 +76,7 @@ console.log("Time to display data");
           console.log("Orderlist Not null");
           document.getElementById('o'+i).appendChild(btn);
         }
+        console.log(orderid);
         document.getElementById("send"+i).addEventListener("click", function(){ updateOrder(orderid); });
       }
     }
