@@ -82,7 +82,7 @@ console.log("Time to display data");
       }
     }
     var mybr = document.createElement('br');
-    var addmybr = document.getElementById('delete'+i);
+    var addmybr = document.getElementById('send'+i);
       if (addmybr != null) {
         console.log("addmybr not null");
         addmybr.appendChild(mybr);
