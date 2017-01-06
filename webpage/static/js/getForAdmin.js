@@ -70,7 +70,7 @@ console.log("Time to display data");
         console.log("Orderlist Not null");
         var t = document.createTextNode("Click to update order to sent");
         btn.appendChild(t);
-        btn.id = "send"+i;
+        btn.id = "send/"+res[1];
         IdOrders.innerHTML = "OrderId: " + res[1] + " | " + isPaid + " | PaymentType: " + res[0] + " | "+ " Order not sent " + " ";
         var addbutton = document.getElementById('Orderlist');
         if (addbutton != null) {
@@ -78,11 +78,17 @@ console.log("Time to display data");
           document.getElementById('o'+i).appendChild(btn);
         }
         console.log(orderid);
-        document.getElementById("send"+i).onclick = function() { updateOrder(orderid); };
+        document.getElementById("send/"+res[1]).addEventListener("click", function(){
+
+          var str2 = this.id;
+          var res2 = str2.split("/");
+          var orderid = res2[1];
+
+          updateOrder(orderid); };
       }
     }
     var mybr = document.createElement('br');
-    var addmybr = document.getElementById('send'+i);
+    var addmybr = document.getElementById('o'+i);
       if (addmybr != null) {
         console.log("addmybr not null");
         addmybr.appendChild(mybr);

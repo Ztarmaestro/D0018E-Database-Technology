@@ -23,7 +23,7 @@ type Cookie struct{
 }
 
 type Car struct {
-	idProducts					string `json=idProducts`
+	IdProducts					string `json=IdProducts`
 	ProductName 				string `json=ProductDescription`
 	Price								string `json=Price`
 	ProductDescription 	string `json=ProductDescription`
@@ -32,15 +32,15 @@ type Car struct {
 }
 
 type Cart struct {
-	idProducts					string `json=idProducts`
-	idCustomers 				string `json=idCustomers`
+	IdProducts					string `json=IdProducts`
+	IdCustomers 				string `json=IdCustomers`
 	Quantity 						string `json=Quantity`
 	TotalPrice					string `json=TotalPrice`
 	ProductName					string `json=ProductName`
 }
 
 type Orders struct {
-	idOrders						string `json=idOrders`
+	IdOrders						int `json=IdOrders`
 	Sent 								int `json=Sent`
 	Paid 								int `json=Paid`
 	PaymentType					string `json=PaymentType`
@@ -289,7 +289,7 @@ func getCar(w http.ResponseWriter, r *http.Request) {
 	defer db.Close()
 
 	car := &Car{}
-	car.idProducts = idProducts
+	car.IdProducts = idProducts
 	car.ProductName = ProductName
 	car.Price = Price
 	car.ProductDescription = ProductDescription
@@ -599,7 +599,7 @@ func getAll(w http.ResponseWriter, r *http.Request) {
 									    Orders := &Orders{}
 											err := rows.Scan(&idOrders, &Sent, &Paid)
 
-											ids := strconv.Itoa(idOrders)
+											Orders.IdOrders = idOrders
 											Orders.Sent = Sent
 											Orders.Paid = Paid
 
@@ -613,7 +613,7 @@ func getAll(w http.ResponseWriter, r *http.Request) {
 												panic(err.Error())
 											}
 
-											Orders.PaymentType = PaymentType + "/" + ids
+											Orders.PaymentType = PaymentType
 
 											Orders_result = append(Orders_result, *Orders)
 									}
