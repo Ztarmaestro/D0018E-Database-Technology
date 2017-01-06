@@ -40,7 +40,7 @@ type Cart struct {
 }
 
 type Orders struct {
-  idPayment						string `json=idPayment`
+  idPayment						int `json=idPayment`
 	idOrders						string `json=idOrders`
 	Sent 								int `json=Sent`
 	Paid 								int `json=Paid`
@@ -629,6 +629,7 @@ func getAll(w http.ResponseWriter, r *http.Request) {
 								defer db.Close()
 
 								orderdetails,_ := json.Marshal(Orders_result)
+								log.Printf("2", orderdetails)
 								w.Write(orderdetails)}
 
 func updateDB(w http.ResponseWriter, r *http.Request) {

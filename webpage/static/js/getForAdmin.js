@@ -14,6 +14,7 @@ window.onload = function() {
       if (xhr.readyState == 4) { // `DONE`
         status = xhr.status;
         if (status == 200) {
+          console.log(data + " before parse");
           data = JSON.parse(xhr.response);
           // obj = JSON.parse(data)
           console.log(data)
