@@ -35,15 +35,15 @@ console.log("Time to display data");
     console.log("Row "+i);
     var orderid = data[i].IdOrders;
     var orderlist = document.createElement("b");
-    orderlist.id = "o"+i;
+    orderlist.id = 'o'+i;
     var btn = document.createElement("BUTTON");
+
+    IdOrders = document.getElementById('Orderlist').appendChild(orderlist);
 
     if (data[i].Sent == '1') {
       console.log("Order "+ i +" sent");
-      var IdOrders = document.getElementById('Orderlist');
       if (IdOrders != null) {
         console.log("Orderlist Not null");
-        IdOrders.appendChild(orderlist);
         var t = document.createTextNode("Sent");
         btn.appendChild(t);
         IdOrders.innerHTML = data[i].IdOrders + " | PaymentType: " + data[i].PaymentType + " ";
@@ -56,16 +56,18 @@ console.log("Time to display data");
       } else {
         var isPaid = "Not Paid";
       }
-      var IdOrders = document.getElementById('Orderlist');
       if (IdOrders != null) {
         console.log("Orderlist Not null");
-        IdOrders.appendChild(orderlist);
         var t = document.createTextNode("Click to update order to sent");
         btn.appendChild(t);
         btn.id = "send"+i;
         IdOrders.innerHTML = "OrderId: " + data[i].IdOrders + " | " + isPaid + " | PaymentType: " + data[i].PaymentType + " ";
-        document.getElementById('o'+i).appendChild(btn);
-        document.getElementById("send"+i).addEventListener("click", function(){ updateOrder(orderid); });
+        var addbutton = document.getElementById('Orderlist');
+        if (addbutton != null) {
+          console.log("Orderlist Not null");
+          document.getElementById('o'+i).appendChild(btn);
+          document.getElementById("send"+i).addEventListener("click", function(){ updateOrder(orderid); });
+        }
       }
     }
     var mybr = document.createElement('br');
