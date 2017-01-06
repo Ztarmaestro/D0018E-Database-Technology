@@ -18,7 +18,6 @@ function getCookie(type) {
     : new ActiveXObject('Microsoft.XMLHTTP');
   xhr.open('get',"/Customers/"+cname+"/"+password, true);
 
-
   xhr.onreadystatechange = function() {
     var status;
     var data;
