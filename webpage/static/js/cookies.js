@@ -1,16 +1,18 @@
 function setCookie(cname, cvalue, exdays) {
-
+    console.log("Tjena");
     var d = new Date();
     d.setTime(d.getTime() + (exdays*24*60*60*1000));
     var expires = "expires="+ d.toUTCString();
-    var cname = document.getElementById("Email")	
-    var cvalue = "hehe"
-    document.cookie = cname// + "=" + cvalue + ";" + expires + ";path=/";
+    var cname = document.getElementById("registerEmail").value;
+    console.log(cname);
+    var cvalue = "HEJ ERIK";
+    document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
 }
 
 
 
 function getCookie(type) {
+  console.log("getcookie")
 	var cname = document.getElementById("Email")
 	var cpassword = document.getElementById("password")
   var xhr = typeof XMLHttpRequest != 'undefined'
@@ -29,6 +31,7 @@ function getCookie(type) {
         data = JSON.parse(xhr.response);
        // obj = JSON.parse(data)
         console.log(data)
+
         setCookie(data, "", 1)
 
       } else {

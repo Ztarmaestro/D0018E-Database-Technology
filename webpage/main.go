@@ -9,7 +9,7 @@ import (
 	"database/sql"
 	_ "github.com/go-sql-driver/mysql"
 	"encoding/json"
-	"strconv"
+//	"strconv"
 //	"golang.org/x/crypto/bcrypt"
 	// Third party packages
 	//"github.com/julienschmidt/httprouter"
@@ -53,10 +53,10 @@ var err error
 func registerHandler(res http.ResponseWriter, req *http.Request) {
 	log.Printf("registerHandler")
 
-	Email := req.FormValue("Email")
+	Email := req.FormValue("registerEmail")
 	password := req.FormValue("password")
 
-	var user, idCustomers string
+	var user string
 
 	// Create an sql.DB and check for errors
     //db, err = sql.Open("mysql", "martin:persson@/mydb")
@@ -137,17 +137,14 @@ func authHandler(res http.ResponseWriter, req *http.Request)  {
 				http.Error(res, "Server error, unable to create your account.", 500)
 							return
 					}
-
-					http.SetCookie(res, &http.Cookie{
-					Name:	idCustomers,
-					Value:	"1",
-					})
     			if (Admin == "1"){
     				http.Redirect(res, req, "/adminpage", 301)
     			} else {
-        			http.Redirect(w, r, "/startpage", 301)
+        			http.Redirect(res, req, "/startpage", 301)
+        			fmt.Println("idcustomer:", idCustomers)
         			customer,_ := json.Marshal(idCustomers)
-        			w.Write(customer)
+        			fmt.Println("marshal::", customer)
+        			res.Write(customer)
 
         		}
         	} else{
@@ -328,7 +325,7 @@ func getCart(w http.ResponseWriter, r *http.Request) {
 
 				err = db.QueryRow("SELECT ProductName FROM Products WHERE idProducts=?", idProducts).Scan(&ProductName)
 
-				cart.idProducts = idProducts
+				cart.IdProducts = idProducts
 				cart.Quantity = Quantity
 				cart.TotalPrice = TotalPrice
 				cart.ProductName = ProductName
@@ -800,10 +797,10 @@ func main() {
 	http.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.Dir("./static"))))
 
 	//Real address for server, change back before pushing to git
-	bindAddr := "192.168.1.242:8080"
+	//bindAddr := "192.168.1.242:8080"
 
 	//Address for testing server on LAN
-	//bindAddr := "127.0.0.1:8000"
+	bindAddr := "127.0.0.1:8000"
 
   //Mox Address
 	//bindAddr := "130.240.110.93:8000"
