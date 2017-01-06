@@ -14,7 +14,7 @@ window.onload = function() {
       if (xhr.readyState == 4) { // `DONE`
         status = xhr.status;
         if (status == 200) {
-          console.log(data + " before parse");
+          console.log(xhr.response + " before parse");
           data = JSON.parse(xhr.response);
           // obj = JSON.parse(data)
           console.log(data)
@@ -39,6 +39,9 @@ console.log("Time to display data");
     orderlist.id = 'o'+i;
     var btn = document.createElement("BUTTON");
 
+    var str = data[i].Payme;
+    var res = str.split("/");
+
     IdOrders = document.getElementById('Orderlist').appendChild(orderlist);
 
     if (data[i].Sent == '1') {
@@ -47,9 +50,7 @@ console.log("Time to display data");
         console.log("Orderlist Not null");
         var t = document.createTextNode("Sent");
         btn.appendChild(t);
-        console.log(data[i].IdOrders);
-        console.log(data[i].idPayment);
-        IdOrders.innerHTML = "OrderID: " + data[i].idPayment + " | PaymentType: " + data[i].PaymentType + " ";
+        IdOrders.innerHTML = "OrderID: " + res[1] + " | PaymentType: " + res[0] + " ";
         document.getElementById('o'+i).appendChild(btn);
       }
     } else {
@@ -64,8 +65,7 @@ console.log("Time to display data");
         var t = document.createTextNode("Click to update order to sent");
         btn.appendChild(t);
         btn.id = "send"+i;
-        console.log(data[i].idPayment);
-        IdOrders.innerHTML = "OrderId: " + data[i].idPayment + " | " + isPaid + " | PaymentType: " + data[i].PaymentType + " ";
+        IdOrders.innerHTML = "OrderId: " + res[1] + " | " + isPaid + " | PaymentType: " + res[0] + " ";
         var addbutton = document.getElementById('Orderlist');
         if (addbutton != null) {
           console.log("Orderlist Not null");
