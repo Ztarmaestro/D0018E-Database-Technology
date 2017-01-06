@@ -77,7 +77,7 @@ console.log("Time to display data");
           document.getElementById('o'+i).appendChild(btn);
         }
         console.log(orderid);
-        document.getElementById("send"+i).addEventListener("click", function(){ updateOrder(orderid); });
+        document.getElementById("send"+i).onclick = function() { updateOrder(orderid); };
       }
     }
     var mybr = document.createElement('br');
