@@ -40,6 +40,7 @@ type Cart struct {
 }
 
 type Orders struct {
+	empty								string `json=empty`
 	idOrders						string `json=idOrders`
 	Sent 								int `json=Sent`
 	Paid 								int `json=Paid`
@@ -600,6 +601,7 @@ func getAll(w http.ResponseWriter, r *http.Request) {
 											err := rows.Scan(&idOrders, &Sent, &Paid)
 
 											ids := strconv.Itoa(idOrders)
+											Orders.empty = "empty";
 											Orders.idOrders = ids
 											Orders.Sent = Sent
 											Orders.Paid = Paid
