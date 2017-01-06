@@ -28,9 +28,8 @@ function addToCart(customerId, carmodel) {
 }
 
 function checkIfLogin(carmodel) {
-
-  var customerId = "3"
-
+//  var customerId = "3"
+	var customerId = document.cookie;
   //window.location = "/error";
 
   //alert("You are not logged in and can't buy this product. Please register or login to an account");

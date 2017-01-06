@@ -15,10 +15,7 @@ import (
 	//"github.com/gorilla/mux"
 	//"github.com/gorilla/sessions"
 )
-type Cookie struct{
-	Name 	string
-	Value 	string
-}
+
 
 type Car struct {
 	idProducts					string `json=idProducts`
@@ -47,8 +44,7 @@ type Review struct {
 	Review							string `json=Review`
 }
 
-
-var cookie = &Cookie{}
+//var cookie = &Cookie{}
 var db *sql.DB
 var err error
 
@@ -64,8 +60,8 @@ func registerHandler(res http.ResponseWriter, req *http.Request) {
 
 	// Create an sql.DB and check for errors
     //db, err = sql.Open("mysql", "martin:persson@/mydb")
-    //	db, err = sql.Open("mysql", "pi:exoticpi@/mydb")
-		db, err = sql.Open("mysql", "pi:exoticpi@/mydb")
+    //	db, err = sql.Open("mysql", "root:@/mydb")
+		db, err = sql.Open("mysql", "root:@/mydb")
     if err != nil {
         panic(err.Error())
     }
@@ -95,11 +91,11 @@ func registerHandler(res http.ResponseWriter, req *http.Request) {
             return
         }
 
-
 		http.SetCookie(res, &http.Cookie{
 		Name:	Email,
 		Value:	"1",
 		})
+
        http.Redirect(res, req, "/startpage", 301)
        return
     case err != nil:
@@ -120,9 +116,10 @@ func authHandler(w http.ResponseWriter, r *http.Request)  {
     var databaseUsername  string
     var databasePassword  string
     var Admin string
+    var idCustomers int
 
     // Create an sql.DB and check for errors
-		db, err = sql.Open("mysql", "pi:exoticpi@/mydb")
+		db, err = sql.Open("mysql", "root:@/mydb")
     if err != nil {
         panic(err.Error())
     }
@@ -134,13 +131,17 @@ func authHandler(w http.ResponseWriter, r *http.Request)  {
     }
     // Search the database for the username provided
     // If it exists grab the password for validation
-    err := db.QueryRow("SELECT Email, Password, Admin FROM Customers WHERE Email=?", Email).Scan(&databaseUsername, &databasePassword, &Admin)
+    err := db.QueryRow("SELECT Email, idCustomers, Password, Admin FROM Customers WHERE Email=?", Email).Scan(&databaseUsername, &idCustomers, &databasePassword, &Admin)
+	fmt.Println("hello", Email)
+	fmt.Println("idcustomer:", idCustomers)
 	if err == nil {
     		if (Email == databaseUsername && password == databasePassword){
     			if (Admin == "1"){
     				http.Redirect(w, r, "/adminpage", 301)
     			} else {
-        		http.Redirect(w, r, "/startpage", 301)
+        			http.Redirect(w, r, "/startpage", 301)
+        			customer,_ := json.Marshal(idCustomers)
+        			w.Write(customer)
         		}
         	} else{
         			http.Redirect(w,r,"/login",301)
@@ -227,6 +228,7 @@ func adminPageHandler(w http.ResponseWriter, r *http.Request)  {
 		t.Execute(w, nil)
 	}}
 
+
 func checkoutHandler(w http.ResponseWriter, r *http.Request)  {
 
 	// you access the cached templates with the defined name, not the filename
@@ -251,7 +253,7 @@ func getCar(w http.ResponseWriter, r *http.Request) {
 
     // Create an sql.DB and check for errors
 		//db, err = sql.Open("mysql", "martin:persson@/mydb")
-		db, err = sql.Open("mysql", "pi:exoticpi@/mydb")
+		db, err = sql.Open("mysql", "root:@/mydb")
     if err != nil {
         panic(err.Error())
     }
@@ -292,7 +294,7 @@ func getCart(w http.ResponseWriter, r *http.Request) {
 
     // Create an sql.DB and check for errors
 		//db, err = sql.Open("mysql", "martin:persson@/mydb")
-		db, err = sql.Open("mysql", "pi:exoticpi@/mydb")
+		db, err = sql.Open("mysql", "root:@/mydb")
     if err != nil {
         panic(err.Error())
     }
@@ -351,7 +353,7 @@ func removeFromCart(w http.ResponseWriter, r *http.Request) {
 
     // Create an sql.DB and check for errors
 		//db, err = sql.Open("mysql", "martin:persson@/mydb")
-		db, err = sql.Open("mysql", "pi:exoticpi@/mydb")
+		db, err = sql.Open("mysql", "root:@/mydb")
     if err != nil {
         panic(err.Error())
     }
@@ -392,7 +394,7 @@ func addToCart(w http.ResponseWriter, r *http.Request) {
 
 	    // Create an sql.DB and check for errors
 			//db, err = sql.Open("mysql", "martin:persson@/mydb")
-			db, err = sql.Open("mysql", "pi:exoticpi@/mydb")
+			db, err = sql.Open("mysql", "root:@/mydb")
 	    if err != nil {
 	        panic(err.Error())
 	    }
@@ -437,7 +439,7 @@ func  sendOrder(w http.ResponseWriter, r *http.Request)  {
 
 
 
-		db, err = sql.Open("mysql", "pi:exoticpi@/mydb")
+		db, err = sql.Open("mysql", "root:@/mydb")
 	    if err != nil {
 	        panic(err.Error())
 	    }
@@ -483,7 +485,7 @@ func addReview(w http.ResponseWriter, req *http.Request) {
 
 			    // Create an sql.DB and check for errors
 					//db, err = sql.Open("mysql", "martin:persson@/mydb")
-					db, err = sql.Open("mysql", "pi:exoticpi@/mydb")
+					db, err = sql.Open("mysql", "root:@/mydb")
 			    if err != nil {
 			        panic(err.Error())
 			    }
@@ -517,7 +519,7 @@ func getReview(w http.ResponseWriter, r *http.Request) {
 
 			    // Create an sql.DB and check for errors
 					//db, err = sql.Open("mysql", "martin:persson@/mydb")
-					db, err = sql.Open("mysql", "pi:exoticpi@/mydb")
+					db, err = sql.Open("mysql", "root:@/mydb")
 			    if err != nil {
 			        panic(err.Error())
 			    }
@@ -564,7 +566,7 @@ func getAll(w http.ResponseWriter, r *http.Request) {
 
 							    // Create an sql.DB and check for errors
 									//db, err = sql.Open("mysql", "martin:persson@/mydb")
-									db, err = sql.Open("mysql", "pi:exoticpi@/mydb")
+									db, err = sql.Open("mysql", "root:@/mydb")
 							    if err != nil {
 							        panic(err.Error())
 							    }
@@ -613,7 +615,7 @@ func updateDB(w http.ResponseWriter, r *http.Request) {
 
 	// Create an sql.DB and check for errors
 	//db, err = sql.Open("mysql", "martin:persson@/mydb")
-	db, err = sql.Open("mysql", "pi:exoticpi@/mydb")
+	db, err = sql.Open("mysql", "root:@/mydb")
 	if err != nil {
 		 panic(err.Error())
 	}
