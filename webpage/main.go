@@ -40,7 +40,7 @@ type Cart struct {
 }
 
 type Orders struct {
-	empty								string `json=empty`
+  idPayment						string `json=idPayment`
 	idOrders						string `json=idOrders`
 	Sent 								int `json=Sent`
 	Paid 								int `json=Paid`
@@ -578,7 +578,7 @@ func getAll(w http.ResponseWriter, r *http.Request) {
 								  // Grab everything from the database
 
 									var Orders_result []Orders // create an array of Orders
-							    var idOrders, Sent, Paid int
+							    var idOrders, Sent, Paid, idPayment int
 									var PaymentType string
 
 							    // Create an sql.DB and check for errors
@@ -601,7 +601,6 @@ func getAll(w http.ResponseWriter, r *http.Request) {
 											err := rows.Scan(&idOrders, &Sent, &Paid)
 
 											ids := strconv.Itoa(idOrders)
-											Orders.empty = "empty";
 											Orders.idOrders = ids
 											Orders.Sent = Sent
 											Orders.Paid = Paid
@@ -610,12 +609,13 @@ func getAll(w http.ResponseWriter, r *http.Request) {
 												panic(err.Error())
 											}
 
-											err = db.QueryRow("SELECT PaymentType FROM Payment WHERE idPayment=?", idOrders).Scan(&PaymentType)
+											err = db.QueryRow("SELECT PaymentType, idPayment FROM Payment WHERE idPayment=?", idOrders).Scan(&PaymentType, &idPayment)
 
 											if err != nil {
 												panic(err.Error())
 											}
 
+											Orders.idPayment = idPayment
 											Orders.PaymentType = PaymentType
 
 											Orders_result = append(Orders_result, *Orders)
