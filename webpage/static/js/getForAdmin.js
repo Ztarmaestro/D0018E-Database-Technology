@@ -54,7 +54,6 @@ console.log("Time to display data");
           var isPaid = "Not Paid";
         }
         console.log("Orderlist Not null");
-        btn.appendChild(t);
         IdOrders.innerHTML = "OrderID: " + res[1]+ " | " + isPaid +  " | " + "PaymentType: " + res[0] + " | " + "Sent" + " ";
 
       }
