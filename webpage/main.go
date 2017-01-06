@@ -598,7 +598,8 @@ func getAll(w http.ResponseWriter, r *http.Request) {
 									    Orders := &Orders{}
 											err := rows.Scan(&idOrders, &Sent, &Paid)
 
-											Orders.idOrders = idOrders
+											var newIdOrder := idOrders
+											Orders.idOrders = newIdOrder
 											Orders.Sent = Sent
 											Orders.Paid = Paid
 
