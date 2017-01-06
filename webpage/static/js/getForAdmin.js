@@ -54,10 +54,9 @@ console.log("Time to display data");
           var isPaid = "Not Paid";
         }
         console.log("Orderlist Not null");
-        var t = document.createTextNode("Sent");
         btn.appendChild(t);
-        IdOrders.innerHTML = "OrderID: " + res[1]+ " | " + isPaid +  " | " + "PaymentType: " + res[0] + " ";
-        document.getElementById('o'+i).appendChild(btn);
+        IdOrders.innerHTML = "OrderID: " + res[1]+ " | " + isPaid +  " | " + "PaymentType: " + res[0] + " | " + "Sent" + " ";
+
       }
     } else {
       console.log("Order "+ i +" not sent");
