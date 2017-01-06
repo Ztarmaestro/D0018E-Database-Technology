@@ -39,7 +39,7 @@ type Cart struct {
 }
 
 type Orders struct {
-	idOrders						int `json=idOrders`
+	idOrders						string `json=idOrders`
 	Sent 								int `json=Sent`
 	Paid 								int `json=Paid`
 	PaymentType					string `json=PaymentType`
@@ -598,8 +598,7 @@ func getAll(w http.ResponseWriter, r *http.Request) {
 									    Orders := &Orders{}
 											err := rows.Scan(&idOrders, &Sent, &Paid)
 
-											var newIdOrder := idOrders
-											Orders.idOrders = newIdOrder
+											Orders.idOrders = idOrders
 											Orders.Sent = Sent
 											Orders.Paid = Paid
 
