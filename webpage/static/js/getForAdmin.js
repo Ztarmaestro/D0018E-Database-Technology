@@ -69,7 +69,7 @@ console.log("Time to display data");
         var t = document.createTextNode("Click to update order to sent");
         btn.appendChild(t);
         btn.id = "send"+i;
-        IdOrders.innerHTML = "OrderId: " + res[1] + " | " + isPaid + " | PaymentType: " + res[0] + " ";
+        IdOrders.innerHTML = "OrderId: " + res[1] + " | " + isPaid + " | PaymentType: " + res[0] + " | "+ " Order not sent " + " ";
         var addbutton = document.getElementById('Orderlist');
         if (addbutton != null) {
           console.log("Orderlist Not null");
