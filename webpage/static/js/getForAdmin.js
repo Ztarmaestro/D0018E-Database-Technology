@@ -74,8 +74,8 @@ console.log("Time to display data");
         if (addbutton != null) {
           console.log("Orderlist Not null");
           document.getElementById('o'+i).appendChild(btn);
-          document.getElementById("send"+i).addEventListener("click", function(){ updateOrder(orderid); });
         }
+        document.getElementById("send"+i).addEventListener("click", function(){ updateOrder(orderid); });
       }
     }
     var mybr = document.createElement('br');
