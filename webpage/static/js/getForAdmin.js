@@ -33,6 +33,7 @@ window.onload = function() {
 function DisplayAllData(data){
 console.log("Time to display data");
   for( var i=0, l=data.length; i<l; i++ ) {
+
     console.log("Row "+i);
 
     var orderlist = document.createElement("b");
@@ -81,7 +82,7 @@ console.log("Time to display data");
       }
     }
     var mybr = document.createElement('br');
-    var addmybr = document.getElementById('o'+i);
+    var addmybr = document.getElementById('delete'+i);
       if (addmybr != null) {
         console.log("addmybr not null");
         addmybr.appendChild(mybr);
