@@ -132,7 +132,7 @@ function check_info(){
 
   var str = document.cookie;
   var res = str.split("=");
-  var res2 = res[0].split(";");
+  var res2 = res[0].split("; ");
   var customerId = res2[1];
   console.log(customerId);
 
