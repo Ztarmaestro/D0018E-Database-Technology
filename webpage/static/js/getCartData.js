@@ -107,7 +107,9 @@ function order_check_info(){
 
   var str = document.cookie;
   var res = str.split("=");
-  var customerId = res[0];
+  var res2 = res[0].split(";");
+  var customerId = res2[1];
+  console.log(customerId);
 
   document.getElementById('order_userId').value = customerId;
 
