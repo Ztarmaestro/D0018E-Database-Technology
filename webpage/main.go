@@ -232,7 +232,6 @@ func adminPageHandler(w http.ResponseWriter, r *http.Request)  {
 		t.Execute(w, nil)
 	}}
 
-
 func checkoutHandler(w http.ResponseWriter, r *http.Request)  {
 
 	// you access the cached templates with the defined name, not the filename
@@ -797,10 +796,10 @@ func main() {
 	http.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.Dir("./static"))))
 
 	//Real address for server, change back before pushing to git
-	//bindAddr := "192.168.1.242:8080"
+	bindAddr := "192.168.1.242:8080"
 
 	//Address for testing server on LAN
-	bindAddr := "127.0.0.1:8000"
+	//bindAddr := "127.0.0.1:8000"
 
   //Mox Address
 	//bindAddr := "130.240.110.93:8000"

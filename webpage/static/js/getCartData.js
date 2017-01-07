@@ -44,14 +44,19 @@ function DisplayCartData(data) {
 
     var btn = document.createElement("BUTTON");
     var t = document.createTextNode("Delete product");
-    btn.id = "delete"+i;
+    btn.id = "delete/"+data[i].ProductName;
     btn.appendChild(t);
 
   	if(document.getElementById("p"+i) != null){
       	Product_List.innerHTML = data[i].ProductName + ": " + data[i].Quantity + " x " + "$ " + data[i].TotalPrice + " ";
         document.getElementById('p'+i).appendChild(btn);
     }
-    document.getElementById("delete"+i).addEventListener("click", function(){ deleteFromCart(CarName); });
+    document.getElementById("delete/"+data[i].ProductName).addEventListener("click", function(){
+      var str = this.id;
+      var res = str.split("/");
+      var CarName = res[1];
+
+      deleteFromCart(CarName); ) });
     var mybr = document.createElement('br');
     document.getElementById('p'+i).appendChild(mybr);
  }

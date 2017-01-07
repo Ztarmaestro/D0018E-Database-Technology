@@ -84,7 +84,7 @@ console.log("Time to display data");
           var res2 = str2.split("/");
           var orderid = res2[1];
 
-          updateOrder(orderid); };
+          updateOrder(orderid); ) };
       }
     }
     var mybr = document.createElement('br');
