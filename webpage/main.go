@@ -452,9 +452,14 @@ func addToCart(w http.ResponseWriter, r *http.Request) {
 func sendOrder(w http.ResponseWriter, r *http.Request)  {
 		log.Printf("Placing order")
 
+
 		userId := r.FormValue("order_userId")
+
+		/*
 		username := r.FormValue("username")
 		password := r.FormValue("password")
+		*/
+
 		email := r.FormValue("id_email")
 		name := r.FormValue("id_name")
 		address := r.FormValue("id_address_line")
@@ -474,6 +479,8 @@ func sendOrder(w http.ResponseWriter, r *http.Request)  {
 	    }
 	    // Search the database for the username provided
 	    // If it exists grab the password for validation
+
+			/*
 	    var idProducts int
 	    var idCustomers int
 	    var Quantity int
@@ -481,12 +488,18 @@ func sendOrder(w http.ResponseWriter, r *http.Request)  {
 	    var idOrders string
 	    var ProductName string
 	    var Price int
+			*/
+
+
 
 			_, err = db.Exec("INSERT INTO Orders(idCustomers, Email, Fullname, Address, City, Postalcode, Phone) VALUES(?,?,?,?,?,?,?)", userId, email, name, address, city, postalcode, phone)
 
 
-			/* Need to do! now take orderid that was created and add stuff from the Cart to OrderDetails with same orderid
-			Also set Payment info, after that empty the customers cart */
+			/* Need to do! Check if userinfo inserted actually exist.
+			Take orderid that was created and add stuff from the Cart to OrderDetails with same orderid.
+			Also set Payment info, after that empty the customers cart.
+
+			*/
 
 			/*
 			rows, err := db.Query("SELECT idProducts, Quantity, TotalPrice FROM Cart WHERE idCustomers=?", userId)
