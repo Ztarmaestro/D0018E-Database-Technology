@@ -34,8 +34,11 @@ function addToCart(customerId, carmodel) {
 function checkIfLogin(carmodel) {
 
   var str = document.cookie;
+  console.log(str);
   var res = str.split("=");
+  console.log(res);
   var res2 = res[0].split(";");
+  console.log(res2);
   var customerId = res2[1];
   console.log(customerId);
 

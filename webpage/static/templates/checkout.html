@@ -96,7 +96,7 @@
                                         <b>Help us keep your account safe and secure, please verify your billing
                                             information.</b>
                                         <br/><br/>
-                                        <form id="login-form" action="/done/" method="POST" role="form" style="display: block;" onsubmit="return order_check_info();">
+                                        <form id="order-form" action="/done/" method="POST" role="form" style="display: block;" onsubmit="return order_check_info();">
                                             <div class="form-group">
                                               <input type="hidden" name="userId" id="order_userId">
                                             </div>
@@ -124,15 +124,11 @@
                                             <div class="form-group">
                                                 <input required="required" type="text" id="id_phone" name="phone" tabindex="8" class="form-control" placeholder="Phone">
                                             </div>
-
-                                            <div class="form-group">
-                                                <div class="row">
-                                                    <div class="col-sm-6 col-sm-offset-3">
-                                                        <input type="submit" name="login-submit" id="login-submit" tabindex="9" class="form-control btn btn-success" value="Place order">
-                                                    </div>
-                                                </div>
+                                            <div class="col-sm-6 col-sm-offset-3">
+                                                <input type="submit" name="order-submit" id="order-submit" tabindex="9" class="form-control btn btn-success" value="Place order">
                                             </div>
                                         </form>
+                                        
                                         <div style="text-align: left;"><br/>
                                             By submiting this order you are agreeing to our <a href="#">universal
                                                 billing agreement</a>, and <a href="#">terms of service</a>.
