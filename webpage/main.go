@@ -613,7 +613,6 @@ func getAll(w http.ResponseWriter, r *http.Request) {
 								defer db.Close()
 
 								orderdetails,_ := json.Marshal(Orders_result)
-								log.Printf("2", orderdetails)
 								w.Write(orderdetails)}
 
 func updateDB(w http.ResponseWriter, r *http.Request) {

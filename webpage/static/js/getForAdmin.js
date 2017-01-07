@@ -34,8 +34,6 @@ function DisplayAllData(data){
 console.log("Time to display data");
   for( var i=0, l=data.length; i<l; i++ ) {
 
-    console.log("Row "+i);
-
     var orderlist = document.createElement("b");
     orderlist.id = 'o'+i;
     var btn = document.createElement("BUTTON");
@@ -43,36 +41,30 @@ console.log("Time to display data");
     IdOrders = document.getElementById('Orderlist').appendChild(orderlist);
 
     if (data[i].Sent == '1') {
-      console.log("Order "+ i +" sent");
       if (IdOrders != null) {
         if (data[i].Paid == 1){
           var isPaid = "Paid";
         } else {
           var isPaid = "Not Paid";
         }
-        console.log("Orderlist Not null");
         IdOrders.innerHTML = "OrderID: " + data[i].IdOrders + " | " + isPaid +  " | " + "PaymentType: " + data[i].PaymentType + " | " + "Sent" + " ";
 
       }
     } else {
-      console.log("Order "+ i +" not sent");
       if (data[i].Paid == 1){
         var isPaid = "Paid";
       } else {
         var isPaid = "Not Paid";
       }
       if (IdOrders != null) {
-        console.log("Orderlist Not null");
         var t = document.createTextNode("Click to update order to sent");
         btn.appendChild(t);
         btn.id = "send/"+data[i].IdOrders;
         IdOrders.innerHTML = "OrderId: " + data[i].IdOrders + " | " + isPaid + " | PaymentType: " + data[i].PaymentType + " | "+ " Order not sent " + " ";
         var addbutton = document.getElementById('Orderlist');
         if (addbutton != null) {
-          console.log("Orderlist Not null");
           document.getElementById('o'+i).appendChild(btn);
         }
-        console.log(data[i].IdOrders);
         document.getElementById("send/"+data[i].IdOrders).addEventListener("click", function(){
 
           var str = this.id;
@@ -85,10 +77,8 @@ console.log("Time to display data");
     var mybr = document.createElement('br');
     var addmybr = document.getElementById('o'+i);
       if (addmybr != null) {
-        console.log("addmybr not null");
         addmybr.appendChild(mybr);
       }
-    console.log("Done");
   }
 }
 
