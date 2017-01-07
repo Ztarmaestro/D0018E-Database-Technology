@@ -1,5 +1,4 @@
 
-
 // Puts the data from the DB into the rigth place on page
 function DisplayCarData(data){
 
@@ -129,14 +128,14 @@ function DisplayReviewData(data){
 }
 
 function check_info(){
-
   // get the users customerid
 
-  var customerId = "3"
+  var str = document.cookie;
+  var res = str.split("=");
+  var customerId = res[0];
+
   document.getElementById('userId').value = customerId;
 
   return true
-
-
 
 }

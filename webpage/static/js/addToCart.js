@@ -35,5 +35,5 @@ function checkIfLogin(carmodel) {
 
   //should only run if you are loggedin. Need session to check!
   addToCart(customerId, carmodel)
-
+  
 }

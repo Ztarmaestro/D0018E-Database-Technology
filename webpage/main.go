@@ -9,12 +9,14 @@ import (
 	"database/sql"
 	_ "github.com/go-sql-driver/mysql"
 	"encoding/json"
-//	"strconv"
-//	"golang.org/x/crypto/bcrypt"
-	// Third party packages
+
+	// Third party packages not using
 	//"github.com/julienschmidt/httprouter"
 	//"github.com/gorilla/mux"
 	//"github.com/gorilla/sessions"
+	//	"strconv"
+	//	"golang.org/x/crypto/bcrypt"
+
 )
 
 type Car struct {
@@ -49,7 +51,6 @@ type User struct {
 	IdCustomers						int `json=IdCustomers`
 }
 
-
 var db *sql.DB
 var err error
 
@@ -57,7 +58,7 @@ func registerHandler(res http.ResponseWriter, req *http.Request) {
 	log.Printf("registerHandler")
 
 	Email := req.FormValue("registerEmail")
-	password := req.FormValue("password")
+	password := req.FormValue("registerpassword")
 
 	var user string
 
@@ -154,7 +155,7 @@ func authHandler(res http.ResponseWriter, req *http.Request)  {
         				user := &User{}
 						user.IdCustomers = idCustomers
 						userdetails,_ := json.Marshal(user)
-						
+
         				res.Write(userdetails)
         			//	http.Redirect(res, req, "/startpage", 301)
 

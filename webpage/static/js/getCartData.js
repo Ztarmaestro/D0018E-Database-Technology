@@ -25,7 +25,6 @@ function getCart(type) {
   };
   xhr.send();
 }
-
 // Puts the data from the DB into the rigth place on page
 function DisplayCartData(data) {
 
@@ -92,60 +91,26 @@ function deleteFromCart(car){
 }
 
 function getUserCart() {
-
   //Check if session exist and take the customerId and send with it
   //Else alert and do nothing
 
-  var customerId = "3"
+  var str = document.cookie;
+  var res = str.split("=");
+  var customerId = res[0];
 
-  //window.location = "/error";
-
-  //alert("You are not logged in and should not be here! Please register or login to an account");
-
-  //should only run if you are loggedin. Need session to check!
   getCart(customerId)
 
 }
 
-function sendOrder() {
+function order_check_info(){
+  // get the users customerid
 
-  //Check if session exist and take the customerId and send with it
-  //Else alert and do nothing
-  alert("Order Sent!");
+  var str = document.cookie;
+  var res = str.split("=");
+  var customerId = res[0];
 
-  var customerId = "3"
+  document.getElementById('order_userId').value = customerId;
 
-  alert("You are not logged in and should not be here! Please register or login to an account");
+  return true
 
-  //should only run if you are loggedin. Need session to check!
-  sendCart(customerId)
-
-}
-
-function sendCart(type) {
-  //Type is the users id that is saved in the session
-
-  var xhr = typeof XMLHttpRequest != 'undefined'
-    ? new XMLHttpRequest()
-    : new ActiveXObject('Microsoft.XMLHTTP');
-  xhr.open('get',"/done/"+type, true);
-  xhr.onreadystatechange = function() {
-    var status;
-    var data;
-    var obj;
-    // https://xhr.spec.whatwg.org/#dom-xmlhttprequest-readystate
-    if (xhr.readyState == 4) { // `DONE`
-      status = xhr.status;
-      if (status == 200) {
-        data = JSON.parse(xhr.response);
-       // obj = JSON.parse(data)
-        console.log(data)
-        window.location = "/startpage";
-
-      } else {
-        console.log("error")
-      }
-    }
-  };
-  xhr.send();
 }
