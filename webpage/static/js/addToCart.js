@@ -1,6 +1,10 @@
 
 function addToCart(customerId, carmodel) {
   //Type is the users id that is saved in the session. carmodel is the car that is added to the cart
+
+  console.log("customerId: " + customerId);
+  console.log("carmodel: " + carmodel);
+
   var xhr = typeof XMLHttpRequest != 'undefined'
     ? new XMLHttpRequest()
     : new ActiveXObject('Microsoft.XMLHTTP');
