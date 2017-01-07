@@ -28,12 +28,14 @@ function addToCart(customerId, carmodel) {
 }
 
 function checkIfLogin(carmodel) {
-  var customerId = "3"
-	// var customerId = document.cookie;
-  //window.location = "/error";
-  //alert("You are not logged in and can't buy this product. Please register or login to an account");
 
-  //should only run if you are loggedin. Need session to check!
-  addToCart(customerId, carmodel)
-  
+  var str = document.cookie;
+  var res = str.split("=");
+  var customerId = res[0];
+
+  if (customerId != null) {
+    addToCart(customerId, carmodel)
+  } else {
+    alert("You are not logged in and can't buy this product. Please register or login to an account");
+  }  
 }
