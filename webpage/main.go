@@ -434,12 +434,17 @@ func addToCart(w http.ResponseWriter, r *http.Request) {
 		defer db.Close()}
 
 func sendOrder(w http.ResponseWriter, r *http.Request)  {
-		log.Printf("sendHandler")
-		//result := r.URL.RequestURI()
-		//substring[2] contains the customerId
-		//substring := strings.Split(result,"/")
+		log.Printf("Placing order")
 
-
+		userId := r.FormValue("order_userId")
+		username := r.FormValue("username")
+		password := r.FormValue("password")
+		email := r.FormValue("id_email")
+		name := r.FormValue("id_name")
+		address := r.FormValue("id_address_line")
+		city := r.FormValue("id_city")
+		postalcode := r.FormValue("id_postalcode")
+		phone := r.FormValue("id_phone")
 
 		db, err = sql.Open("mysql", "root:exoticpi@/mydb")
 	    if err != nil {
@@ -461,14 +466,40 @@ func sendOrder(w http.ResponseWriter, r *http.Request)  {
 	    var ProductName string
 	    var Price int
 
- 		err := db.QueryRow("SELECT * FROM Cart WHERE idCustomers=?", idCustomers).Scan(&idCustomers,&idProducts,&Quantity,&TotalPrice)
- 		_, err = db.Exec("INSERT INTO OrderDetails(idOrders, idProducts, ProductName, Quantity, Price) VALUES(?,?,?,?,?)", idOrders, idProducts, ProductName, Quantity, Price)
+
+			rows, err := db.Query("SELECT idProducts, Quantity, TotalPrice FROM Cart WHERE idCustomers=?", userId)
+
+			for rows.Next() {
+					err := rows.Scan(&idProducts, &Quantity, &TotalPrice)
+
+					Orders.IdOrders = idOrders
+					Orders.Sent = Sent
+					Orders.Paid = Paid
+
+					if err != nil {
+						panic(err.Error())
+					}
+
+					err = db.QueryRow("SELECT PaymentType FROM Payment WHERE idPayment=?", idOrders).Scan(&PaymentType)
+
+					if err != nil {
+						panic(err.Error())
+					}
+
+					Orders.PaymentType = PaymentType
+
+					Orders_result = append(Orders_result, *Orders)
+			}
+
+		_, err = db.Exec("INSERT INTO Orders(idCustomers, Email, Name, Address, City, Postalcode, Phone) VALUES(?,?,?,?,?,?,?)", userId, email, name, address, city, postalcode, phone)
+
+		_, err = db.Exec("INSERT INTO OrderDetails(idOrders, idProducts, ProductName, Quantity, Price) VALUES(?,?,?,?,?)", idOrders, idProducts, ProductName, Quantity, Price)
 
 
-	    err = db.QueryRow("DROP * FROM Cart WHERE idCustomers=?", idCustomers).Scan(&idCustomers,&idProducts,&Quantity,&TotalPrice)
+	    err = db.QueryRow("DELETE FROM Cart WHERE idCustomers=?", idCustomers).Scan(&idCustomers,&idProducts,&Quantity,&TotalPrice)
 		if err == nil {
 			} else{
-	        		http.Redirect(w,r,"/login",301)
+	        		//http.Redirect(w,r,"/login",301)
 	   		}
 	   	// sql.DB should be long lived "defer" closes it once this function ends
 		defer db.Close()
