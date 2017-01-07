@@ -28,7 +28,6 @@ type Car struct {
 
 type Cart struct {
 	IdProducts					string `json=IdProducts`
-	IdCustomers 				string `json=IdCustomers`
 	Quantity 						string `json=Quantity`
 	TotalPrice					string `json=TotalPrice`
 	ProductName					string `json=ProductName`

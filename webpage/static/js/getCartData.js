@@ -56,7 +56,7 @@ function DisplayCartData(data) {
       var res = str.split("/");
       var CarName = res[1];
 
-      deleteFromCart(CarName); ) });
+      deleteFromCart(CarName); });
     var mybr = document.createElement('br');
     document.getElementById('p'+i).appendChild(mybr);
  }

@@ -40,11 +40,6 @@ console.log("Time to display data");
     orderlist.id = 'o'+i;
     var btn = document.createElement("BUTTON");
 
-    var str = data[i].PaymentType;
-    var res = str.split("/");
-    var orderid = res[1];
-    console.log(res[1]);
-
     IdOrders = document.getElementById('Orderlist').appendChild(orderlist);
 
     if (data[i].Sent == '1') {
@@ -56,7 +51,7 @@ console.log("Time to display data");
           var isPaid = "Not Paid";
         }
         console.log("Orderlist Not null");
-        IdOrders.innerHTML = "OrderID: " + res[1]+ " | " + isPaid +  " | " + "PaymentType: " + res[0] + " | " + "Sent" + " ";
+        IdOrders.innerHTML = "OrderID: " + data[i].IdOrders + " | " + isPaid +  " | " + "PaymentType: " + data[i].PaymentType + " | " + "Sent" + " ";
 
       }
     } else {
@@ -70,21 +65,21 @@ console.log("Time to display data");
         console.log("Orderlist Not null");
         var t = document.createTextNode("Click to update order to sent");
         btn.appendChild(t);
-        btn.id = "send/"+res[1];
-        IdOrders.innerHTML = "OrderId: " + res[1] + " | " + isPaid + " | PaymentType: " + res[0] + " | "+ " Order not sent " + " ";
+        btn.id = "send/"+data[i].IdOrders;
+        IdOrders.innerHTML = "OrderId: " + data[i].IdOrders + " | " + isPaid + " | PaymentType: " + data[i].PaymentType + " | "+ " Order not sent " + " ";
         var addbutton = document.getElementById('Orderlist');
         if (addbutton != null) {
           console.log("Orderlist Not null");
           document.getElementById('o'+i).appendChild(btn);
         }
         console.log(orderid);
-        document.getElementById("send/"+res[1]).addEventListener("click", function(){
+        document.getElementById("send/"+data[i].IdOrders).addEventListener("click", function(){
 
-          var str2 = this.id;
-          var res2 = str2.split("/");
-          var orderid = res2[1];
+          var str = this.id;
+          var res = str.split("/");
+          var orderid = res[1];
 
-          updateOrder(orderid); ) };
+          updateOrder(orderid); });
       }
     }
     var mybr = document.createElement('br');
