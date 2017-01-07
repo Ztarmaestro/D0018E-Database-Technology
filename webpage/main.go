@@ -482,15 +482,19 @@ func sendOrder(w http.ResponseWriter, r *http.Request)  {
 	    var ProductName string
 	    var Price int
 
+			_, err = db.Exec("INSERT INTO Orders(idCustomers, Email, Fullname, Address, City, Postalcode, Phone) VALUES(?,?,?,?,?,?,?)", userId, email, name, address, city, postalcode, phone)
 
+
+			/* Need to do! now take orderid that was created and add stuff from the Cart to OrderDetails with same orderid
+			Also set Payment info, after that empty the customers cart */
+
+			/*
 			rows, err := db.Query("SELECT idProducts, Quantity, TotalPrice FROM Cart WHERE idCustomers=?", userId)
 
 			for rows.Next() {
 					err := rows.Scan(&idProducts, &Quantity, &TotalPrice)
 
-					Orders.IdOrders = idOrders
-					Orders.Sent = Sent
-					Orders.Paid = Paid
+
 
 					if err != nil {
 						panic(err.Error())
@@ -518,6 +522,8 @@ func sendOrder(w http.ResponseWriter, r *http.Request)  {
 	        		//http.Redirect(w,r,"/login",301)
 	   		}
 	   	// sql.DB should be long lived "defer" closes it once this function ends
+
+			*/
 		defer db.Close()
 		}
 
