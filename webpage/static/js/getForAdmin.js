@@ -72,7 +72,7 @@ console.log("Time to display data");
           console.log("Orderlist Not null");
           document.getElementById('o'+i).appendChild(btn);
         }
-        console.log(orderid);
+        console.log(data[i].IdOrders);
         document.getElementById("send/"+data[i].IdOrders).addEventListener("click", function(){
 
           var str = this.id;
