@@ -32,10 +32,11 @@ function checkIfLogin(carmodel) {
   var str = document.cookie;
   var res = str.split("=");
   var customerId = res[0];
+  console.log(customerId);
 
   if (customerId != null) {
     addToCart(customerId, carmodel)
   } else {
     alert("You are not logged in and can't buy this product. Please register or login to an account");
-  }  
+  }
 }

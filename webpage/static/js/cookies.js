@@ -3,7 +3,6 @@ function setCookie(cname, cvalue, exdays) {
     var d = new Date();
     d.setTime(d.getTime() + (exdays*24*60*60*1000));
     var expires = "expires="+ d.toUTCString();
-    var cname = document.getElementById("registerEmail").value;
     console.log(cname);
     var cvalue = "idcustomer";
     document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
