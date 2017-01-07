@@ -97,39 +97,21 @@
                                             information.</b>
                                         <br/><br/>
                                         <form id="order-form" action="/done/" method="POST" role="form" style="display: block;" onsubmit="return order_check_info();">
-                                            <div class="form-group">
                                               <input type="hidden" name="userId" id="order_userId">
-                                            </div>
-                                            <div class="form-group">
-                                                <input required="required" type="text" name="username" id="username" tabindex="1" class="form-control" placeholder="Confirm Username" value="">
-                                            </div>
-                                            <div class="form-group">
-                                                <input required="required" type="password" name="password" id="password" tabindex="2" class="form-control" placeholder="Confirm Password">
-                                            </div>
-                                            <div class="form-group">
-                                                <input required="required" type="text" id="id_email" name="email" tabindex="3" class="form-control" placeholder="Email">
-                                            </div>
-                                            <div class="form-group">
-                                                <input required="required" type="text" id="id_name" name="user_name" tabindex="4" class="form-control" placeholder="name">
-                                            </div>
-                                            <div class="form-group">
-                                                <input required="required" type="text" id="id_address_line" name="address_line" tabindex="5" class="form-control" placeholder="Address">
-                                            </div>
-                                            <div class="form-group">
-                                                <input required="required" type="text" id="id_city" name="city" tabindex="6" class="form-control" placeholder="City">
-                                            </div>
-                                            <div class="form-group">
-                                                <input required="required" type="text" id="id_postalcode" name="postalcode" tabindex="7" class="form-control" placeholder="Postalcode">
-                                            </div>
-                                            <div class="form-group">
-                                                <input required="required" type="text" id="id_phone" name="phone" tabindex="8" class="form-control" placeholder="Phone">
-                                            </div>
-                                            <div class="form-group col-sm-6 col-sm-offset-3">
-                                                <input type="submit" name="order-submit" id="order-submit" tabindex="9" class="form-control btn btn-success" value="Place order">
-                                            </div>
+                                              <input required="required" type="text" name="username" id="username" tabindex="1" class="form-control" placeholder="Confirm Username" value="">
+                                              <input required="required" type="password" name="password" id="password" tabindex="2" class="form-control" placeholder="Confirm Password">
+                                              <input required="required" type="text" id="id_email" name="email" tabindex="3" class="form-control" placeholder="Email">
+                                              <input required="required" type="text" id="id_name" name="user_name" tabindex="4" class="form-control" placeholder="Full Name">
+                                              <input required="required" type="text" id="id_address_line" name="address_line" tabindex="5" class="form-control" placeholder="Address">
+                                              <input required="required" type="text" id="id_city" name="city" tabindex="6" class="form-control" placeholder="City">
+                                              <input required="required" type="text" id="id_postalcode" name="postalcode" tabindex="7" class="form-control" placeholder="Postalcode">
+                                              <input required="required" type="text" id="id_phone" name="phone" tabindex="8" class="form-control" placeholder="Phone">
+                                              <input type="submit" name="order-submit" id="order-submit" tabindex="9" class="form-control btn btn-success" value="Place order">
                                         </form>
 
-                                        <div style="text-align: left;"><br>
+                                        <div style="text-align: left;">
+                                          <br>
+                                          <br>
                                             By submiting this order you are agreeing to our <a href="#">universal
                                                 billing agreement</a>, and <a href="#">terms of service</a>.
                                             If you have any questions about our products or services please contact us
