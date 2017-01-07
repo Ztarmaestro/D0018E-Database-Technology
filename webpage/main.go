@@ -400,6 +400,7 @@ func removeFromCart(w http.ResponseWriter, r *http.Request) {
 
 func addToCart(w http.ResponseWriter, r *http.Request) {
 		result := r.URL.RequestURI()
+		log.Printf(result)
 		//substring[3] contains the customerId
 		//substring[2] contains the ProductName
 		substring := strings.Split(result,"/")
