@@ -45,6 +45,10 @@ type Review struct {
 	Review							string `json=Review`
 }
 
+type User struct {
+	IdCustomers						int `json=IdCustomers`
+}
+
 
 var db *sql.DB
 var err error
@@ -103,8 +107,15 @@ func registerHandler(res http.ResponseWriter, req *http.Request) {
 func authHandler(res http.ResponseWriter, req *http.Request)  {
 	log.Printf("authHandler")
     // Grab the username/password from the submitted post form
-    Email := req.FormValue("Email")
-    password := req.FormValue("password")
+	result := req.URL.RequestURI()
+
+	//substring[2] contains the username
+	//substrin3 password
+	substring := strings.Split(result,"/")
+	Email := substring[2]
+	password := substring[3]
+    //Email := req.FormValue("loginEmail")
+    //password := req.FormValue("loginpassword"
 
     // Grab from the database
     var databaseUsername  string
@@ -128,28 +139,32 @@ func authHandler(res http.ResponseWriter, req *http.Request)  {
     // If it exists grab the password for validation
     err := db.QueryRow("SELECT Email, idCustomers, Password, Admin FROM Customers WHERE Email=?", Email).Scan(&databaseUsername, &idCustomers, &databasePassword, &Admin)
 	fmt.Println("hello", Email)
-	fmt.Println("idcustomer:", idCustomers)
 	if err == nil {
     		if (Email == databaseUsername && password == databasePassword){
+    			fmt.Println("log1")
 					err = db.QueryRow("SELECT idCustomers FROM Customers WHERE Email=?", Email).Scan(&idCustomers)
 					if err != nil {
-				http.Error(res, "Server error, unable to create your account.", 500)
+							http.Error(res, "Server error, unable to create your account.", 500)
 							return
 					}
     			if (Admin == "1"){
     				http.Redirect(res, req, "/adminpage", 301)
     			} else {
-        			http.Redirect(res, req, "/startpage", 301)
-        			fmt.Println("idcustomer:", idCustomers)
-        			customer,_ := json.Marshal(idCustomers)
-        			fmt.Println("marshal::", customer)
-        			res.Write(customer)
+        				fmt.Println("log2")
+        				user := &User{}
+						user.IdCustomers = idCustomers
+						userdetails,_ := json.Marshal(user)
+						
+        				res.Write(userdetails)
+        			//	http.Redirect(res, req, "/startpage", 301)
 
         		}
         	} else{
+        		fmt.Println("log3")
         			http.Redirect(res,req,"/login",301)
         	}
     } else{
+    	fmt.Println("log4")
         		http.Redirect(res,req,"/login",301)
    	}
    	// sql.DB should be long lived "defer" closes it once this function ends
@@ -809,7 +824,7 @@ func main() {
   http.HandleFunc("/admin_login", adminLoginHandler)
   http.HandleFunc("/adminpage", adminPageHandler)
 	http.HandleFunc("/checkout", checkoutHandler)
-	http.HandleFunc("/auth", authHandler)
+	http.HandleFunc("/auth/", authHandler)
 	http.HandleFunc("/register", registerHandler)
 	http.HandleFunc("/error", errorHandler)
 
