@@ -450,6 +450,8 @@ func sendOrder(w http.ResponseWriter, r *http.Request)  {
 
 		userId := r.FormValue("order_userId")
 
+		log.Printf("UserId", userId)
+
 		username := r.FormValue("username")
 		password := r.FormValue("password")
 
