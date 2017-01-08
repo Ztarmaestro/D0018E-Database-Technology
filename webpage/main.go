@@ -491,7 +491,7 @@ func sendOrder(w http.ResponseWriter, r *http.Request)  {
 			for rows.Next() {
 					err := rows.Scan(&NewestOrderID)
 
-					log.Printf("looping newOrderId ", newOrderId)
+					log.Printf("looping OrderId ", NewestOrderID)
 
 					if err != nil {
 						panic(err.Error())
@@ -504,7 +504,7 @@ func sendOrder(w http.ResponseWriter, r *http.Request)  {
 
 			_, err = db.Exec("INSERT INTO Orders(idPayment, idCustomers, Email, Fullname, Address, City, Postalcode, Phone) VALUES(?,?,?,?,?,?,?,?)", newIdPayment, userId, email, name, address, city, postalcode, phone)
 
-			log.Printf("newOrderId ", newOrderId )
+			log.Printf("Order Added")
 
 			http.Redirect(w,r,"/startpage",301)
 
