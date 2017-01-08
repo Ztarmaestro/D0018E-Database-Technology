@@ -506,7 +506,11 @@ func sendOrder(w http.ResponseWriter, r *http.Request) {
 						}
 
 						for rows.Next() {
-								err = rows.Scan(&NewestOrderID)
+								err := rows.Scan(&NewestOrderID)
+
+								if err != nil {
+									panic(err.Error())
+								}
 
 								log.Printf("looping OrderId ", NewestOrderID)
 
