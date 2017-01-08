@@ -521,6 +521,10 @@ func sendOrder(w http.ResponseWriter, r *http.Request) {
 
 						rows, err := db.Query("SELECT idProducts, ProductName, Quantity, TotalPrice FROM Cart WHERE idCustomers=?", userId)
 
+						if err != nil {
+							panic(err.Error())
+						}
+
 						for rows.Next() {
 								log.Printf("Insert cart into orderdetails")
 								err := rows.Scan(&idProducts, &ProductName, &Quantity, &TotalPrice)
