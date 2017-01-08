@@ -71,6 +71,7 @@
 
                                 </div>
                             </div>
+                          </form>
                             <div class="panel panel-default">
                                 <div class="panel-heading">
                                     <h4 class="panel-title">
@@ -96,7 +97,7 @@
                                         <b>Help us keep your account safe and secure, please verify your billing
                                             information.</b>
                                         <br/><br/>
-                                        <form id="order-form" action="/done/" method="POST" role="form" style="display: block;" onsubmit="return order_check_info();">
+                                        <form id="order-form" action="/done/" method="POST" onsubmit="return order_check_info();" role="form">
                                               <input type="hidden" name="userId" id="order_userId">
                                               <input required="required" type="text" name="username" id="username" tabindex="1" class="form-control" placeholder="Confirm Username" value="">
                                               <input required="required" type="password" name="password" id="password" tabindex="2" class="form-control" placeholder="Confirm Password">
@@ -119,6 +120,12 @@
                                     </div>
                                 </div>
                             </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+      </div>
+</div>
 
     <!-- jQuery -->
     <script src="static/js/jquery.js"></script>

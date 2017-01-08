@@ -142,7 +142,6 @@ func authHandler(res http.ResponseWriter, req *http.Request)  {
 	fmt.Println("hello", Email)
 	if err == nil {
     		if (Email == databaseUsername && password == databasePassword){
-    			fmt.Println("log1")
 					err = db.QueryRow("SELECT idCustomers FROM Customers WHERE Email=?", Email).Scan(&idCustomers)
 					if err != nil {
 							http.Error(res, "Server error, unable to create your account.", 500)
@@ -151,7 +150,6 @@ func authHandler(res http.ResponseWriter, req *http.Request)  {
     			if (Admin == "1"){
     				http.Redirect(res, req, "/adminpage", 301)
     			} else {
-        				fmt.Println("log2")
         				user := &User{}
 						user.IdCustomers = idCustomers
 						userdetails,_ := json.Marshal(user)
@@ -161,11 +159,9 @@ func authHandler(res http.ResponseWriter, req *http.Request)  {
 
         		}
         	} else{
-        		fmt.Println("log3")
         			http.Redirect(res,req,"/login",301)
         	}
     } else{
-    	fmt.Println("log4")
         		http.Redirect(res,req,"/login",301)
    	}
    	// sql.DB should be long lived "defer" closes it once this function ends
@@ -424,10 +420,10 @@ func addToCart(w http.ResponseWriter, r *http.Request) {
 	    }
 	    // Search the database for the ProductName provided
 
-			err = db.QueryRow("SELECT idProducts FROM Products WHERE ProductName=?", substring[2]).Scan(&idProducts)
+			err = db.QueryRow("SELECT idProducts, UnitsInStock FROM Products WHERE ProductName=?", substring[2]).Scan(&idProducts, &UnitsInStock)
 			err = db.QueryRow("SELECT Quantity FROM Cart WHERE idProducts=? AND idCustomers=?", idProducts, substring[3]).Scan(&Quantity)
 
-			if Quantity > 0 {
+			if Quantity > 0 && UnitsInStock != 0 {
 
 				var newQuantity = Quantity + 1
 
@@ -501,8 +497,8 @@ func sendOrder(w http.ResponseWriter, r *http.Request)  {
 
 			/* Need to do! Check if userinfo inserted actually exist.
 			Take orderid that was created and add stuff from the Cart to OrderDetails with same orderid.
-			Also set Payment info, after that empty the customers cart.
-
+			Also set Payment info, after that empty the customers cart and remove quantity of every car from stock.
+			If UnitsInStock becomes 0 set ProductAvailable to 0.
 			*/
 
 			/*
@@ -569,7 +565,7 @@ func addReview(w http.ResponseWriter, req *http.Request) {
 			    }
 					err := db.QueryRow("SELECT idProducts FROM Products WHERE ProductName=?", carmodel).Scan(&idProducts)
 					_, err = db.Exec("INSERT INTO Review(idCustomers, idProducts, Rating, Review) VALUES(?, ?, ?, ?)", userId, idProducts, Rating, Review)
-
+						http.Redirect(res,req,"/showroom_nologin/"+carmodel,301)
 				if err != nil {
 					} else {
 
