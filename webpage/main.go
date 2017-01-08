@@ -462,6 +462,8 @@ func sendOrder(w http.ResponseWriter, r *http.Request)  {
 		postalcode := r.FormValue("id_postalcode")
 		phone := r.FormValue("id_phone")
 
+		log.Printf("FormValue ", email, name, address, city, postalcode, phone)
+
 		db, err = sql.Open("mysql", "pi:exoticpi@/mydb")
 	    if err != nil {
 	        panic(err.Error())
@@ -484,7 +486,7 @@ func sendOrder(w http.ResponseWriter, r *http.Request)  {
 	    var ProductName string
 	    var Price int
 			*/
-			var NewestOrderID int
+			var NewestOrderID := 0
 
 			rows, err := db.Query("SELECT idOrders FROM Orders")
 
@@ -501,11 +503,15 @@ func sendOrder(w http.ResponseWriter, r *http.Request)  {
 						panic(err.Error())
 					}
 			}
+			if newIdPayment != 0 {
+				newIdPayment := NewestOrderID + 1
+			} else {
 
-			newIdPayment := NewestOrderID + 1
+			}
 
 			log.Printf("newIdPayment ", newIdPayment)
 
+			// INSERT INTO `mydb`.`Orders` (`idOrders`, `idPayment`, `idCustomers`, `OrderDate`, `Sent`, `Paid`, `Email`, `Fullname`, `Address`, `City`, `Postalcode`, `Phone`) VALUES (NULL, '13', '4', CURRENT_TIMESTAMP, '0', '0', 'erik@google.com', 'Erik Karlsson', 'Docentvägen', 'Luleå', '977', '123');
 			_, err = db.Exec("INSERT INTO Orders(idPayment, idCustomers, Email, Fullname, Address, City, Postalcode, Phone) VALUES(?,?,?,?,?,?,?,?)", newIdPayment, userId, email, name, address, city, postalcode, phone)
 
 			log.Printf("Order Added")
