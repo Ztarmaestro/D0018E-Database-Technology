@@ -400,7 +400,6 @@ func removeFromCart(w http.ResponseWriter, r *http.Request) {
 
 func addToCart(w http.ResponseWriter, r *http.Request) {
 		result := r.URL.RequestURI()
-		log.Printf(result)
 		//substring[3] contains the customerId
 		//substring[2] contains the ProductName
 		substring := strings.Split(result,"/")
@@ -490,10 +489,14 @@ func sendOrder(w http.ResponseWriter, r *http.Request)  {
 	    var ProductName string
 	    var Price int
 			*/
+			var NewestOrderID int
 
+			err = db.QueryRow("SELECT idOrders FROM Orders WHERE idOrders DESC LIMIT 1").Scan(&NewestOrderID)
 
+			newOrderId := NewestOrderID + 1
+			log.Printf("newOrderId ", NewestOrderID )
 
-			_, err = db.Exec("INSERT INTO Orders(idCustomers, Email, Fullname, Address, City, Postalcode, Phone) VALUES(?,?,?,?,?,?,?)", userId, email, name, address, city, postalcode, phone)
+			_, err = db.Exec("INSERT INTO Orders(idPayment, idCustomers, Email, Fullname, Address, City, Postalcode, Phone) VALUES(?,?,?,?,?,?,?,?)", newOrderId, userId, email, name, address, city, postalcode, phone)
 
 
 			/* Need to do! Check if userinfo inserted actually exist.
