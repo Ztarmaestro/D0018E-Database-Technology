@@ -494,7 +494,7 @@ func sendOrder(w http.ResponseWriter, r *http.Request)  {
 
 			log.Printf("Set NewestOrderID ", NewestOrderID)
 
-			err := db.QueryRow("SELECT Username, Password FROM Customers WHERE idCustomers=?", userId).Scan(&databaseUsername, &databasePassword)
+			err := db.QueryRow("SELECT Email, Password FROM Customers WHERE idCustomers=?", userId).Scan(&databaseUsername, &databasePassword)
 
 			log.Printf("Dbuser ", databaseUsername)
 			log.Printf("DbPass ", databasePassword)
