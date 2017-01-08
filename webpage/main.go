@@ -492,7 +492,7 @@ func sendOrder(w http.ResponseWriter, r *http.Request)  {
 
 			log.Printf("Set NewestOrderID ", NewestOrderID)
 
-			err := db.QueryRow("SELECT Email, Password FROM Customers WHERE idCustomers=?", userId).Scan(&databaseUsername, &databasePassword
+			err := db.QueryRow("SELECT Email, Password FROM Customers WHERE idCustomers=?", userId).Scan(&databaseUsername, &databasePassword)
 
 			if err == nil {
 				log.Printf("check info")
@@ -506,7 +506,7 @@ func sendOrder(w http.ResponseWriter, r *http.Request)  {
 						}
 
 						for rows.Next() {
-								err := rows.Scan(&NewestOrderID)
+								err = rows.Scan(&NewestOrderID)
 
 								log.Printf("looping OrderId ", NewestOrderID)
 

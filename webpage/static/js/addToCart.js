@@ -37,9 +37,9 @@ function checkIfLogin(carmodel) {
   console.log(str);
   var res = str.split("=");
   console.log(res);
-  var res2 = res[0].split("; ");
-  console.log(res2);
-  var customerId = res2[1];
+  //var res2 = res[0].split("; ");
+  //console.log(res2);
+  var customerId = res[0];
   console.log(customerId);
 
   if (customerId != null) {
