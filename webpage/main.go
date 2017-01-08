@@ -488,6 +488,10 @@ func sendOrder(w http.ResponseWriter, r *http.Request)  {
 
 			rows, err := db.Query("SELECT idOrders FROM Orders")
 
+			if err != nil {
+				panic(err.Error())
+			}
+
 			for rows.Next() {
 					err := rows.Scan(&NewestOrderID)
 
