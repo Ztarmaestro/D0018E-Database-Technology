@@ -445,7 +445,7 @@ func addToCart(w http.ResponseWriter, r *http.Request) {
 
 		defer db.Close()}
 
-func sendOrder(w http.ResponseWriter, r *http.Request)  {
+func sendOrder(w http.ResponseWriter, r *http.Request) {
 		log.Printf("Placing order")
 
 		userId := r.FormValue("order_userId")
