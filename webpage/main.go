@@ -486,12 +486,23 @@ func sendOrder(w http.ResponseWriter, r *http.Request)  {
 			*/
 			var NewestOrderID int
 
-			err = db.QueryRow("SELECT idOrders FROM Orders WHERE id=(SELECT MAX(id) FROM Orders").Scan(&NewestOrderID)
-			log.Printf("newOrderId ", NewestOrderID )
-			newOrderId := NewestOrderID + 1
-			log.Printf("newOrderId ", newOrderId )
+			rows, err := db.Query("SELECT idOrders FROM Orders")
 
-			_, err = db.Exec("INSERT INTO Orders(idPayment, idCustomers, Email, Fullname, Address, City, Postalcode, Phone) VALUES(?,?,?,?,?,?,?,?)", newOrderId, userId, email, name, address, city, postalcode, phone)
+			for rows.Next() {
+					err := rows.Scan(&NewestOrderID)
+
+					log.Printf("looping newOrderId ", newOrderId)
+
+					if err != nil {
+						panic(err.Error())
+					}
+			}
+
+			newIdPayment := NewestOrderID + 1
+
+			log.Printf("newIdPayment ", newIdPayment)
+
+			_, err = db.Exec("INSERT INTO Orders(idPayment, idCustomers, Email, Fullname, Address, City, Postalcode, Phone) VALUES(?,?,?,?,?,?,?,?)", newIdPayment, userId, email, name, address, city, postalcode, phone)
 
 			log.Printf("newOrderId ", newOrderId )
 
