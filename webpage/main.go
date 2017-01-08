@@ -486,7 +486,7 @@ func sendOrder(w http.ResponseWriter, r *http.Request)  {
 	    var ProductName string
 	    var Price int
 			*/
-			var NewestOrderID := 0
+			var NewestOrderID = 0
 
 			rows, err := db.Query("SELECT idOrders FROM Orders")
 
@@ -504,7 +504,7 @@ func sendOrder(w http.ResponseWriter, r *http.Request)  {
 					}
 			}
 			if newIdPayment != 0 {
-				newIdPayment := NewestOrderID + 1
+				var newIdPayment = NewestOrderID + 1
 			} else {
 
 			}
