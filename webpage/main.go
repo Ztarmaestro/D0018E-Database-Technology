@@ -461,6 +461,8 @@ func sendOrder(w http.ResponseWriter, r *http.Request)  {
 		phone := r.FormValue("id_phone")
 
 		log.Printf("FormValue ", email, name, address, city, postalcode, phone)
+		log.Printf("Username ", username)
+		log.Printf("Password ", password)
 
 		db, err = sql.Open("mysql", "pi:exoticpi@/mydb")
 	    if err != nil {
@@ -492,7 +494,11 @@ func sendOrder(w http.ResponseWriter, r *http.Request)  {
 
 			err := db.QueryRow("SELECT Username, Password FROM Customers WHERE idCustomers=?", userId).Scan(&databaseUsername, &databasePassword)
 
+			log.Printf("Dbuser ", databaseUsername)
+			log.Printf("DbPass ", databasePassword)
+
 			if err == nil {
+				log.Printf("check info")
 					if (username == databaseUsername && password == databasePassword){
 						log.Printf("Confimed info correct")
 
@@ -550,7 +556,7 @@ func sendOrder(w http.ResponseWriter, r *http.Request)  {
 
 						log.Printf("Order Added")
 
-						_, err = db.Exec("DELETE FROM `Cart` WHERE idCustomers=?", userId)
+						_, err = db.Exec("DELETE * FROM `Cart` WHERE idCustomers=?", userId)
 
 					}
 				}
