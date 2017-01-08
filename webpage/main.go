@@ -448,7 +448,6 @@ func addToCart(w http.ResponseWriter, r *http.Request) {
 func sendOrder(w http.ResponseWriter, r *http.Request)  {
 		log.Printf("Placing order")
 
-
 		userId := r.FormValue("order_userId")
 
 		/*
@@ -487,13 +486,16 @@ func sendOrder(w http.ResponseWriter, r *http.Request)  {
 			*/
 			var NewestOrderID int
 
-			err = db.QueryRow("SELECT idOrders FROM Orders WHERE idOrders DESC LIMIT 1").Scan(&NewestOrderID)
-
-			newOrderId := NewestOrderID + 1
+			err := db.QueryRow("SELECT idOrders FROM Orders WHERE id=(SELECT MAX(id) FROM Orders").Scan(&NewestOrderID)
 			log.Printf("newOrderId ", NewestOrderID )
+			newOrderId := NewestOrderID + 1
+			log.Printf("newOrderId ", newOrderID )
 
 			_, err = db.Exec("INSERT INTO Orders(idPayment, idCustomers, Email, Fullname, Address, City, Postalcode, Phone) VALUES(?,?,?,?,?,?,?,?)", newOrderId, userId, email, name, address, city, postalcode, phone)
 
+			log.Printf("newOrderId ", newOrderID )
+			
+			http.Redirect(w,r,"/startpage",301)
 
 			/* Need to do! Check if userinfo inserted actually exist.
 			Take orderid that was created and add stuff from the Cart to OrderDetails with same orderid.
