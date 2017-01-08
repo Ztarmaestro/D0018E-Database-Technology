@@ -493,7 +493,7 @@ func sendOrder(w http.ResponseWriter, r *http.Request)  {
 			err := db.QueryRow("SELECT Username, Password FROM Customers WHERE Email=?", userId).Scan(&databaseUsername, &databasePassword)
 
 			if err == nil {
-					if (Email == databaseUsername && password == databasePassword){
+					if (username == databaseUsername && password == databasePassword){
 						rows, err := db.Query("SELECT idOrders FROM Orders")
 
 						if err != nil {
@@ -520,7 +520,7 @@ func sendOrder(w http.ResponseWriter, r *http.Request)  {
 						_, err = db.Exec("INSERT INTO Orders(idPayment, idCustomers, Email, Fullname, Address, City, Postalcode, Phone) VALUES(?,?,?,?,?,?,?,?)", newIdPayment, userId, email, name, address, city, postalcode, phone)
 						_, err = db.Exec("INSERT INTO Payment(idPayment, PaymentType) VALUES(?,?)", newIdPayment, PaymentType)
 
-						rows, err := db.Query("SELECT idProducts, ProductName, Quantity, TotalPrice FROM Cart WHERE idCustomers=?", userId)
+						rows, err = db.Query("SELECT idProducts, ProductName, Quantity, TotalPrice FROM Cart WHERE idCustomers=?", userId)
 
 						for rows.Next() {
 								err := rows.Scan(&idProducts, &ProductName, &Quantity, &Price)
@@ -529,15 +529,15 @@ func sendOrder(w http.ResponseWriter, r *http.Request)  {
 									panic(err.Error())
 								}
 
-								err = db.Exec("INSERT INTO OrderDetails(idOrders, idProducts, ProductName, Quantity, Price) VALUES(?,?,?,?,?)", newIdPayment, idProducts, ProductName, Quantity, Price)
-								err = db.Query("SELECT UnitsInStock, ProductAvailable FROM Products WHERE idProducts=?", idProducts).Scan(&UnitsInStock, &ProductAvailable)
+								_, err = db.Exec("INSERT INTO OrderDetails(idOrders, idProducts, ProductName, Quantity, Price) VALUES(?,?,?,?,?)", newIdPayment, idProducts, ProductName, Quantity, Price)
+								err = db.QueryRow("SELECT UnitsInStock, ProductAvailable FROM Products WHERE idProducts=?", idProducts).Scan(&UnitsInStock, &ProductAvailable)
 
 								var updatedQuantity = UnitsInStock - Quantity
 
-								err = db.Exec("update Products set UnitsInStock=? where idProducts=?", updatedQuantity, idProducts)
+								_, err = db.Exec("update Products set UnitsInStock=? where idProducts=?", updatedQuantity, idProducts)
 
 								if updatedQuantity == 0 {
-									err = db.Exec("update Products set ProductAvailable=? where idProducts=?", 0, idProducts)
+									_, err = db.Exec("update Products set ProductAvailable=? where idProducts=?", 0, idProducts)
 								}
 
 								if err != nil {
@@ -547,7 +547,7 @@ func sendOrder(w http.ResponseWriter, r *http.Request)  {
 
 						log.Printf("Order Added")
 
-						err = db.Exec("DELETE FROM `Cart` WHERE idCustomers=?", userId)
+						_, err = db.Exec("DELETE FROM `Cart` WHERE idCustomers=?", userId)
 
 					}
 				}
