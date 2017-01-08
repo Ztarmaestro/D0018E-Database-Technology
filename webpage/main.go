@@ -489,12 +489,12 @@ func sendOrder(w http.ResponseWriter, r *http.Request)  {
 			err := db.QueryRow("SELECT idOrders FROM Orders WHERE id=(SELECT MAX(id) FROM Orders").Scan(&NewestOrderID)
 			log.Printf("newOrderId ", NewestOrderID )
 			newOrderId := NewestOrderID + 1
-			log.Printf("newOrderId ", newOrderID )
+			log.Printf("newOrderId ", newOrderId )
 
 			_, err = db.Exec("INSERT INTO Orders(idPayment, idCustomers, Email, Fullname, Address, City, Postalcode, Phone) VALUES(?,?,?,?,?,?,?,?)", newOrderId, userId, email, name, address, city, postalcode, phone)
 
-			log.Printf("newOrderId ", newOrderID )
-			
+			log.Printf("newOrderId ", newOrderId )
+
 			http.Redirect(w,r,"/startpage",301)
 
 			/* Need to do! Check if userinfo inserted actually exist.
