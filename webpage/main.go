@@ -463,8 +463,6 @@ func sendOrder(w http.ResponseWriter, r *http.Request)  {
 		phone := r.FormValue("id_phone")
 
 		log.Printf("FormValue ", email, name, address, city, postalcode, phone)
-		log.Printf("Username ", username)
-		log.Printf("Password ", password)
 
 		db, err = sql.Open("mysql", "pi:exoticpi@/mydb")
 	    if err != nil {
@@ -494,10 +492,7 @@ func sendOrder(w http.ResponseWriter, r *http.Request)  {
 
 			log.Printf("Set NewestOrderID ", NewestOrderID)
 
-			err := db.QueryRow("SELECT Email, Password FROM Customers WHERE idCustomers=?", userId).Scan(&databaseUsername, &databasePassword)
-
-			log.Printf("Dbuser ", databaseUsername)
-			log.Printf("DbPass ", databasePassword)
+			err := db.QueryRow("SELECT Email, Password FROM Customers WHERE idCustomers=?", userId).Scan(&databaseUsername, &databasePassword
 
 			if err == nil {
 				log.Printf("check info")
@@ -515,9 +510,6 @@ func sendOrder(w http.ResponseWriter, r *http.Request)  {
 
 								log.Printf("looping OrderId ", NewestOrderID)
 
-								if err != nil {
-									panic(err.Error())
-								}
 						}
 						if NewestOrderID != 0 {
 							newIdPayment = NewestOrderID + 1
@@ -530,11 +522,11 @@ func sendOrder(w http.ResponseWriter, r *http.Request)  {
 						_, err = db.Exec("INSERT INTO Orders(idPayment, idCustomers, Email, Fullname, Address, City, Postalcode, Phone) VALUES(?,?,?,?,?,?,?,?)", newIdPayment, userId, email, name, address, city, postalcode, phone)
 						_, err = db.Exec("INSERT INTO Payment(idPayment, PaymentType) VALUES(?,?)", newIdPayment, PaymentType)
 
-						rows2, err = db.Query("SELECT idProducts, ProductName, Quantity, TotalPrice FROM Cart WHERE idCustomers=?", userId)
+						rows, err = db.Query("SELECT idProducts, ProductName, Quantity, TotalPrice FROM Cart WHERE idCustomers=?", userId)
 
-						for rows2.Next() {
+						for rows.Next() {
 								log.Printf("Insert cart into orderdetails")
-								err := rows2.Scan(&idProducts, &ProductName, &Quantity, &TotalPrice)
+								err := rows.Scan(&idProducts, &ProductName, &Quantity, &TotalPrice)
 
 								if err != nil {
 									panic(err.Error())
