@@ -39,7 +39,7 @@ function checkIfLogin(carmodel) {
   console.log(res);
   var res2 = res[0].split("; ");
   console.log(res2);
-  var customerId = res2[1];
+  var customerId = parseInt(res2[1]);
   console.log(customerId);
 
   if (customerId != null) {
