@@ -490,10 +490,12 @@ func sendOrder(w http.ResponseWriter, r *http.Request)  {
 
 			log.Printf("Set NewestOrderID ", NewestOrderID)
 
-			err := db.QueryRow("SELECT Username, Password FROM Customers WHERE Email=?", userId).Scan(&databaseUsername, &databasePassword)
+			err := db.QueryRow("SELECT Username, Password FROM Customers WHERE idCustomers=?", userId).Scan(&databaseUsername, &databasePassword)
 
 			if err == nil {
 					if (username == databaseUsername && password == databasePassword){
+						log.Printf("Confimed info correct")
+
 						rows, err := db.Query("SELECT idOrders FROM Orders")
 
 						if err != nil {
@@ -533,10 +535,11 @@ func sendOrder(w http.ResponseWriter, r *http.Request)  {
 								err = db.QueryRow("SELECT UnitsInStock, ProductAvailable FROM Products WHERE idProducts=?", idProducts).Scan(&UnitsInStock, &ProductAvailable)
 
 								var updatedQuantity = UnitsInStock - Quantity
-
+								log.Printf("Update UnitsInStock")
 								_, err = db.Exec("update Products set UnitsInStock=? where idProducts=?", updatedQuantity, idProducts)
 
 								if updatedQuantity == 0 {
+									log.Printf("Set ProductAvailable to 0")
 									_, err = db.Exec("update Products set ProductAvailable=? where idProducts=?", 0, idProducts)
 								}
 
