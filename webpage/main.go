@@ -403,8 +403,8 @@ func addToCart(w http.ResponseWriter, r *http.Request) {
 		log.Printf(substring[2])
 
 		   // Grab from the database
-	    var idProducts, Price, UnitsInStock, ProductAvailable string
-			var Quantity int
+	    var idProducts, Price, ProductAvailable string
+			var UnitsInStock, Quantity int
 
 	    // Create an sql.DB and check for errors
 			//db, err = sql.Open("mysql", "martin:persson@/mydb")
@@ -565,7 +565,7 @@ func addReview(w http.ResponseWriter, req *http.Request) {
 			    }
 					err := db.QueryRow("SELECT idProducts FROM Products WHERE ProductName=?", carmodel).Scan(&idProducts)
 					_, err = db.Exec("INSERT INTO Review(idCustomers, idProducts, Rating, Review) VALUES(?, ?, ?, ?)", userId, idProducts, Rating, Review)
-						http.Redirect(res,req,"/showroom_nologin/"+carmodel,301)
+						http.Redirect(w,req,"/showroom_nologin/"+carmodel,301)
 				if err != nil {
 					} else {
 
