@@ -450,10 +450,8 @@ func sendOrder(w http.ResponseWriter, r *http.Request)  {
 
 		userId := r.FormValue("order_userId")
 
-		/*
 		username := r.FormValue("username")
 		password := r.FormValue("password")
-		*/
 
 		email := r.FormValue("id_email")
 		name := r.FormValue("id_name")
@@ -477,93 +475,87 @@ func sendOrder(w http.ResponseWriter, r *http.Request)  {
 	    // Search the database for the username provided
 	    // If it exists grab the password for validation
 
-			/*
 	    var idProducts int
-	    var idCustomers int
 	    var Quantity int
-	    var TotalPrice int
-	    var idOrders string
-	    var ProductName string
 	    var Price int
-			*/
+			var UnitsInStock int
+			var ProductAvailable int
+	    var ProductName string
+			var PaymentType = "Invoice"
 			var newIdPayment int
+			var databaseUsername  string
+			var databasePassword  string
+
 			var NewestOrderID = 0
+
 			log.Printf("Set NewestOrderID ", NewestOrderID)
 
-			rows, err := db.Query("SELECT idOrders FROM Orders")
+			err := db.QueryRow("SELECT Username, Password FROM Customers WHERE Email=?", userId).Scan(&databaseUsername, &databasePassword)
 
-			if err != nil {
-				panic(err.Error())
-			}
+			if err == nil {
+					if (Email == databaseUsername && password == databasePassword){
+						rows, err := db.Query("SELECT idOrders FROM Orders")
 
-			for rows.Next() {
-					err := rows.Scan(&NewestOrderID)
+						if err != nil {
+							panic(err.Error())
+						}
 
-					log.Printf("looping OrderId ", NewestOrderID)
+						for rows.Next() {
+								err := rows.Scan(&NewestOrderID)
 
-					if err != nil {
-						panic(err.Error())
+								log.Printf("looping OrderId ", NewestOrderID)
+
+								if err != nil {
+									panic(err.Error())
+								}
+						}
+						if NewestOrderID != 0 {
+							newIdPayment = NewestOrderID + 1
+						} else {
+
+						}
+
+						log.Printf("newIdPayment ", newIdPayment)
+
+						_, err = db.Exec("INSERT INTO Orders(idPayment, idCustomers, Email, Fullname, Address, City, Postalcode, Phone) VALUES(?,?,?,?,?,?,?,?)", newIdPayment, userId, email, name, address, city, postalcode, phone)
+						_, err = db.Exec("INSERT INTO Payment(idPayment, PaymentType) VALUES(?,?)", newIdPayment, PaymentType)
+
+						rows, err := db.Query("SELECT idProducts, ProductName, Quantity, TotalPrice FROM Cart WHERE idCustomers=?", userId)
+
+						for rows.Next() {
+								err := rows.Scan(&idProducts, &ProductName, &Quantity, &Price)
+
+								if err != nil {
+									panic(err.Error())
+								}
+
+								err = db.Exec("INSERT INTO OrderDetails(idOrders, idProducts, ProductName, Quantity, Price) VALUES(?,?,?,?,?)", newIdPayment, idProducts, ProductName, Quantity, Price)
+								err = db.Query("SELECT UnitsInStock, ProductAvailable FROM Products WHERE idProducts=?", idProducts).Scan(&UnitsInStock, &ProductAvailable)
+
+								var updatedQuantity = UnitsInStock - Quantity
+
+								err = db.Exec("update Products set UnitsInStock=? where idProducts=?", updatedQuantity, idProducts)
+
+								if updatedQuantity == 0 {
+									err = db.Exec("update Products set ProductAvailable=? where idProducts=?", 0, idProducts)
+								}
+
+								if err != nil {
+									panic(err.Error())
+								}
+						}
+
+						log.Printf("Order Added")
+
+						err = db.Exec("DELETE FROM `Cart` WHERE idCustomers=?", userId)
+
 					}
-			}
-			if NewestOrderID != 0 {
-				newIdPayment = NewestOrderID + 1
-			} else {
+				}
 
-			}
+				http.Redirect(w,r,"/startpage",301)
 
-			log.Printf("newIdPayment ", newIdPayment)
-
-			// INSERT INTO `mydb`.`Orders` (`idOrders`, `idPayment`, `idCustomers`, `OrderDate`, `Sent`, `Paid`, `Email`, `Fullname`, `Address`, `City`, `Postalcode`, `Phone`) VALUES (NULL, '13', '4', CURRENT_TIMESTAMP, '0', '0', 'erik@google.com', 'Erik Karlsson', 'Docentvägen', 'Luleå', '977', '123');
-			_, err = db.Exec("INSERT INTO Orders(idPayment, idCustomers, Email, Fullname, Address, City, Postalcode, Phone) VALUES(?,?,?,?,?,?,?,?)", newIdPayment, userId, email, name, address, city, postalcode, phone)
-
-			log.Printf("Order Added")
-
-			http.Redirect(w,r,"/startpage",301)
-
-			/* Need to do! Check if userinfo inserted actually exist.
-			Take orderid that was created and add stuff from the Cart to OrderDetails with same orderid.
-			Also set Payment info, after that empty the customers cart and remove quantity of every car from stock.
-			If UnitsInStock becomes 0 set ProductAvailable to 0.
-			*/
-
-			/*
-			rows, err := db.Query("SELECT idProducts, Quantity, TotalPrice FROM Cart WHERE idCustomers=?", userId)
-
-			for rows.Next() {
-					err := rows.Scan(&idProducts, &Quantity, &TotalPrice)
-
-
-
-					if err != nil {
-						panic(err.Error())
-					}
-
-					err = db.QueryRow("SELECT PaymentType FROM Payment WHERE idPayment=?", idOrders).Scan(&PaymentType)
-
-					if err != nil {
-						panic(err.Error())
-					}
-
-					Orders.PaymentType = PaymentType
-
-					Orders_result = append(Orders_result, *Orders)
-			}
-
-		_, err = db.Exec("INSERT INTO Orders(idCustomers, Email, Name, Address, City, Postalcode, Phone) VALUES(?,?,?,?,?,?,?)", userId, email, name, address, city, postalcode, phone)
-
-		_, err = db.Exec("INSERT INTO OrderDetails(idOrders, idProducts, ProductName, Quantity, Price) VALUES(?,?,?,?,?)", idOrders, idProducts, ProductName, Quantity, Price)
-
-
-	    err = db.QueryRow("DELETE FROM Cart WHERE idCustomers=?", idCustomers).Scan(&idCustomers,&idProducts,&Quantity,&TotalPrice)
-		if err == nil {
-			} else{
-	        		//http.Redirect(w,r,"/login",301)
-	   		}
-	   	// sql.DB should be long lived "defer" closes it once this function ends
-
-			*/
-		defer db.Close()
-		}
+			defer db.Close()
+}
 
 func addReview(w http.ResponseWriter, req *http.Request) {
 
