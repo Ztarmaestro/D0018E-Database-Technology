@@ -486,7 +486,7 @@ func sendOrder(w http.ResponseWriter, r *http.Request)  {
 			*/
 			var NewestOrderID int
 
-			err := db.QueryRow("SELECT idOrders FROM Orders WHERE id=(SELECT MAX(id) FROM Orders").Scan(&NewestOrderID)
+			err = db.QueryRow("SELECT idOrders FROM Orders WHERE id=(SELECT MAX(id) FROM Orders").Scan(&NewestOrderID)
 			log.Printf("newOrderId ", NewestOrderID )
 			newOrderId := NewestOrderID + 1
 			log.Printf("newOrderId ", newOrderId )
