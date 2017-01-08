@@ -35,14 +35,10 @@ function checkIfLogin(carmodel) {
 
   var str = document.cookie;
   console.log(str);
-  var res = str.split("=");
-  console.log(res);
-  var res2 = res[0].split("; ");
-  console.log(res2);
-  var customerId = parseInt(res2[1]);
+  var customerId = str.charAt(0)
   console.log(customerId);
 
-  if (customerId != null) {
+  if (customerId != "") {
     addToCart(customerId, carmodel)
   } else {
     alert("You are not logged in and can't buy this product. Please register or login to an account");

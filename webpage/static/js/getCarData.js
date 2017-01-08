@@ -131,9 +131,8 @@ function check_info(){
   // get the users customerid
 
   var str = document.cookie;
-  var res = str.split("=");
-  var res2 = res[0].split("; ");
-  var customerId = res2[1];
+  console.log(str);
+  var customerId = str.charAt(0)
   console.log(customerId);
 
   document.getElementById('userId').value = customerId;

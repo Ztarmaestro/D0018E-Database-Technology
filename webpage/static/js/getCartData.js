@@ -63,9 +63,8 @@ function DisplayCartData(data) {
 
 function deleteFromCart(car){
   var str = document.cookie;
-  var res = str.split("=");
-  var res2 = res[0].split("; ");
-  var customerId = res2[1];
+  console.log(str);
+  var customerId = str.charAt(0)
   console.log(customerId);
   //Type is the users id that is saved in the session. carmodel is the car that is added to the cart
   var xhr = typeof XMLHttpRequest != 'undefined'
@@ -99,10 +98,8 @@ function getUserCart() {
   //Else alert and do nothing
 
   var str = document.cookie;
-  var res = str.split("=");
-  var res2 = res[0].split("; ");
-  var customerId = parseInt(res2[1]);
-
+  console.log(str);
+  var customerId = str.charAt(0)
   console.log(customerId);
 
   getCart(customerId)
@@ -113,9 +110,8 @@ function order_check_info(){
   // get the users customerid
 
   var str = document.cookie;
-  var res = str.split("=");
-  var res2 = res[0].split("; ");
-  var customerId = res2[1];
+  console.log(str);
+  var customerId = str.charAt(0)
   console.log(customerId);
 
   document.getElementById('order_userId').value = customerId;
