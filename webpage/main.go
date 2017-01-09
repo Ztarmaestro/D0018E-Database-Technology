@@ -534,8 +534,11 @@ func sendOrder(w http.ResponseWriter, r *http.Request) {
 								if err != nil {
 									panic(err.Error())
 								}
-								err = db.QueryRow("SELECT UnitsInStock, ProductAvailable, ProductName FROM Products WHERE idProducts=?", idProducts).Scan(&UnitsInStock, &ProductAvailable, &ProductName)
+								err = db.QueryRow("SELECT ProductName, UnitsInStock, ProductAvailable FROM Products WHERE idProducts=?", idProducts).Scan(&ProductName, &UnitsInStock, &ProductAvailable)
 								log.Printf("Insert cartype to orderdetail ", ProductName)
+								log.Printf("UnitsInStock ", UnitsInStock)
+								log.Printf("Is ProductAvailable ", ProductAvailable)
+
 								_, err = db.Exec("INSERT INTO OrderDetails(idOrders, idProducts, ProductName, Quantity, TotalPrice) VALUES(?,?,?,?,?)", newIdPayment, idProducts, ProductName, Quantity, TotalPrice)
 
 								var updatedQuantity = UnitsInStock - Quantity
@@ -543,6 +546,7 @@ func sendOrder(w http.ResponseWriter, r *http.Request) {
 								_, err = db.Exec("update Products set UnitsInStock=? where idProducts=?", updatedQuantity, idProducts)
 
 								if updatedQuantity == 0 {
+									log.Printf("No more of that cartype left")
 									log.Printf("Set ProductAvailable to 0")
 									_, err = db.Exec("update Products set ProductAvailable=? where idProducts=?", 0, idProducts)
 								}
