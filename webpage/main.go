@@ -404,10 +404,12 @@ func addToCart(w http.ResponseWriter, r *http.Request) {
 
 			var canIget1More = Quantity + 1
 			var newUnitInStock = UnitsInStock - canIget1More
+			log.Printf("new unit in stock ", newUnitInStock)
 
 			if UnitsInStock == 1 {
 				if Quantity >= 1 {
 					log.Printf("Can't buy one more")
+					http.Redirect(w,r,"/showroom/"+substring[2],301)
 				} else {
 				newQuantity = 1
 				err := db.QueryRow("SELECT idProducts, Price, UnitsInStock, ProductAvailable FROM Products WHERE ProductName=?", substring[2]).Scan(&idProducts, &Price, &UnitsInStock, &ProductAvailable)
@@ -549,7 +551,7 @@ func addReview(w http.ResponseWriter, req *http.Request) {
 	log.Printf("For car ", carmodel)
 
 	var idProducts int
-	var idcustomerexists string
+	var idcustomerexists int
 
 	db, err = sql.Open("mysql", "pi:exoticpi@/mydb")
 	if err != nil {
