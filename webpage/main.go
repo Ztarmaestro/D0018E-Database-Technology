@@ -558,7 +558,7 @@ func sendOrder(w http.ResponseWriter, r *http.Request) {
 
 						log.Printf("Order Added")
 
-						_, err = db.Exec("DELETE * FROM Cart WHERE idCustomers=?", userId)
+						_, err = db.Exec("DELETE FROM Cart WHERE idCustomers=?", userId)
 
 					}
 				}
