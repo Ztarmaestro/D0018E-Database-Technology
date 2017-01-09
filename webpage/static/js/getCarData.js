@@ -28,7 +28,7 @@ function DisplayCarData(data){
     }
     if(document.getElementById("Price") != null){
         Price.innerHTML = "----";
-        document.getElementById('BuyButton').href="/error"
+        document.getElementById('BuyButton').href="#"
     }
     if(document.getElementById("Description") != null){
         Description.innerHTML = data.ProductDescription;
@@ -117,11 +117,11 @@ function getReview(type) {
 function DisplayReviewData(data){
 
 	if (data != null) {
-	
+
 	    for( var i=0, l=data.length; i<l; i++ ) {
 	          var pr = document.createElement("b");
 	          pr.id = "r"+i;
-	
+
 	          document.getElementById('Product_review').appendChild(pr)
 	          document.getElementById('r'+i).innerHTML = "Rating: " + data[i].Rating + "/5 " + "\n" + "Review: " + data[i].Review;
 	          var mybr = document.createElement('br');

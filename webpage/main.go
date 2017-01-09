@@ -55,7 +55,7 @@ var db *sql.DB
 var err error
 
 func registerHandler(res http.ResponseWriter, req *http.Request) {
-	log.Printf("registerHandler")
+	log.Printf("Register new User")
 
 	Email := req.FormValue("registerEmail")
 	password := req.FormValue("registerpassword")
@@ -75,7 +75,6 @@ func registerHandler(res http.ResponseWriter, req *http.Request) {
         panic(err.Error())
   }
 
-
     err := db.QueryRow("SELECT Email FROM Customers WHERE Email=?", Email).Scan(&user)
   	log.Printf("email", Email)
    	log.Printf("password", password)
@@ -90,11 +89,11 @@ func registerHandler(res http.ResponseWriter, req *http.Request) {
 
         _, err = db.Exec("INSERT INTO Customers(Email, password) VALUES(?, ?)", Email, password)
         if err != nil {
-			http.Error(res, "Server error, unable to create your account.", 500)
+						http.Error(res, "Server error, unable to create your account.", 500)
             return
         }
-
-		http.Redirect(res, req, "/startpage", 301)
+				log.Printf("User added to DB")
+				http.Redirect(res, req, "/startpage", 301)
       	return
     case err != nil:
 		http.Error(res, "Server error, unable to create your account.", 500)
@@ -105,17 +104,13 @@ func registerHandler(res http.ResponseWriter, req *http.Request) {
     defer db.Close()}
 
 func authHandler(res http.ResponseWriter, req *http.Request)  {
-	log.Printf("authHandler")
-    // Grab the username/password from the submitted post form
+	log.Printf("Authenticating that the User exist in DB")
 	result := req.URL.RequestURI()
-
 	//substring[2] contains the username
-	//substrin3 password
+	//substring[3] contains the password
 	substring := strings.Split(result,"/")
 	Email := substring[2]
 	password := substring[3]
-    //Email := req.FormValue("loginEmail")
-    //password := req.FormValue("loginpassword"
 
     // Grab from the database
     var databaseUsername  string
@@ -147,14 +142,16 @@ func authHandler(res http.ResponseWriter, req *http.Request)  {
 							return
 					}
     			if (Admin == "1"){
+						log.Printf("User is an Superadmin. Send to adminpage")
     				http.Redirect(res, req, "/adminpage", 301)
     			} else {
-        				user := &User{}
+        		user := &User{}
 						user.IdCustomers = idCustomers
 						userdetails,_ := json.Marshal(user)
 
-        				res.Write(userdetails)
-        			//	http.Redirect(res, req, "/startpage", 301)
+						log.Printf("User exist in DB, sent back userdetails and set cookie")
+        		res.Write(userdetails)
+        		//	http.Redirect(res, req, "/startpage", 301)
 
         		}
         	} else{
@@ -165,7 +162,6 @@ func authHandler(res http.ResponseWriter, req *http.Request)  {
    	}
    	// sql.DB should be long lived "defer" closes it once this function ends
     defer db.Close()
-
  }
 
 func indexHandler(w http.ResponseWriter, r *http.Request) {
@@ -205,20 +201,6 @@ func loginHandler(w http.ResponseWriter, r *http.Request) {
   // you access the cached templates with the defined name, not the filename
 
   pagePath := "static/templates/login.html"
-
-	if t, err := template.ParseFiles(pagePath); err != nil {
-		// Something gnarly happened.
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-	} else {
-		// return to client via t.Execute
-		t.Execute(w, nil)
-	}}
-
-func adminLoginHandler(w http.ResponseWriter, r *http.Request) {
-
-	// you access the cached templates with the defined name, not the filename
-
-	pagePath := "static/templates/adminlogin.html"
 
 	if t, err := template.ParseFiles(pagePath); err != nil {
 		// Something gnarly happened.
@@ -398,8 +380,6 @@ func addToCart(w http.ResponseWriter, r *http.Request) {
 		//substring[3] contains the customerId
 		//substring[2] contains the ProductName
 		substring := strings.Split(result,"/")
-		log.Printf(substring[3])
-		log.Printf(substring[2])
 
 		   // Grab from the database
 	    var idProducts, Price, ProductAvailable string
@@ -449,19 +429,14 @@ func sendOrder(w http.ResponseWriter, r *http.Request) {
 
 		userId := r.FormValue("order_userId")
 
-		log.Printf("UserId", userId)
-
 		username := r.FormValue("username")
 		password := r.FormValue("password")
-
 		email := r.FormValue("id_email")
 		name := r.FormValue("id_name")
 		address := r.FormValue("id_address_line")
 		city := r.FormValue("id_city")
 		postalcode := r.FormValue("id_postalcode")
 		phone := r.FormValue("id_phone")
-
-		log.Printf("FormValue ", email, name, address, city, postalcode, phone)
 
 		db, err = sql.Open("mysql", "pi:exoticpi@/mydb")
 	    if err != nil {
@@ -486,24 +461,15 @@ func sendOrder(w http.ResponseWriter, r *http.Request) {
 			var newIdPayment int
 			var databaseUsername  string
 			var databasePassword  string
-
 			var NewestOrderID = 0
-
-			log.Printf("Set NewestOrderID ", NewestOrderID)
 
 			err := db.QueryRow("SELECT Email, Password FROM Customers WHERE idCustomers=?", userId).Scan(&databaseUsername, &databasePassword)
 
 			if err == nil {
-				log.Printf("check info")
 					if (username == databaseUsername && password == databasePassword){
 						log.Printf("Confimed info correct")
 
-
-							//Don't work Limit1
-
-
 						err = db.QueryRow("SELECT idOrders FROM Orders WHERE idOrders = (SELECT MAX(idOrders) FROM Orders)").Scan(&NewestOrderID)
-						log.Printf("Newest OrderId ", NewestOrderID)
 
 						if err != nil {
 							panic(err.Error())
@@ -512,10 +478,7 @@ func sendOrder(w http.ResponseWriter, r *http.Request) {
 						if NewestOrderID != 0 {
 							newIdPayment = NewestOrderID + 1
 						} else {
-
 						}
-
-						log.Printf("newIdPayment ", newIdPayment)
 
 						_, err = db.Exec("INSERT INTO Orders(idPayment, idCustomers, Email, Fullname, Address, City, Postalcode, Phone) VALUES(?,?,?,?,?,?,?,?)", newIdPayment, userId, email, name, address, city, postalcode, phone)
 						_, err = db.Exec("INSERT INTO Payment(idPayment, PaymentType) VALUES(?,?)", newIdPayment, PaymentType)
@@ -534,10 +497,6 @@ func sendOrder(w http.ResponseWriter, r *http.Request) {
 									panic(err.Error())
 								}
 								err = db.QueryRow("SELECT ProductName, UnitsInStock, ProductAvailable FROM Products WHERE idProducts=?", idProducts).Scan(&ProductName, &UnitsInStock, &ProductAvailable)
-								log.Printf("Insert cartype to orderdetail ", ProductName)
-								log.Printf("UnitsInStock ", UnitsInStock)
-								log.Printf("Is ProductAvailable ", ProductAvailable)
-
 								_, err = db.Exec("INSERT INTO OrderDetails(idOrders, idProducts, ProductName, Quantity, Price) VALUES(?,?,?,?,?)", newIdPayment, idProducts, ProductName, Quantity, TotalPrice)
 
 								var updatedQuantity = UnitsInStock - Quantity
@@ -545,8 +504,7 @@ func sendOrder(w http.ResponseWriter, r *http.Request) {
 								_, err = db.Exec("update Products set UnitsInStock=? where idProducts=?", updatedQuantity, idProducts)
 
 								if updatedQuantity == 0 {
-									log.Printf("No more of that cartype left")
-									log.Printf("Set ProductAvailable to 0")
+									log.Printf("No more of that cartype left. Set ProductAvailable to 0")
 									_, err = db.Exec("update Products set ProductAvailable=? where idProducts=?", 0, idProducts)
 								}
 
@@ -555,7 +513,7 @@ func sendOrder(w http.ResponseWriter, r *http.Request) {
 								}
 						}
 
-						log.Printf("Order Added")
+						log.Printf("Order Added. Empty cart")
 
 						_, err = db.Exec("DELETE FROM Cart WHERE idCustomers=?", userId)
 
@@ -564,16 +522,15 @@ func sendOrder(w http.ResponseWriter, r *http.Request) {
 
 				http.Redirect(w,r,"/startpage",301)
 
-			defer db.Close()
-}
+			defer db.Close()}
 
 func addReview(w http.ResponseWriter, req *http.Request) {
-
 
 	Rating := req.FormValue("Rating")
 	Review := req.FormValue("Review")
 	carmodel := req.FormValue("cartype")
 	userId := req.FormValue("userId")
+
 	var idProduct int
 	var idcustomerexists string
 
@@ -607,9 +564,8 @@ func addReview(w http.ResponseWriter, req *http.Request) {
 
 				defer db.Close()
 	} else {
-		http.Redirect(w,req,"/",301)
-	}
-}
+		http.Redirect(w,req,"/login",301)
+	}}
 
 func getReview(w http.ResponseWriter, r *http.Request) {
 
@@ -724,10 +680,6 @@ func updateDB(w http.ResponseWriter, r *http.Request) {
 	result := r.URL.RequestURI()
 	//substring[2] contains the idOrders
 	substring := strings.Split(result,"/")
-	log.Printf(substring[2])
-
-	// Grab from the database
-	//var idOrders, Sent int
 
 	// Create an sql.DB and check for errors
 	//db, err = sql.Open("mysql", "martin:persson@/mydb")
@@ -742,8 +694,6 @@ func updateDB(w http.ResponseWriter, r *http.Request) {
 			panic(err.Error())
 	}
 
-	// update to sent to 1=sent
-
 	// update
   stmt, err := db.Prepare("update Orders set Sent=? where idOrders=?")
 
@@ -756,12 +706,6 @@ func updateDB(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 			panic(err.Error())
 	}
-
-	/*err := db.Exec("UPDATE Orders SET Sent=? WHERE idOrders=?", substring[2])
-
-	if err != nil {
-			panic(err.Error())
-	}*/
 
 	defer db.Close()}
 
@@ -878,45 +822,28 @@ func showroom_nologinHandler(w http.ResponseWriter, r *http.Request) {
 			}
 	}}
 
-func errorHandler(w http.ResponseWriter, r *http.Request)  {
-
-	// you access the cached templates with the defined name, not the filename
-
-	pagePath := "static/templates/error.html"
-
-	if t, err := template.ParseFiles(pagePath); err != nil {
-		// Something gnarly happened.
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-	} else {
-		// return to client via t.Execute
-		t.Execute(w, nil)}}
-
 func main() {
 
 	// Instantiate a new router
 
 	http.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.Dir("./static"))))
 
-	//Real address for server, change back before pushing to git
+	/* Real LAN address for server */
 	bindAddr := "192.168.1.242:8080"
-
-	//Address for testing server on LAN
-	//bindAddr := "127.0.0.1:8000"
 
   //Mox Address
 	//bindAddr := "130.240.110.93:8000"
 
-	//Handlers for differnt pages
+	/* Handlers for differnt pages and call functions */
   http.HandleFunc("/", indexHandler)
   http.HandleFunc("/startpage", loggedinHandler)
   http.HandleFunc("/login", loginHandler)
-  http.HandleFunc("/admin_login", adminLoginHandler)
   http.HandleFunc("/adminpage", adminPageHandler)
 	http.HandleFunc("/checkout", checkoutHandler)
 	http.HandleFunc("/auth/", authHandler)
 	http.HandleFunc("/register", registerHandler)
-	http.HandleFunc("/error", errorHandler)
 
+	/* Handler for the Cars. If logged in or not */
 	http.HandleFunc("/showroom/ferrari", showroomHandler)
   http.HandleFunc("/showroom_nologin/ferrari", showroom_nologinHandler)
 
@@ -929,20 +856,20 @@ func main() {
 	http.HandleFunc("/showroom/camaro", showroomHandler)
 	http.HandleFunc("/showroom_nologin/camaro", showroom_nologinHandler)
 
-	// GET FUNCTIONS
+	/* GET FUNCTIONS */
 	http.HandleFunc("/car/", getCar)
 	http.HandleFunc("/cart/", getCart)
 	http.HandleFunc("/addToCart/", addToCart)
 	http.HandleFunc("/removeFromCart/", removeFromCart)
 
-	/* sendOrder, clean up everything */
+	/* Place Order */
 	http.HandleFunc("/done/", sendOrder)
 
 	/* For Admin */
 	http.HandleFunc("/everything", getAll)
 	http.HandleFunc("/update/", updateDB)
 
-	/* For review */
+	/* For Review */
 	http.HandleFunc("/getReview/", getReview)
 	http.HandleFunc("/addReview/", addReview)
 
