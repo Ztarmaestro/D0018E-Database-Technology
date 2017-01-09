@@ -528,15 +528,15 @@ func sendOrder(w http.ResponseWriter, r *http.Request) {
 						}
 
 						for rows.Next() {
-								log.Printf("Insert cart into orderdetails")
+							  log.Printf("Insert products in cart to orderdetail for user ", userId)
 								err := rows.Scan(&idProducts, &Quantity, &TotalPrice)
 
 								if err != nil {
 									panic(err.Error())
 								}
-								err := db.Query("SELECT ProductName FROM Products WHERE idProducts=?", idProducts).Scan(&ProductName)
+								err = db.QueryRow("SELECT UnitsInStock, ProductAvailable, ProductName FROM Products WHERE idProducts=?", idProducts).Scan(&ProductName, &UnitsInStock, &ProductAvailable)
+								log.Printf("Insert cartype to orderdetail ", ProductName)
 								_, err = db.Exec("INSERT INTO OrderDetails(idOrders, idProducts, ProductName, Quantity, TotalPrice) VALUES(?,?,?,?,?)", newIdPayment, idProducts, ProductName, Quantity, TotalPrice)
-								err = db.QueryRow("SELECT UnitsInStock, ProductAvailable FROM Products WHERE idProducts=?", idProducts).Scan(&UnitsInStock, &ProductAvailable)
 
 								var updatedQuantity = UnitsInStock - Quantity
 								log.Printf("Update UnitsInStock")
