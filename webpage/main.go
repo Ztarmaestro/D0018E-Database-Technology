@@ -607,6 +607,7 @@ func addReview(w http.ResponseWriter, req *http.Request) {
 
 				defer db.Close()
 	} else {
+		http.Redirect(w,req,"/",301)
 	}
 }
 

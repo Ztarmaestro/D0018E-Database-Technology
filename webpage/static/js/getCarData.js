@@ -116,15 +116,20 @@ function getReview(type) {
 
 function DisplayReviewData(data){
 
-    for( var i=0, l=data.length; i<l; i++ ) {
-          var pr = document.createElement("b");
-          pr.id = "r"+i;
-
-          document.getElementById('Product_review').appendChild(pr)
-          document.getElementById('r'+i).innerHTML = "Rating: " + data[i].Rating + "/5 " + "\n" + "Review: " + data[i].Review;
-          var mybr = document.createElement('br');
-          document.getElementById('r'+i).appendChild(mybr);
-    }
+	if (data.length != null) {
+	
+	    for( var i=0, l=data.length; i<l; i++ ) {
+	          var pr = document.createElement("b");
+	          pr.id = "r"+i;
+	
+	          document.getElementById('Product_review').appendChild(pr)
+	          document.getElementById('r'+i).innerHTML = "Rating: " + data[i].Rating + "/5 " + "\n" + "Review: " + data[i].Review;
+	          var mybr = document.createElement('br');
+	          document.getElementById('r'+i).appendChild(mybr);
+	    }
+	} else {
+	condole.log("No reviews for this car");
+	}
 }
 
 function check_info(){
