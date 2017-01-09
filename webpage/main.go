@@ -583,8 +583,6 @@ func addReview(w http.ResponseWriter, req *http.Request) {
 
 	if idcustomerexists == userId{
 
-
-
 				  // Grab everything from the database
 					var idProducts string
 
