@@ -67,9 +67,7 @@ function DisplayCartData(data) {
 }
 
 function deleteFromCart(car){
-  var str = document.cookie;
-  console.log(str);
-  var customerId = str.charAt(0)
+  var customerId = callCookie("idcustomer")
   console.log(customerId);
   //Type is the users id that is saved in the session. carmodel is the car that is added to the cart
   var xhr = typeof XMLHttpRequest != 'undefined'
@@ -104,7 +102,7 @@ function getUserCart() {
 
   var customerId = callCookie("idcustomer")
   console.log(customerId);
-  
+
   if (customerId != "") {
     getCart(customerId)
   } else {

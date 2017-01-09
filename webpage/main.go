@@ -384,7 +384,7 @@ func addToCart(w http.ResponseWriter, r *http.Request) {
 		   // Grab from the database
 	    var idProducts, Price, ProductAvailable string
 			var UnitsInStock, Quantity int
-
+			var newQuantity = 0
 	    // Create an sql.DB and check for errors
 			//db, err = sql.Open("mysql", "martin:persson@/mydb")
 			db, err = sql.Open("mysql", "pi:exoticpi@/mydb")
@@ -402,9 +402,12 @@ func addToCart(w http.ResponseWriter, r *http.Request) {
 			err = db.QueryRow("SELECT idProducts, UnitsInStock FROM Products WHERE ProductName=?", substring[2]).Scan(&idProducts, &UnitsInStock)
 			err = db.QueryRow("SELECT Quantity FROM Cart WHERE idProducts=? AND idCustomers=?", idProducts, substring[3]).Scan(&Quantity)
 
-			if (Quantity > 0) && (UnitsInStock != 0) {
+			log.Printf("Q ", Quantity)
+			log.Printf("U ", UnitsInStock)
 
-				var newQuantity = Quantity + 1
+			if UnitsInStock != 0 {
+
+				newQuantity = Quantity + 1
 
 				// Insert to cart
 				err := db.QueryRow("SELECT idProducts, Price, UnitsInStock, ProductAvailable FROM Products WHERE ProductName=?", substring[2]).Scan(&idProducts, &Price, &UnitsInStock, &ProductAvailable)
@@ -416,9 +419,7 @@ func addToCart(w http.ResponseWriter, r *http.Request) {
 				}
 
 				} else {
-					err = db.QueryRow("SELECT idProducts, Price, UnitsInStock, ProductAvailable FROM Products WHERE ProductName=?", substring[2]).Scan(&idProducts, &Price, &UnitsInStock, &ProductAvailable)
-					_, err = db.Exec("INSERT INTO Cart(idCustomers, idProducts, Quantity, TotalPrice) VALUES(?, ?, ?, ?)", substring[3], idProducts, 1, Price)
-					log.Printf("First time inserting")
+					http.Redirect(w,req,"/showroom/"+ProductName,301)
 
 				}
 
@@ -537,7 +538,7 @@ func addReview(w http.ResponseWriter, req *http.Request) {
 	var idcustomerexists string
 
 	err = db.QueryRow("SELECT idProducts FROM Products WHERE ProductName=?", carmodel).Scan(&idProduct)
-	err = db.QueryRow("SELECT idCustomers FROM Review WHERE idProducts=?", idProduct, userId).Scan(idcustomerexists)
+	err = db.QueryRow("SELECT idCustomers FROM Review WHERE idProducts=?", idProduct).Scan(idcustomerexists)
 	log.Printf("what do I get back? ", idcustomerexists)
 
 	if (idcustomerexists != userId) || (idcustomerexists == "") {
