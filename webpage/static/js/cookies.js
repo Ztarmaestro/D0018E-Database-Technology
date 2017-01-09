@@ -9,6 +9,22 @@ function setCookie(cname, cvalue, exdays) {
     window.location="/startpage"
 }
 
+function deleteCookie(cname, cvalue, exdays){
+  var str = document.cookie;
+  console.log(str);
+  var cname = str.charAt(0);
+
+  console.log("setcookie");
+    var d = new Date();
+    d.setTime(d.getTime() + (exdays*0*60*60*1000));
+    var expires = "expires="+ d.toUTCString();
+    console.log(cname);
+    var cvalue = "";
+    document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
+    window.location="/"
+}
+
+
 function newCustomerCookie() {
 	var cname = document.getElementById("registerEmail").value;
 	var cpassword = document.getElementById("registerpassword").value;
