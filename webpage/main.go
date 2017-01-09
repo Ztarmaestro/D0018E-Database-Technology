@@ -570,7 +570,12 @@ func addReview(w http.ResponseWriter, req *http.Request) {
 	err = db.QueryRow("SELECT idCustomers FROM Review WHERE idProducts=?", idProducts).Scan(idcustomerexists)
 	log.Printf("what do I get back from review? ", idcustomerexists)
 
-	ConvertedIdCustomers := strconv.Atoi(userId)
+	ConvertedIdCustomers, err := strconv.Atoi(userId)
+
+	if err != nil {
+		// handle error
+		fmt.Println(err)
+	}
 
 	if idcustomerexists !=  ConvertedIdCustomers {
 
