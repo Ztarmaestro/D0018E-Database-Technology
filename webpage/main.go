@@ -406,7 +406,6 @@ func addToCart(w http.ResponseWriter, r *http.Request) {
 			var newUnitInStock = UnitsInStock - canIget1More
 			log.Printf(newUnitInStock)
 
-			}
 			if UnitsInStock == 1 {
 				if Quantity >= 1 {
 					log.Printf("Can't buy one more")
