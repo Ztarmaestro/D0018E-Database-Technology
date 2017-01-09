@@ -33,9 +33,7 @@ function addToCart(customerId, carmodel) {
 
 function checkIfLogin(carmodel) {
 
-  var str = document.cookie;
-  console.log(str);
-  var customerId = str.charAt(0)
+  var customerId = callCookie("idcustomer")
   console.log(customerId);
 
   if (customerId != "") {

@@ -102,10 +102,9 @@ function getUserCart() {
   //Check if session exist and take the customerId and send with it
   //Else alert and do nothing
 
-  var str = document.cookie;
-  console.log(str);
-  var customerId = str.charAt(0)
+  var customerId = callCookie("idcustomer")
   console.log(customerId);
+  
   if (customerId != "") {
     getCart(customerId)
   } else {
@@ -118,9 +117,7 @@ function getUserCart() {
 function order_check_info(){
   // get the users customerid
 
-  var str = document.cookie;
-  console.log(str);
-  var customerId = str.charAt(0)
+  var customerId = callCookie("idcustomer")
   console.log(customerId);
 
   if (customerId != "") {
