@@ -413,6 +413,10 @@ func addToCart(w http.ResponseWriter, r *http.Request) {
 				err := db.QueryRow("SELECT idProducts, Price, UnitsInStock, ProductAvailable FROM Products WHERE ProductName=?", substring[2]).Scan(&idProducts, &Price, &UnitsInStock, &ProductAvailable)
 				log.Printf("First time inserting ")
 				_, err = db.Exec("INSERT INTO Cart(idCustomers, idProducts, Quantity, TotalPrice) VALUES(?, ?, ?, ?)", substring[3], idProducts, newQuantity, Price)
+
+				if err != nil {
+						panic(err.Error())
+				}
 			} else if newUnitInStock != 0 {
 
 				newQuantity = Quantity + 1
