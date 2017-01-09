@@ -128,7 +128,7 @@ function DisplayReviewData(data){
 	          document.getElementById('r'+i).appendChild(mybr);
 	    }
 	} else {
-	condole.log("No reviews for this car");
+	console.log("No reviews for this car");
 	}
 }
 
