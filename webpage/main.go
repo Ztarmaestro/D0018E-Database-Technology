@@ -539,7 +539,7 @@ func sendOrder(w http.ResponseWriter, r *http.Request) {
 								log.Printf("UnitsInStock ", UnitsInStock)
 								log.Printf("Is ProductAvailable ", ProductAvailable)
 
-								_, err = db.Exec("INSERT INTO OrderDetails(idOrders, idProducts, ProductName, Quantity, TotalPrice) VALUES(?,?,?,?,?)", newIdPayment, idProducts, ProductName, Quantity, TotalPrice)
+								_, err = db.Exec("INSERT INTO OrderDetails(idOrders, idProducts, ProductName, Quantity, Price) VALUES(?,?,?,?,?)", newIdPayment, idProducts, ProductName, Quantity, TotalPrice)
 
 								var updatedQuantity = UnitsInStock - Quantity
 								log.Printf("Update UnitsInStock")
