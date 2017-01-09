@@ -402,13 +402,15 @@ func addToCart(w http.ResponseWriter, r *http.Request) {
 			err = db.QueryRow("SELECT idProducts, UnitsInStock, ProductAvailable FROM Products WHERE ProductName=?", substring[2]).Scan(&idProducts, &UnitsInStock, &ProductAvailable)
 			err = db.QueryRow("SELECT Quantity FROM Cart WHERE idProducts=? AND idCustomers=?", idProducts, substring[3]).Scan(&Quantity)
 
-			log.Printf("Q ", Quantity)
-			log.Printf("U ", UnitsInStock)
-
 			var canIget1More = Quantity + 1
 			var newUnitInStock = UnitsInStock - canIget1More
+			log.Printf(newUnitInStock)
 
-			if (UnitsInStock == 1) && (newUnitInStock != 0){
+			}
+			if UnitsInStock == 1 {
+				if Quantity >= 1 {
+					log.Printf("Can't buy one more")
+				} else {
 				newQuantity = 1
 				err := db.QueryRow("SELECT idProducts, Price, UnitsInStock, ProductAvailable FROM Products WHERE ProductName=?", substring[2]).Scan(&idProducts, &Price, &UnitsInStock, &ProductAvailable)
 				log.Printf("First time inserting ")
@@ -417,7 +419,8 @@ func addToCart(w http.ResponseWriter, r *http.Request) {
 				if err != nil {
 						panic(err.Error())
 				}
-			} else if newUnitInStock != 0 {
+				}
+			} else if newUnitInStock >= 0 {
 
 				newQuantity = Quantity + 1
 
@@ -550,6 +553,17 @@ func addReview(w http.ResponseWriter, req *http.Request) {
 	var idProduct int
 	var idcustomerexists string
 
+	db, err = sql.Open("mysql", "pi:exoticpi@/mydb")
+	if err != nil {
+			panic(err.Error())
+	}
+
+	// Test the connection to the database
+	err = db.Ping()
+	if err != nil {
+			panic(err.Error())
+	}
+
 	err = db.QueryRow("SELECT idProducts FROM Products WHERE ProductName=?", carmodel).Scan(&idProduct)
 	log.Printf("what do I get back from Products? ", idcustomerexists)
 	err = db.QueryRow("SELECT idCustomers FROM Review WHERE idProducts=?", idProduct).Scan(idcustomerexists)
@@ -557,21 +571,6 @@ func addReview(w http.ResponseWriter, req *http.Request) {
 
 	if (idcustomerexists != userId) || (idcustomerexists == "") {
 
-				  // Grab everything from the database
-					var idProducts string
-
-			    // Create an sql.DB and check for errors
-					//db, err = sql.Open("mysql", "martin:persson@/mydb")
-					db, err = sql.Open("mysql", "pi:exoticpi@/mydb")
-			    if err != nil {
-			        panic(err.Error())
-			    }
-
-			    // Test the connection to the database
-			    err = db.Ping()
-			    if err != nil {
-			        panic(err.Error())
-			    }
 					err := db.QueryRow("SELECT idProducts FROM Products WHERE ProductName=?", carmodel).Scan(&idProducts)
 					_, err = db.Exec("INSERT INTO Review(idCustomers, idProducts, Rating, Review) VALUES(?, ?, ?, ?)", userId, idProducts, Rating, Review)
 						http.Redirect(w,req,"/showroom/"+carmodel,301)
