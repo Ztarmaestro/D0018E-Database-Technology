@@ -14,6 +14,7 @@ function deleteCookie(cname, cvalue, exdays){
   var str = document.cookie;
   console.log(str);
   var cname = str.charAt(0);
+  setCookie(cname,"idcustomer",-1);
 
   location.reload();
     
