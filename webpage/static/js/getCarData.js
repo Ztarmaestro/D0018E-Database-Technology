@@ -135,11 +135,7 @@ function check_info(){
   var customerId = str.charAt(0)
   console.log(customerId);
 
-  document.getElementById('userId').value = customerId;
-
-  return true
-
-  if (customerId != null) {
+  if (customerId != "") {
     document.getElementById('userId').value = customerId;
 
     return true
