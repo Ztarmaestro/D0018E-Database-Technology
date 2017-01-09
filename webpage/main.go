@@ -500,8 +500,10 @@ func sendOrder(w http.ResponseWriter, r *http.Request) {
 						log.Printf("Confimed info correct")
 
 
+							//Don't work Limit1
 
-						err = db.QueryRow("SELECT idOrders FROM Orders ORDER BY idOrders DESC LIMIT=?", 1).Scan(&NewestOrderID)
+
+						err = db.QueryRow("SELECT idOrders FROM Orders WHERE ID = (SELECT MAX(idOrders) FROM Orders)").Scan(&NewestOrderID)
 						log.Printf("Newest OrderId ", NewestOrderID)
 
 						if err != nil {
