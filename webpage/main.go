@@ -531,7 +531,7 @@ func addReview(w http.ResponseWriter, req *http.Request) {
 	carmodel := req.FormValue("cartype")
 	userId := req.FormValue("userId")
 
-	log.Printf("Check if User ", userId, " has writen an review before for ", carmodel)
+	log.Printf("Check if User has writen an review before ", userId)
 
 	var idProduct int
 	var idcustomerexists string
