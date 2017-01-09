@@ -419,7 +419,7 @@ func addToCart(w http.ResponseWriter, r *http.Request) {
 				}
 
 				} else {
-					http.Redirect(w,req,"/showroom/"+ProductName,301)
+					http.Redirect(w,r,"/showroom/"+substring[2],301)
 
 				}
 
