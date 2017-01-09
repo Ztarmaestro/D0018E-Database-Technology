@@ -9,6 +9,7 @@ import (
 	"database/sql"
 	_ "github.com/go-sql-driver/mysql"
 	"encoding/json"
+	"strconv"
 
 	// Third party packages not using
 	//"github.com/julienschmidt/httprouter"
@@ -569,7 +570,9 @@ func addReview(w http.ResponseWriter, req *http.Request) {
 	err = db.QueryRow("SELECT idCustomers FROM Review WHERE idProducts=?", idProducts).Scan(idcustomerexists)
 	log.Printf("what do I get back from review? ", idcustomerexists)
 
-	if (idcustomerexists != userId) || (idcustomerexists == "") {
+	ConvertedIdCustomers := strconv.Atoi(userId)
+
+	if idcustomerexists !=  ConvertedIdCustomers {
 
 					err := db.QueryRow("SELECT idProducts FROM Products WHERE ProductName=?", carmodel).Scan(&idProducts)
 					_, err = db.Exec("INSERT INTO Review(idCustomers, idProducts, Rating, Review) VALUES(?, ?, ?, ?)", userId, idProducts, Rating, Review)
