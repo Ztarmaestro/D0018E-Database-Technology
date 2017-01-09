@@ -588,9 +588,12 @@ func addReview(w http.ResponseWriter, req *http.Request) {
 					}
 
 				defer db.Close()
-	} else {
+	} else if idcustomerexists ==  ConvertedIdCustomers {
 		http.Redirect(w,req,"/showroom/"+carmodel,301)
-	}}
+	} else{
+		http.Redirect(w,req,"/login",301)
+	}
+}
 
 func getReview(w http.ResponseWriter, r *http.Request) {
 
