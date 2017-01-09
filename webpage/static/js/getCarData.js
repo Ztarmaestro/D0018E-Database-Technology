@@ -139,4 +139,14 @@ function check_info(){
 
   return true
 
+  if (customerId != null) {
+    document.getElementById('userId').value = customerId;
+
+    return true
+  } else {
+    alert("You are not logged in and can't do that. Please register or login to an account");
+    window.location = "/";
+  }
+
+
 }

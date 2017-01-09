@@ -101,8 +101,14 @@ function getUserCart() {
   console.log(str);
   var customerId = str.charAt(0)
   console.log(customerId);
+  if (customerId != null) {
+    getCart(customerId)
+  } else {
+    alert("You are not logged in and and should not be here. Please register or login to an account");
+    window.location = "/";
+  }
 
-  getCart(customerId)
+
 
 }
 
@@ -114,8 +120,13 @@ function order_check_info(){
   var customerId = str.charAt(0)
   console.log(customerId);
 
-  document.getElementById('order_userId').value = customerId;
+  if (customerId != null) {
+    document.getElementById('order_userId').value = customerId;
 
-  return true
+    return true
+  } else {
+    alert("You are not logged in and can't do that. Please register or login to an account");
+    window.location = "/";
+  }
 
 }
