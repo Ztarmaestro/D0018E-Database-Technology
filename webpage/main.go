@@ -404,7 +404,6 @@ func addToCart(w http.ResponseWriter, r *http.Request) {
 
 			var canIget1More = Quantity + 1
 			var newUnitInStock = UnitsInStock - canIget1More
-			log.Printf(newUnitInStock)
 
 			if UnitsInStock == 1 {
 				if Quantity >= 1 {
@@ -549,7 +548,7 @@ func addReview(w http.ResponseWriter, req *http.Request) {
 	log.Printf("Check if User has writen an review before ", userId)
 	log.Printf("For car ", carmodel)
 
-	var idProduct int
+	var idProducts int
 	var idcustomerexists string
 
 	db, err = sql.Open("mysql", "pi:exoticpi@/mydb")
@@ -563,8 +562,8 @@ func addReview(w http.ResponseWriter, req *http.Request) {
 			panic(err.Error())
 	}
 
-	err = db.QueryRow("SELECT idProducts FROM Products WHERE ProductName=?", carmodel).Scan(&idProduct)
-	log.Printf("what do I get back from Products? ", idcustomerexists)
+	err = db.QueryRow("SELECT idProducts FROM Products WHERE ProductName=?", carmodel).Scan(&idProducts)
+	log.Printf("what do I get back from Products? ", idProduct)
 	err = db.QueryRow("SELECT idCustomers FROM Review WHERE idProducts=?", idProduct).Scan(idcustomerexists)
 	log.Printf("what do I get back from review? ", idcustomerexists)
 
