@@ -6,7 +6,7 @@ function setCookie(cname, cvalue, exdays) {
 
     d.setTime(d.getTime() + (exdays*24*60*60*1000));
     console.log(cname);
-    document.cookie = cname + "=" + cvalue + ";" + expires;
+    document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/;";
     window.location="/startpage"
 }
 
