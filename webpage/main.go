@@ -408,7 +408,7 @@ func addToCart(w http.ResponseWriter, r *http.Request) {
 			var canIget1More = Quantity + 1
 			var newUnitInStock = UnitsInStock - canIget1More
 
-			if UnitsInStock == 1 {
+			if (UnitsInStock == 1) && (newUnitInStock != 0){
 				newQuantity = 1
 				err := db.QueryRow("SELECT idProducts, Price, UnitsInStock, ProductAvailable FROM Products WHERE ProductName=?", substring[2]).Scan(&idProducts, &Price, &UnitsInStock, &ProductAvailable)
 				log.Printf("First time inserting ")
