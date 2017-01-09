@@ -575,6 +575,15 @@ func addReview(w http.ResponseWriter, req *http.Request) {
 	Review := req.FormValue("Review")
 	carmodel := req.FormValue("cartype")
 	userId := req.FormValue("userId")
+	var idProduct int
+	var idcustomerexists int
+
+	err = db.QueryRow("SELECT idProducts FROM Products WHERE ProductName=?", carmodel).Scan(&idProduct)
+	err = db.QueryRow("SELECT idCustomers FROM Review WHERE idProducts=? AND idCustomers=?", idProduct, userId).Scan(idcustomerexists)
+
+	if idcustomerexists == userId{
+
+
 
 				  // Grab everything from the database
 					var idProducts string
@@ -599,7 +608,10 @@ func addReview(w http.ResponseWriter, req *http.Request) {
 
 					}
 
-				defer db.Close()}
+				defer db.Close()
+	} else {
+	}
+}
 
 func getReview(w http.ResponseWriter, r *http.Request) {
 
