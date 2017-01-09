@@ -534,7 +534,7 @@ func sendOrder(w http.ResponseWriter, r *http.Request) {
 								if err != nil {
 									panic(err.Error())
 								}
-								err = db.QueryRow("SELECT UnitsInStock, ProductAvailable, ProductName FROM Products WHERE idProducts=?", idProducts).Scan(&ProductName, &UnitsInStock, &ProductAvailable)
+								err = db.QueryRow("SELECT UnitsInStock, ProductAvailable, ProductName FROM Products WHERE idProducts=?", idProducts).Scan(&UnitsInStock, &ProductAvailable, &ProductName)
 								log.Printf("Insert cartype to orderdetail ", ProductName)
 								_, err = db.Exec("INSERT INTO OrderDetails(idOrders, idProducts, ProductName, Quantity, TotalPrice) VALUES(?,?,?,?,?)", newIdPayment, idProducts, ProductName, Quantity, TotalPrice)
 
