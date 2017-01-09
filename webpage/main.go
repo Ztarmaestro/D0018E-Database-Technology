@@ -402,7 +402,7 @@ func addToCart(w http.ResponseWriter, r *http.Request) {
 			err = db.QueryRow("SELECT idProducts, UnitsInStock FROM Products WHERE ProductName=?", substring[2]).Scan(&idProducts, &UnitsInStock)
 			err = db.QueryRow("SELECT Quantity FROM Cart WHERE idProducts=? AND idCustomers=?", idProducts, substring[3]).Scan(&Quantity)
 
-			if Quantity > 0 && UnitsInStock != 0 {
+			if (Quantity > 0) && (UnitsInStock != 0) {
 
 				var newQuantity = Quantity + 1
 
@@ -531,6 +531,8 @@ func addReview(w http.ResponseWriter, req *http.Request) {
 	carmodel := req.FormValue("cartype")
 	userId := req.FormValue("userId")
 
+	log.Printf("Check if User ", userId, " has writen an review before for ", carmodel)
+
 	var idProduct int
 	var idcustomerexists string
 
@@ -538,7 +540,7 @@ func addReview(w http.ResponseWriter, req *http.Request) {
 	err = db.QueryRow("SELECT idCustomers FROM Review WHERE idProducts=? AND idCustomers=?", idProduct, userId).Scan(idcustomerexists)
 	log.Printf("what do I get back? ", idcustomerexists)
 
-	if idcustomerexists != userId || idcustomerexists == "" {
+	if (idcustomerexists != userId) || (idcustomerexists == "") {
 
 				  // Grab everything from the database
 					var idProducts string

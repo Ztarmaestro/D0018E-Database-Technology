@@ -14,8 +14,9 @@ function setCookie(cname, cvalue, exdays) {
 }
 
 function deleteCookie(){
-
-  document.cookie = "username=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+  //document.cookie = 'myCookie=; expires='+new Date(0).toUTCString() +'; path=/myPath/';
+  //document.cookie = "username=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+  document.cookie = "username=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/http://79.136.28.205:8080/";
   window.location="/"
 
 }
