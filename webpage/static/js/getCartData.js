@@ -17,7 +17,7 @@ function getCart(type) {
        // obj = JSON.parse(data)
         console.log(data)
         if (data == null) {
-          alert("You don't have any products in your cart, yet. Please add products to the cart, then proceed to the checkout");
+          alert("You don't have any products in your cart, yet.\nPlease add products to the cart, then proceed to the checkout.");
           window.location = "/startpage";
         } else {
           DisplayCartData(data)
