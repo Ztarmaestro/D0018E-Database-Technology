@@ -576,7 +576,7 @@ func addReview(w http.ResponseWriter, req *http.Request) {
 	carmodel := req.FormValue("cartype")
 	userId := req.FormValue("userId")
 	var idProduct int
-	var idcustomerexists int
+	var idcustomerexists string
 
 	err = db.QueryRow("SELECT idProducts FROM Products WHERE ProductName=?", carmodel).Scan(&idProduct)
 	err = db.QueryRow("SELECT idCustomers FROM Review WHERE idProducts=? AND idCustomers=?", idProduct, userId).Scan(idcustomerexists)
