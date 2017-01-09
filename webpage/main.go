@@ -190,7 +190,7 @@ func loggedinHandler(w http.ResponseWriter, r *http.Request) {
 
   pagePath := "static/templates/navbar_logout.html"
 
-	pageTemplate := "static/templates/index.html"
+	pageTemplate := "static/templates/index_loggedin.html"
 
 	if t, err := template.ParseFiles(pagePath, pageTemplate); err != nil {
 		// Something gnarly happened.
