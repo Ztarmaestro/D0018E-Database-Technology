@@ -6,19 +6,13 @@ function setCookie(cname, cvalue, exdays) {
 
     d.setTime(d.getTime() + (exdays*24*60*60*1000));
     console.log(cname);
-    document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
+    document.cookie = cname + "=" + cvalue + ";" + expires;
     window.location="/startpage"
 }
 
-function deleteCookie(cname, cvalue, exdays){
-  var str = document.cookie;
-  console.log(str);
-  var cname = str.charAt(0);
-  setCookie(cname,"idcustomer",-1);
-
-  location.reload();
-    
-    window.location="/"
+function deleteCookie(){
+  document.cookie = "username=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+  window.location="/"
 
  // console.log("setcookie");
     //var date = new Date("12/15/1990");
