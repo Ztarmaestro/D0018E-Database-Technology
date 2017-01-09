@@ -399,13 +399,21 @@ func addToCart(w http.ResponseWriter, r *http.Request) {
 	    }
 	    // Search the database for the ProductName provided
 
-			err = db.QueryRow("SELECT idProducts, UnitsInStock FROM Products WHERE ProductName=?", substring[2]).Scan(&idProducts, &UnitsInStock)
+			err = db.QueryRow("SELECT idProducts, UnitsInStock, ProductAvailable FROM Products WHERE ProductName=?", substring[2]).Scan(&idProducts, &UnitsInStock, &ProductAvailable)
 			err = db.QueryRow("SELECT Quantity FROM Cart WHERE idProducts=? AND idCustomers=?", idProducts, substring[3]).Scan(&Quantity)
 
 			log.Printf("Q ", Quantity)
 			log.Printf("U ", UnitsInStock)
 
-			if UnitsInStock != 0 {
+			var canIget1More = Quantity + 1
+			var newUnitInStock = UnitsInStock - canIget1More
+
+			if UnitsInStock == 1 {
+
+				err := db.QueryRow("SELECT idProducts, Price, UnitsInStock, ProductAvailable FROM Products WHERE ProductName=?", substring[2]).Scan(&idProducts, &Price, &UnitsInStock, &ProductAvailable)
+				log.Printf("First time inserting ")
+				_, err = db.Exec("INSERT INTO Cart(idCustomers, idProducts, Quantity, TotalPrice) VALUES(?, ?, ?, ?)", substring[3], idProducts, newQuantity, Price)
+			} else if newUnitInStock != 0 {
 
 				newQuantity = Quantity + 1
 
