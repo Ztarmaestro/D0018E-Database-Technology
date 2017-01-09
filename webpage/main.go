@@ -503,7 +503,7 @@ func sendOrder(w http.ResponseWriter, r *http.Request) {
 							//Don't work Limit1
 
 
-						err = db.QueryRow("SELECT idOrders FROM Orders WHERE ID = (SELECT MAX(idOrders) FROM Orders)").Scan(&NewestOrderID)
+						err = db.QueryRow("SELECT idOrders FROM Orders WHERE idOrders = (SELECT MAX(idOrders) FROM Orders)").Scan(&NewestOrderID)
 						log.Printf("Newest OrderId ", NewestOrderID)
 
 						if err != nil {
@@ -521,7 +521,7 @@ func sendOrder(w http.ResponseWriter, r *http.Request) {
 						_, err = db.Exec("INSERT INTO Orders(idPayment, idCustomers, Email, Fullname, Address, City, Postalcode, Phone) VALUES(?,?,?,?,?,?,?,?)", newIdPayment, userId, email, name, address, city, postalcode, phone)
 						_, err = db.Exec("INSERT INTO Payment(idPayment, PaymentType) VALUES(?,?)", newIdPayment, PaymentType)
 
-						rows, err := db.Query("SELECT idProducts, ProductName, Quantity, TotalPrice FROM Cart WHERE idCustomers=?", userId)
+						rows, err := db.Query("SELECT idProducts, Quantity, TotalPrice FROM Cart WHERE idCustomers=?", userId)
 
 						if err != nil {
 							panic(err.Error())
@@ -529,13 +529,13 @@ func sendOrder(w http.ResponseWriter, r *http.Request) {
 
 						for rows.Next() {
 								log.Printf("Insert cart into orderdetails")
-								err := rows.Scan(&idProducts, &ProductName, &Quantity, &TotalPrice)
+								err := rows.Scan(&idProducts, &Quantity, &TotalPrice)
 
 								if err != nil {
 									panic(err.Error())
 								}
-
-								_, err = db.Exec("INSERT INTO OrderDetails(idOrders, idProducts, ProductName, Quantity, Price) VALUES(?,?,?,?,?)", newIdPayment, idProducts, ProductName, Quantity, TotalPrice)
+								err := db.Query("SELECT ProductName FROM Products WHERE idProducts=?", idProducts).Scan(&ProductName)
+								_, err = db.Exec("INSERT INTO OrderDetails(idOrders, idProducts, ProductName, Quantity, TotalPrice) VALUES(?,?,?,?,?)", newIdPayment, idProducts, ProductName, Quantity, TotalPrice)
 								err = db.QueryRow("SELECT UnitsInStock, ProductAvailable FROM Products WHERE idProducts=?", idProducts).Scan(&UnitsInStock, &ProductAvailable)
 
 								var updatedQuantity = UnitsInStock - Quantity
