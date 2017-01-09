@@ -1,10 +1,11 @@
 function setCookie(cname, cvalue, exdays) {
     console.log("setcookie");
     var d = new Date();
-    d.setTime(d.getTime() + (exdays*24*60*60*1000));
-    var expires = "expires="+ d.toUTCString();
-    console.log(cname);
     var cvalue = "idcustomer";
+    var expires = "expires="+ d.toUTCString();
+
+    d.setTime(d.getTime() + (exdays*24*60*60*1000));
+    console.log(cname);
     document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
     window.location="/startpage"
 }
@@ -14,15 +15,22 @@ function deleteCookie(cname, cvalue, exdays){
   console.log(str);
   var cname = str.charAt(0);
 
-  console.log("setcookie");
+  location.reload();
+    
+    window.location="/"
+
+ // console.log("setcookie");
     //var date = new Date("12/15/1990");
     //d.setDate(30);
    // var expires = "expires="+ d.toUTCString();
     //console.log(cname);
-    var cvalue = "";
-    //document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
-    document.cookie = cname + cvalue + "=;expires=Thu, 01 Jan 1970 00:00:00 GMT" +";path=/";
-    window.location="/"
+  //document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
+  //document.cookie = cname + cvalue + "=;expires=Thu, 01 Jan 1970 00:00:00 GMT" +";path=/";
+  //document.cookie = cname + "=" + cvalue + ";" + "-1" + ";path=/";
+   // document.cookie = cname + '=; expires=Thu, 01 Jan 1970 00:00:01 GMT;';
+
+
+
 }
 
 
