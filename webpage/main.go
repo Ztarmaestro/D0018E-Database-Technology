@@ -545,13 +545,15 @@ func addReview(w http.ResponseWriter, req *http.Request) {
 	userId := req.FormValue("userId")
 
 	log.Printf("Check if User has writen an review before ", userId)
+	log.Printf("For car ", cartype)
 
 	var idProduct int
 	var idcustomerexists string
 
 	err = db.QueryRow("SELECT idProducts FROM Products WHERE ProductName=?", carmodel).Scan(&idProduct)
+	log.Printf("what do I get back from Products? ", idcustomerexists)
 	err = db.QueryRow("SELECT idCustomers FROM Review WHERE idProducts=?", idProduct).Scan(idcustomerexists)
-	log.Printf("what do I get back? ", idcustomerexists)
+	log.Printf("what do I get back from review? ", idcustomerexists)
 
 	if (idcustomerexists != userId) || (idcustomerexists == "") {
 
