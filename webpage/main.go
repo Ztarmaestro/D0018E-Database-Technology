@@ -563,8 +563,8 @@ func addReview(w http.ResponseWriter, req *http.Request) {
 	}
 
 	err = db.QueryRow("SELECT idProducts FROM Products WHERE ProductName=?", carmodel).Scan(&idProducts)
-	log.Printf("what do I get back from Products? ", idProduct)
-	err = db.QueryRow("SELECT idCustomers FROM Review WHERE idProducts=?", idProduct).Scan(idcustomerexists)
+	log.Printf("what do I get back from Products? ", idProducts)
+	err = db.QueryRow("SELECT idCustomers FROM Review WHERE idProducts=?", idProducts).Scan(idcustomerexists)
 	log.Printf("what do I get back from review? ", idcustomerexists)
 
 	if (idcustomerexists != userId) || (idcustomerexists == "") {
