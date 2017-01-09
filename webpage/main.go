@@ -556,7 +556,7 @@ func addReview(w http.ResponseWriter, req *http.Request) {
 			    }
 					err := db.QueryRow("SELECT idProducts FROM Products WHERE ProductName=?", carmodel).Scan(&idProducts)
 					_, err = db.Exec("INSERT INTO Review(idCustomers, idProducts, Rating, Review) VALUES(?, ?, ?, ?)", userId, idProducts, Rating, Review)
-						http.Redirect(w,req,"/showroom_nologin/"+carmodel,301)
+						http.Redirect(w,req,"/showroom/"+carmodel,301)
 				if err != nil {
 					} else {
 
@@ -609,7 +609,7 @@ func getReview(w http.ResponseWriter, r *http.Request) {
 
 							Review_result = append(Review_result, *reviewlist)
 					}
-				log.Printf("1", Review_result)
+
 				if err != nil {
 					} else {
 
