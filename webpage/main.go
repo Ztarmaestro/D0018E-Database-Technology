@@ -548,9 +548,6 @@ func addReview(w http.ResponseWriter, req *http.Request) {
 	carmodel := req.FormValue("cartype")
 	userId := req.FormValue("userId")
 
-	log.Printf("Check if User has writen an review before ", userId)
-	log.Printf("For car ", carmodel)
-
 	var idProducts int
 	var idcustomerexists int
 
@@ -566,9 +563,7 @@ func addReview(w http.ResponseWriter, req *http.Request) {
 	}
 
 	err = db.QueryRow("SELECT idProducts FROM Products WHERE ProductName=?", carmodel).Scan(&idProducts)
-	log.Printf("what do I get back from Products? ", idProducts)
 	err = db.QueryRow("SELECT idCustomers FROM Review WHERE idProducts=?", idProducts).Scan(&idcustomerexists)
-	log.Printf("what do I get back from review? ", idcustomerexists)
 
 	ConvertedIdCustomers, err := strconv.Atoi(userId)
 
