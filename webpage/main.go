@@ -572,7 +572,7 @@ func addReview(w http.ResponseWriter, req *http.Request) {
 		fmt.Println(err)
 	}
 
-	if idcustomerexists !=  ConvertedIdCustomers {
+	if (idcustomerexists != ConvertedIdCustomers) && (userId != "") {
 
 					err := db.QueryRow("SELECT idProducts FROM Products WHERE ProductName=?", carmodel).Scan(&idProducts)
 					_, err = db.Exec("INSERT INTO Review(idCustomers, idProducts, Rating, Review) VALUES(?, ?, ?, ?)", userId, idProducts, Rating, Review)
@@ -583,7 +583,7 @@ func addReview(w http.ResponseWriter, req *http.Request) {
 					}
 
 				defer db.Close()
-	} else if (idcustomerexists == ConvertedIdCustomers) && (userId != "") {
+	} if idcustomerexists == ConvertedIdCustomers {
 		http.Redirect(w,req,"/showroom/"+carmodel,301)
 	} else{
 		http.Redirect(w,req,"/login",301)
