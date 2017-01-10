@@ -147,6 +147,7 @@ func authHandler(res http.ResponseWriter, req *http.Request)  {
 						user := &User{}
 						user.IdCustomers = idCustomers
 						userdetails,_ := json.Marshal(user)
+						res.Write(userdetails)
     			} else {
         		user := &User{}
 						user.IdCustomers = idCustomers
