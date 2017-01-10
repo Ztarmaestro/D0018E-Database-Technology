@@ -516,6 +516,12 @@ func sendOrder(w http.ResponseWriter, r *http.Request) {
 									panic(err.Error())
 								}
 								err = db.QueryRow("SELECT ProductName, UnitsInStock, ProductAvailable FROM Products WHERE idProducts=?", idProducts).Scan(&ProductName, &UnitsInStock, &ProductAvailable)
+								if ProductAvailable == 0 {
+									_, err = db.Exec("DELETE FROM Orders WHERE idOrders=?", newIdPayment)
+									_, err = db.Exec("DELETE FROM Cart WHERE idCustomers=? AND idProducts=?", userId, idProducts)
+									http.Redirect(w,r,"/checkout",301)
+
+								} else {
 								_, err = db.Exec("INSERT INTO OrderDetails(idOrders, idProducts, ProductName, Quantity, Price) VALUES(?,?,?,?,?)", newIdPayment, idProducts, ProductName, Quantity, TotalPrice)
 
 								var updatedQuantity = UnitsInStock - Quantity
@@ -530,6 +536,7 @@ func sendOrder(w http.ResponseWriter, r *http.Request) {
 								if err != nil {
 									panic(err.Error())
 								}
+							}
 						}
 
 						log.Printf("Order Added. Empty cart")
