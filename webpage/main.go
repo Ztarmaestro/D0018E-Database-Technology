@@ -143,8 +143,10 @@ func authHandler(res http.ResponseWriter, req *http.Request)  {
 							return
 					}
     			if (Admin == "1"){
-						log.Printf("User is an Superadmin. Send to adminpage")
-    				http.Redirect(res, req, "/adminpage", 301)
+						log.Printf("User is an Superadmin!")
+						user := &User{}
+						user.IdCustomers = idCustomers
+						userdetails,_ := json.Marshal(user)
     			} else {
         		user := &User{}
 						user.IdCustomers = idCustomers
