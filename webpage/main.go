@@ -583,7 +583,7 @@ func addReview(w http.ResponseWriter, req *http.Request) {
 					}
 
 				defer db.Close()
-	} if idcustomerexists == ConvertedIdCustomers {
+	} else if (idcustomerexists == ConvertedIdCustomers) && (userId != "") {
 		http.Redirect(w,req,"/showroom/"+carmodel,301)
 	} else{
 		http.Redirect(w,req,"/login",301)
