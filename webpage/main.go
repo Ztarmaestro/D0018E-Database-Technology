@@ -476,7 +476,7 @@ func sendOrder(w http.ResponseWriter, r *http.Request) {
 			var newIdPayment int
 			var databaseUsername  string
 			var databasePassword  string
-			var NewestOrderID = 0
+			var NewestOrderID int
 
 			err := db.QueryRow("SELECT Email, Password FROM Customers WHERE idCustomers=?", userId).Scan(&databaseUsername, &databasePassword)
 
@@ -487,12 +487,13 @@ func sendOrder(w http.ResponseWriter, r *http.Request) {
 						err = db.QueryRow("SELECT idOrders FROM Orders WHERE idOrders = (SELECT MAX(idOrders) FROM Orders)").Scan(&NewestOrderID)
 
 						if err != nil {
-							panic(err.Error())
+							NewestOrderID = 0
 						}
 
 						if NewestOrderID != 0 {
 							newIdPayment = NewestOrderID + 1
 						} else {
+							newIdPayment = NewestOrderID + 1
 						}
 
 						_, err = db.Exec("INSERT INTO Orders(idPayment, idCustomers, Email, Fullname, Address, City, Postalcode, Phone) VALUES(?,?,?,?,?,?,?,?)", newIdPayment, userId, email, name, address, city, postalcode, phone)
