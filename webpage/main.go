@@ -166,6 +166,7 @@ func authHandler(res http.ResponseWriter, req *http.Request)  {
 						userdetails,_ := json.Marshal(user)
 						res.Write(userdetails)
     			} else {
+						fmt.Println("ID ", idCustomers)
         		user := &User{}
 						user.IdCustomers = idCustomers
 						userdetails,_ := json.Marshal(user)
@@ -877,7 +878,8 @@ func main() {
 	http.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.Dir("./static"))))
 
 	/* Real LAN address for server */
-	bindAddr := "192.168.1.242:8080"
+	//bindAddr := "192.168.1.242:8080"
+	bindAddr := "79.136.28.205:8080"
 
   //Mox Address
 	//bindAddr := "130.240.110.93:8000"
