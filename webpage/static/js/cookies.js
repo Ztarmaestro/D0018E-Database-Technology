@@ -9,18 +9,18 @@ function setCookie(cname, cvalue, exdays) {
     console.log("Cookie expires " + expires);
 
     document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
-    window.location="/startpage"
+    window.location="/startpage";
 
 }
 
 function deleteCookie(){
   //document.cookie = 'myCookie=; expires='+new Date(0).toUTCString() +'; path=/myPath/';
   //document.cookie = "username=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
-  var customerId = callCookie("idcustomer")
+  var customerId = callCookie("idcustomer");
   console.log(customerId);
   document.cookie = "idcustomer" + "=" + customerId + ";" + "expires=Thu, 01 Jan 1970 00:00:00 UTC" + ";path=/";
   //document.cookie = "username=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/http://79.136.28.205:8080/";
-  window.location="/"
+  window.location="/";
 
 }
 
@@ -32,7 +32,7 @@ function newCustomerCookie() {
   console.log(cpassword);
 
   //Check if first letter in cname i capital
-  checkNewUser(cname)
+  checkNewUser(cname);
 
   var xhr = typeof XMLHttpRequest != 'undefined'
     ? new XMLHttpRequest()
@@ -53,7 +53,7 @@ function newCustomerCookie() {
         data = JSON.parse(xhr.response);
        // obj = JSON.parse(data)
         console.log(data)
-        setCookie("", data.IdCustomers, 1)
+        setCookie("", data.IdCustomers, 1);
       } else {
         console.log("error")
       }
@@ -90,7 +90,7 @@ function getCookie(type) {
         data = JSON.parse(xhr.response);
        // obj = JSON.parse(data)
         console.log(data)
-        setCookie("", data.IdCustomers, 1)
+        setCookie("", data.IdCustomers, 1);
       } else {
         console.log("error")
       }
