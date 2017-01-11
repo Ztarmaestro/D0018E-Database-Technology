@@ -120,5 +120,7 @@ function getUserCart() {
   if (customerId != "") {
     getCart(customerId);
    } else {
+     alert("You are not logged in and and should not be here. Please register or login to an account");
+     window.location = "/";
    }
  }
