@@ -43,6 +43,8 @@ if (nameok.length == 0){
 
   xhr.open('GET', '/register/'+ cname + '/' + cpassword, true);
 
+  sleep(10000);
+
   xhr.onreadystatechange = function() {
     var status;
     var data;
@@ -130,4 +132,11 @@ function checkNewUser(username) {
     return "";
 
   }
+}
+
+function sleep(miliseconds) {
+   var currentTime = new Date().getTime();
+
+   while (currentTime + miliseconds >= new Date().getTime()) {
+   }
 }
