@@ -51,7 +51,8 @@ if (nameok.length == 0){
       status = xhr.status;
       if (status == 200) {
 
-        getCookie("newCustomer",cname,cpassword);
+        alert("User now register. Now try to login.");
+        window.location = "/login";
 
       } else {
         console.log("error")
@@ -62,16 +63,11 @@ if (nameok.length == 0){
  }
 }
 
-function getCookie(type, name, password) {
+function getCookie() {
   console.log("getcookie");
 
-  if(type.length != 0){
-    var cname = name;
-  	var cpassword = password;
-  } else {
-    var cname = document.getElementById("loginEmail").value;
-    var cpassword = document.getElementById("loginpassword").value;
-  }
+  var cname = document.getElementById("loginEmail").value;
+  var cpassword = document.getElementById("loginpassword").value;
 
   console.log("username and password");
   console.log(cname);
