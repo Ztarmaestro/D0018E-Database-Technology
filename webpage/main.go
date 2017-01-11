@@ -506,7 +506,7 @@ func sendOrder(w http.ResponseWriter, r *http.Request) {
 							newIdPayment = NewestOrderID + 1
 						}
 
-						_, err = db.Exec("INSERT INTO Orders(idPayment, idCustomers, Email, Fullname, Address, City, Postalcode, Phone) VALUES(?,?,?,?,?,?,?,?)", newIdPayment, userId, email, name, address, city, postalcode, phone)
+						_, err = db.Exec("INSERT INTO Orders(id Orders, idPayment, idCustomers, Email, Fullname, Address, City, Postalcode, Phone) VALUES(?,?,?,?,?,?,?,?,?)", newIdPayment, newIdPayment, userId, email, name, address, city, postalcode, phone)
 						_, err = db.Exec("INSERT INTO Payment(idPayment, PaymentType) VALUES(?,?)", newIdPayment, PaymentType)
 
 						rows, err := db.Query("SELECT idProducts, Quantity, TotalPrice FROM Cart WHERE idCustomers=?", userId)
