@@ -10,6 +10,7 @@ import (
 	_ "github.com/go-sql-driver/mysql"
 	"encoding/json"
 	"strconv"
+	"time"
 
 	// Third party packages not using
 	//"github.com/julienschmidt/httprouter"
@@ -101,6 +102,8 @@ func registerHandler(res http.ResponseWriter, req *http.Request) {
             return
         }
 				log.Printf("User added to DB")
+				duration := time.Duration(5)*time.Second // Pause for 5 seconds
+  			time.Sleep(duration)
 				err = db.QueryRow("SELECT idCustomers FROM Customers WHERE Email=?", Email).Scan(&idCustomers)
 				if err != nil {
 						http.Error(res, "Server error, unable to create your account.", 500)
@@ -878,8 +881,7 @@ func main() {
 	http.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.Dir("./static"))))
 
 	/* Real LAN address for server */
-	//bindAddr := "192.168.1.242:8080"
-	bindAddr := "79.136.28.205:8080"
+	bindAddr := "192.168.1.242:8080"
 
   //Mox Address
 	//bindAddr := "130.240.110.93:8000"
