@@ -41,37 +41,38 @@ if (nameok.length == 0){
     ? new XMLHttpRequest()
     : new ActiveXObject('Microsoft.XMLHTTP');
 
-  xhr.open('GET', '/register/'+ cname + '/' + cpassword, true);
+  xhr.open('POST', '/register/'+ cname + '/' + cpassword, true);
 
   xhr.onreadystatechange = function() {
     var status;
-    var data;
-    // https://xhr.spec.whatwg.org/#dom-xmlhttprequest-
-    console.log(xhr.readyState)
+
+    // https://xhr.spec.whatwg.org/#dom-xmlhttprequest-readystate
     if (xhr.readyState == 4) { // `DONE`
       status = xhr.status;
-      console.log("status")
-      console.log(status);
       if (status == 200) {
-        data = JSON.parse(xhr.response);
-       // obj = JSON.parse(data)
-        console.log(data)
-        setCookie("", data.IdCustomers, 1);
+
+        getCookie("newCustomer",cname,cpassword);
+
       } else {
-        data = JSON.parse(xhr.response);
-        console.log(data)
         console.log("error")
       }
     }
   };
-  xhr.send();
+  xhr.send();;
  }
 }
 
-function getCookie(type) {
+function getCookie(type, name, password) {
   console.log("getcookie");
-	var cname = document.getElementById("loginEmail").value;
-	var cpassword = document.getElementById("loginpassword").value;
+
+  if(type.length != 0){
+    var cname = name;
+  	var cpassword = password;
+  } else {
+    var cname = document.getElementById("loginEmail").value;
+    var cpassword = document.getElementById("loginpassword").value;
+  }
+
   console.log("username and password");
   console.log(cname);
   console.log(cpassword);
