@@ -95,12 +95,12 @@ func registerHandler(res http.ResponseWriter, req *http.Request) {
             return
         }
 
-        res, err = db.Exec("INSERT INTO Customers(Email, password) VALUES(?, ?)", Email, password)
+        r, err = db.Exec("INSERT INTO Customers(Email, password) VALUES(?, ?)", Email, password)
         if err != nil {
 						http.Error(res, "Server error, unable to create your account.", 500)
             return
         }
-				id, err := res.LastInsertId()
+				id, err := r.LastInsertId()
 				if err != nil {
 				            println("Error:", err.Error())
 				        } else {
