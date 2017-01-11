@@ -105,6 +105,8 @@ func registerHandler(res http.ResponseWriter, req *http.Request) {
 				            println("Error:", err.Error())
 				        } else {
 				            println("LastInsertId:", id)
+										var a int
+										int(id) < a
 										log.Printf("User added to DB")
 										user := &User{}
 										user.IdCustomers = id
