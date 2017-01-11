@@ -31,11 +31,14 @@ function newCustomerCookie() {
   console.log(cname);
   console.log(cpassword);
 
+  //Check if first letter in cname i capital
+  checkNewUser(cname)
+
   var xhr = typeof XMLHttpRequest != 'undefined'
     ? new XMLHttpRequest()
     : new ActiveXObject('Microsoft.XMLHTTP');
 
-  xhr.open('GET', '/auth/'+ cname + '/' + cpassword, true);
+  xhr.open('GET', '/register/'+ cname + '/' + cpassword, true);
 
   xhr.onreadystatechange = function() {
     var status;
@@ -110,4 +113,15 @@ function callCookie(cname) {
         }
     }
     return "";
+}
+
+function checkNewUser(username) {
+
+  if(uesername[0].toUpperCase() == username[0])
+  {
+     return true;
+  } else {
+    alert("First letter needs to be Uppercase! Try again.");
+    window.location = "/login";
+  }
 }

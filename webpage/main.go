@@ -61,6 +61,7 @@ func registerHandler(res http.ResponseWriter, req *http.Request) {
 	Email := req.FormValue("registerEmail")
 	password := req.FormValue("registerpassword")
 
+	var idCustomers int
 	var user string
 
 	// Create an sql.DB and check for errors
@@ -94,7 +95,18 @@ func registerHandler(res http.ResponseWriter, req *http.Request) {
             return
         }
 				log.Printf("User added to DB")
-				http.Redirect(res, req, "/startpage", 301)
+				err = db.QueryRow("SELECT idCustomers FROM Customers WHERE Email=?", Email).Scan(&idCustomers)
+				if err != nil {
+						http.Error(res, "Server error, unable to create your account.", 500)
+						return
+				}
+				user := &User{}
+				user.IdCustomers = idCustomers
+				userdetails,_ := json.Marshal(user)
+
+				log.Printf("User now exist in DB, sent back new userdetails and set cookie")
+				res.Write(userdetails)
+
       	return
     case err != nil:
 		http.Error(res, "Server error, unable to create your account.", 500)

@@ -28,7 +28,7 @@ function DisplayCarData(data){
     }
     if(document.getElementById("Price") != null){
         Price.innerHTML = "----";
-        document.getElementById('BuyButton').href="#"
+        document.getElementById('BuyButton').disabled = true;
     }
     if(document.getElementById("Description") != null){
         Description.innerHTML = data.ProductDescription;

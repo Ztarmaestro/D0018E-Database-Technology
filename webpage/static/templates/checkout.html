@@ -99,14 +99,14 @@
                                         <br/><br/>
                                         <form id="order-form" action="/done/" method="POST" onsubmit="return order_check_info();" role="form">
                                               <input type="hidden" name="order_userId" id="order_userId">
-                                              <input required="required" type="text" name="username" id="username" tabindex="1" class="form-control" placeholder="Confirm Username">
+                                              <input required="required" type="email" name="username" id="username" tabindex="1" class="form-control" placeholder="Confirm Username">
                                               <input required="required" type="password" name="password" id="password" tabindex="2" class="form-control" placeholder="Confirm Password">
-                                              <input required="required" type="text" id="id_email" name="id_email" tabindex="3" class="form-control" placeholder="Email">
+                                              <input required="required" type="email" id="id_email" name="id_email" tabindex="3" class="form-control" placeholder="Email">
                                               <input required="required" type="text" id="id_name" name="id_name" tabindex="4" class="form-control" placeholder="Full Name">
                                               <input required="required" type="text" id="id_address_line" name="id_address_line" tabindex="5" class="form-control" placeholder="Address">
                                               <input required="required" type="text" id="id_city" name="id_city" tabindex="6" class="form-control" placeholder="City">
-                                              <input required="required" type="text" id="id_postalcode" name="id_postalcode" tabindex="7" class="form-control" placeholder="Postalcode">
-                                              <input required="required" type="text" id="id_phone" name="id_phone" tabindex="8" class="form-control" placeholder="Phone">
+                                              <input required="required" type="number" id="id_postalcode" name="id_postalcode" tabindex="7" class="form-control" placeholder="Postalcode">
+                                              <input required="required" type="tel" id="id_phone" name="id_phone" tabindex="8" class="form-control" placeholder="Phone">
                                               <input type="submit" name="order-submit" id="order-submit" tabindex="9" class="form-control btn btn-success" value="Place order">
                                         </form>
 
