@@ -1,4 +1,4 @@
-function checkIfLogin() {
+function checkUserLogin() {
   var customerId = callCookie("idcustomer");
   console.log(customerId);
 
