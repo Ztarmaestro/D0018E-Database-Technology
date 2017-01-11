@@ -506,7 +506,7 @@ func sendOrder(w http.ResponseWriter, r *http.Request) {
 							newIdPayment = NewestOrderID + 1
 						}
 
-						_, err = db.Exec("INSERT INTO Orders(id Orders, idPayment, idCustomers, Email, Fullname, Address, City, Postalcode, Phone) VALUES(?,?,?,?,?,?,?,?,?)", newIdPayment, newIdPayment, userId, email, name, address, city, postalcode, phone)
+						_, err = db.Exec("INSERT INTO Orders(idOrders, idPayment, idCustomers, Email, Fullname, Address, City, Postalcode, Phone) VALUES(?,?,?,?,?,?,?,?,?)", newIdPayment, newIdPayment, userId, email, name, address, city, postalcode, phone)
 						_, err = db.Exec("INSERT INTO Payment(idPayment, PaymentType) VALUES(?,?)", newIdPayment, PaymentType)
 
 						rows, err := db.Query("SELECT idProducts, Quantity, TotalPrice FROM Cart WHERE idCustomers=?", userId)
@@ -530,6 +530,26 @@ func sendOrder(w http.ResponseWriter, r *http.Request) {
 
 								} else {
 								_, err = db.Exec("INSERT INTO OrderDetails(idOrders, idProducts, ProductName, Quantity, Price) VALUES(?,?,?,?,?)", newIdPayment, idProducts, ProductName, Quantity, TotalPrice)
+
+								if err != nil {
+									panic(err.Error())
+								}
+							}
+						}
+
+						rows2, err := db.Query("SELECT idProducts, Quantity, TotalPrice FROM Cart WHERE idCustomers=?", userId)
+
+						if err != nil {
+							panic(err.Error())
+						}
+
+						for rows2.Next() {
+								err := rows2.Scan(&idProducts, &Quantity, &TotalPrice)
+
+								if err != nil {
+									panic(err.Error())
+								}
+								err = db.QueryRow("SELECT ProductName, UnitsInStock, ProductAvailable FROM Products WHERE idProducts=?", idProducts).Scan(&ProductName, &UnitsInStock, &ProductAvailable)
 
 								var updatedQuantity = UnitsInStock - Quantity
 								log.Printf("Update UnitsInStock")
