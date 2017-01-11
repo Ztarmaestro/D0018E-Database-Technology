@@ -67,7 +67,6 @@ func registerHandler(res http.ResponseWriter, req *http.Request) {
 	/* Email := req.FormValue("registerEmail")
 	password := req.FormValue("registerpassword") */
 
-	var idCustomers int
 	var user string
 
 	// Create an sql.DB and check for errors
@@ -108,7 +107,9 @@ func registerHandler(res http.ResponseWriter, req *http.Request) {
 										log.Printf("User added to DB")
 										user := &User{}
 										user.IdCustomers = id
+										log.Printf("User added to DB", user)
 										userdetails,_ := json.Marshal(user)
+										log.Printf("User added to DB", userdetails)
 
 										log.Printf("User now exist in DB, sent back new userdetails and set cookie")
 										res.Write(userdetails)
