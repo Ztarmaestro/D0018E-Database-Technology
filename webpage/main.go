@@ -10,7 +10,6 @@ import (
 	_ "github.com/go-sql-driver/mysql"
 	"encoding/json"
 	"strconv"
-	"time"
 
 	// Third party packages not using
 	//"github.com/julienschmidt/httprouter"
@@ -96,20 +95,18 @@ func registerHandler(res http.ResponseWriter, req *http.Request) {
             return
         }
 
-        _, err = db.Exec("INSERT INTO Customers(Email, password) VALUES(?, ?)", Email, password)
+        res, err = db.Exec("INSERT INTO Customers(Email, password) VALUES(?, ?)", Email, password)
         if err != nil {
 						http.Error(res, "Server error, unable to create your account.", 500)
             return
         }
-				log.Printf("User added to DB")
-				duration := time.Duration(5)*time.Second // Pause for 5 seconds
-  			time.Sleep(duration)
-				err = db.QueryRow("SELECT idCustomers FROM Customers WHERE Email=?", Email).Scan(&idCustomers)
+				id, err := res.LastInsertId()
 				if err != nil {
-						http.Error(res, "Server error, unable to create your account.", 500)
-						return
-				}
-				log.Printf("UserID", idCustomers)
+				            println("Error:", err.Error())
+				        } else {
+				            println("LastInsertId:", id)
+				        }
+				log.Printf("User added to DB")
 				user := &User{}
 				user.IdCustomers = idCustomers
 				userdetails,_ := json.Marshal(user)
