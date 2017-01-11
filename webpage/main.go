@@ -49,7 +49,7 @@ type Review struct {
 }
 
 type User struct {
-	IdCustomers						int `json=IdCustomers`
+	IdCustomers						int64 `json=IdCustomers`
 }
 
 var db *sql.DB
@@ -105,8 +105,6 @@ func registerHandler(res http.ResponseWriter, req *http.Request) {
 				            println("Error:", err.Error())
 				        } else {
 				            println("LastInsertId:", id)
-										var a int
-										int(id) < a
 										log.Printf("User added to DB")
 										user := &User{}
 										user.IdCustomers = id
@@ -164,13 +162,15 @@ func authHandler(res http.ResponseWriter, req *http.Request)  {
     			if (Admin == "1"){
 						log.Printf("User is an Superadmin!")
 						user := &User{}
-						user.IdCustomers = idCustomers
+						i64 := int64(idCustomers)
+						user.IdCustomers = i64
 						userdetails,_ := json.Marshal(user)
 						res.Write(userdetails)
     			} else {
 						fmt.Println("ID ", idCustomers)
         		user := &User{}
-						user.IdCustomers = idCustomers
+						i64 := int64(idCustomers)
+						user.IdCustomers = i64
 						userdetails,_ := json.Marshal(user)
 
 						log.Printf("User exist in DB, sent back userdetails and set cookie")
