@@ -106,14 +106,13 @@ func registerHandler(res http.ResponseWriter, req *http.Request) {
 						http.Error(res, "Server error, unable to create your account.", 500)
 						return
 				}
+				log.Printf("UserID", idCustomers)
 				user := &User{}
 				user.IdCustomers = idCustomers
 				userdetails,_ := json.Marshal(user)
 
 				log.Printf("User now exist in DB, sent back new userdetails and set cookie")
 				res.Write(userdetails)
-
-      	return
     case err != nil:
 		http.Error(res, "Server error, unable to create your account.", 500)
         return
