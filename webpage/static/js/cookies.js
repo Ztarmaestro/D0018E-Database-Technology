@@ -117,7 +117,7 @@ function callCookie(cname) {
 
 function checkNewUser(username) {
 
-  if(uesername[0].toUpperCase() == username[0])
+  if(username[0].toUpperCase() == username[0])
   {
      console.log("First letter is Uppercase " + username[0]);
   } else {
