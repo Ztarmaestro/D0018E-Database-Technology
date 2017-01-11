@@ -34,7 +34,7 @@ function newCustomerCookie() {
   //Check if first letter in cname i capital
   var nameok = checkNewUser(cname);
 
-if nameok != true{
+if nameok != ""{
   window.location="/login";
 } else {
   var xhr = typeof XMLHttpRequest != 'undefined'
@@ -123,11 +123,11 @@ function checkNewUser(username) {
   if(username[0].toUpperCase() == username[0])
   {
      console.log("First letter is Uppercase " + username[0]);
-     return true;
+     return "ok";
   } else {
     console.log("First letter is not Uppercase " + username[0]);
     alert("First letter needs to be Uppercase! Try again.");
-    return false;
+    return "";
 
   }
 }
