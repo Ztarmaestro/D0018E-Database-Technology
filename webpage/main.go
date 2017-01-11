@@ -57,9 +57,15 @@ var err error
 
 func registerHandler(res http.ResponseWriter, req *http.Request) {
 	log.Printf("Register new User")
+	result := req.URL.RequestURI()
+	//substring[2] contains the username
+	//substring[3] contains the password
+	substring := strings.Split(result,"/")
+	Email := substring[2]
+	password := substring[3]
 
-	Email := req.FormValue("registerEmail")
-	password := req.FormValue("registerpassword")
+	/* Email := req.FormValue("registerEmail")
+	password := req.FormValue("registerpassword") */
 
 	var idCustomers int
 	var user string
@@ -884,7 +890,7 @@ func main() {
   http.HandleFunc("/adminpage", adminPageHandler)
 	http.HandleFunc("/checkout", checkoutHandler)
 	http.HandleFunc("/auth/", authHandler)
-	http.HandleFunc("/register", registerHandler)
+	http.HandleFunc("/register/", registerHandler)
 
 	/* Handler for the Cars. If logged in or not */
 	http.HandleFunc("/showroom/ferrari", showroomHandler)
