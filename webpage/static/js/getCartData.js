@@ -112,3 +112,13 @@ function order_check_info(){
   }
 
 }
+
+function getUserCart() {
+  var customerId = callCookie("idcustomer");
+  console.log(customerId);
+
+  if (customerId != "") {
+    getCart(customerId);
+   } else {
+   }
+ }
