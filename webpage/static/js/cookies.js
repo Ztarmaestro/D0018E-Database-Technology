@@ -34,7 +34,7 @@ function newCustomerCookie() {
   //Check if first letter in cname i capital
   var nameok = checkNewUser(cname);
 
-if (nameok != ""){
+if (nameok.length == 0){
   window.location="/login";
 } else {
   var xhr = typeof XMLHttpRequest != 'undefined'
