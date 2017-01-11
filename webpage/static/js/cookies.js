@@ -58,6 +58,8 @@ if (nameok.length == 0){
         console.log(data)
         setCookie("", data.IdCustomers, 1);
       } else {
+        data = JSON.parse(xhr.response);
+        console.log(data)
         console.log("error")
       }
     }
