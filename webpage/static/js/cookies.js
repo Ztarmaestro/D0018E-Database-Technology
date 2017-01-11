@@ -41,7 +41,7 @@ if (nameok.length == 0){
     ? new XMLHttpRequest()
     : new ActiveXObject('Microsoft.XMLHTTP');
 
-  xhr.open('POST', '/register/'+ cname + '/' + cpassword, true);
+  xhr.open('post', "/register/"+ cname + "/" + cpassword, true);
 
   xhr.onreadystatechange = function() {
     var status;
