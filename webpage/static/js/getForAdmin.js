@@ -1,4 +1,9 @@
 function getAllData() {
+
+  var customerId = callCookie("idcustomer")
+  console.log(customerId);
+
+  if (customerId == 1){
     //Type is the users id that is saved in the session. carmodel is the car that is added to the cart
     var xhr = typeof XMLHttpRequest != 'undefined'
       ? new XMLHttpRequest()
@@ -25,6 +30,11 @@ function getAllData() {
       }
     };
     xhr.send();
+  } else {
+    alert("You are not an Admin and should not be here! Bye, bye!!!");
+    deleteCookie()
+  }
+
 }
 
 // Put all data on the admin page Orders produkt etc.
@@ -106,18 +116,4 @@ function updateOrder(orderid){
     }
   };
   xhr.send();
-}
-
-window.onload = function() {
-
-  var customerId = callCookie("idcustomer")
-  console.log(customerId);
-
-  if (customerId == 1){
-    getAllData()
-  } else {
-    alert("You are not an Admin and should not be here! Bye, bye!!!");
-    deleteCookie()
-  }
-
 }
