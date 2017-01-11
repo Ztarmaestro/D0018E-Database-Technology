@@ -119,8 +119,10 @@ function checkNewUser(username) {
 
   if(uesername[0].toUpperCase() == username[0])
   {
-     return true;
+     console.log("First letter is Uppercase " + username[0]);
   } else {
+    console.log("First letter is not Uppercase " + username[0]);
+
     alert("First letter needs to be Uppercase! Try again.");
     window.location = "/login";
   }
