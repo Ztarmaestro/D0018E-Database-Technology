@@ -86,13 +86,10 @@ func registerHandler(res http.ResponseWriter, req *http.Request) {
   	log.Printf("email", Email)
    	log.Printf("password", password)
 
-    switch {
-    case err == sql.ErrNoRows:
-    	//hashedPassword, err := bcrypt.GenerateFromPassword([]byte(password), bcrypt.DefaultCost)
-        if err == nil {
+		if err == nil {
 			http.Error(res, "Server error, unable to create your account.", 500)
-            return
-        }
+						http.Redirect(res, req, "/login", 301)
+        } else {
 
         r, err := db.Exec("INSERT INTO Customers(Email, password) VALUES(?, ?)", Email, password)
         if err != nil {
@@ -105,15 +102,10 @@ func registerHandler(res http.ResponseWriter, req *http.Request) {
 				        } else {
 				            println("LastInsertId:", id)
 										log.Printf("User added to DB")
-										log.Printf("User now exist in DB, sent back new userdetails and set cookie")
 										return
 				        }
-    case err != nil:
-		http.Error(res, "Server error, unable to create your account.", 500)
-        return
-    default:
-    	http.Redirect(res, req, "/login", 301)
-    }
+				}
+
     defer db.Close()}
 
 func authHandler(res http.ResponseWriter, req *http.Request)  {
