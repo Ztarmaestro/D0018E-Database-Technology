@@ -147,7 +147,7 @@ func authHandler(res http.ResponseWriter, req *http.Request)  {
 							return
 					}
     			if (Admin == "1"){
-						log.Printf("User is an Superadmin!")
+						log.Printf("User exist, Superadmin!")
 						user := &User{}
 						i64 := int64(idCustomers)
 						user.IdCustomers = i64
@@ -158,9 +158,7 @@ func authHandler(res http.ResponseWriter, req *http.Request)  {
         		user := &User{}
 						i64 := int64(idCustomers)
 						user.IdCustomers = i64
-						log.Printf("User added to DB", user)
 						userdetails,_ := json.Marshal(user)
-						log.Printf("User added to DB", userdetails)
 
 						log.Printf("User exist in DB, sent back userdetails and set cookie")
         		res.Write(userdetails)
