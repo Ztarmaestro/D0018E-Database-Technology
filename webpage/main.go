@@ -563,7 +563,6 @@ func sendOrder(w http.ResponseWriter, r *http.Request) {
 								if err != nil {
 									panic(err.Error())
 								}
-							}
 						}
 
 						log.Printf("Order Added. Empty cart")
