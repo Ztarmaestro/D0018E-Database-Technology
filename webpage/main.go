@@ -708,6 +708,10 @@ func getAll(w http.ResponseWriter, r *http.Request) {
 
 											rows2, err := db.Query("SELECT ProductName, Quantity, Price FROM OrderDetails WHERE idOrders=?", idOrders)
 
+											if err != nil {
+												panic(err.Error())
+											}
+											
 											for rows2.Next() {
 												err := rows.Scan(&ProductName, &Quantity, &Price)
 												sQuantity := strconv.Itoa(Quantity)
