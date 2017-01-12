@@ -684,7 +684,6 @@ func getAll(w http.ResponseWriter, r *http.Request) {
 									var Orders_result []Orders // create an array of Orders
 							    var idOrders, Sent, Paid, Quantity, Price int
 									var PaymentType, ProductName string
-									var OrderInfo = ""
 
 							    // Create an sql.DB and check for errors
 									//db, err = sql.Open("mysql", "martin:persson@/mydb")
@@ -702,6 +701,7 @@ func getAll(w http.ResponseWriter, r *http.Request) {
 									rows, err := db.Query("SELECT idOrders, Sent, Paid FROM Orders")
 
 									for rows.Next() {
+											var OrderInfo = ""
 
 									    Orders := &Orders{}
 											err := rows.Scan(&idOrders, &Sent, &Paid)
@@ -709,12 +709,12 @@ func getAll(w http.ResponseWriter, r *http.Request) {
 											rows2, err := db.Query("SELECT ProductName, Quantity, Price FROM OrderDetails WHERE idOrders=?", idOrders)
 
 											for rows2.Next() {
-												err := rows.Scan(&ProductName, &Quantity, &Price)
+												err := rows2.Scan(&ProductName, &Quantity, &Price)
 
 												if err != nil {
 													panic(err.Error())
 												}
-												
+
 												sQuantity := strconv.Itoa(Quantity)
 												sPrice := strconv.Itoa(Price)
 												OrderInfo += OrderInfo + " ProductName: " + ProductName + ", Quantity: " + sQuantity + ", Price: " + sPrice + "; "
