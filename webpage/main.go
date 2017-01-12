@@ -682,8 +682,8 @@ func getAll(w http.ResponseWriter, r *http.Request) {
 								  // Grab everything from the database
 
 									var Orders_result []Orders // create an array of Orders
-							    var idOrders, Sent, Paid, Quantity, Price, idProducts int
-									var PaymentType string
+							    var idOrders, Sent, Paid, Quantity, Price int
+									var PaymentType, ProductName string
 									var OrderInfo = ""
 
 							    // Create an sql.DB and check for errors
@@ -710,7 +710,7 @@ func getAll(w http.ResponseWriter, r *http.Request) {
 
 											for rows2.Next() {
 												err := rows.Scan(&ProductName, &Quantity, &Price)
-												OrderInfo += OrderInfo + " ProductName: " + ProductName + ", Quantity: " + Quantity + ", Price: " + Price + " "
+												OrderInfo += OrderInfo + " ProductName: " + ProductName + ", Quantity: " + Quantity + ", Price: " + Price + "; "
 											}
 
 											log.Printf("OrderInfo", OrderInfo)
