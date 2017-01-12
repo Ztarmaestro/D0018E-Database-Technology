@@ -710,7 +710,9 @@ func getAll(w http.ResponseWriter, r *http.Request) {
 
 											for rows2.Next() {
 												err := rows.Scan(&ProductName, &Quantity, &Price)
-												OrderInfo += OrderInfo + " ProductName: " + ProductName + ", Quantity: " + Quantity + ", Price: " + Price + "; "
+												sQuantity := strconv.Itoa(Quantity)
+												sPrice := strconv.Itoa(Price)
+												OrderInfo += OrderInfo + " ProductName: " + ProductName + ", Quantity: " + sQuantity + ", Price: " + sPrice + "; "
 											}
 
 											log.Printf("OrderInfo", OrderInfo)
