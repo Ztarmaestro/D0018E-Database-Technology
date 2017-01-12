@@ -41,6 +41,7 @@ type Orders struct {
 	Sent 								int `json=Sent`
 	Paid 								int `json=Paid`
 	PaymentType					string `json=PaymentType`
+	Details							string `json=Details`
 }
 
 type Review struct {
@@ -681,8 +682,9 @@ func getAll(w http.ResponseWriter, r *http.Request) {
 								  // Grab everything from the database
 
 									var Orders_result []Orders // create an array of Orders
-							    var idOrders, Sent, Paid int
+							    var idOrders, Sent, Paid, Quantity, Price, idProducts int
 									var PaymentType string
+									var OrderInfo = ""
 
 							    // Create an sql.DB and check for errors
 									//db, err = sql.Open("mysql", "martin:persson@/mydb")
@@ -700,10 +702,21 @@ func getAll(w http.ResponseWriter, r *http.Request) {
 									rows, err := db.Query("SELECT idOrders, Sent, Paid FROM Orders")
 
 									for rows.Next() {
+
 									    Orders := &Orders{}
 											err := rows.Scan(&idOrders, &Sent, &Paid)
 
+											rows2, err := db.Query("SELECT ProductName, Quantity, Price FROM OrderDetails WHERE idOrders=?", idOrders)
+
+											for rows2.Next() {
+												err := rows.Scan(&ProductName, &Quantity, &Price)
+												OrderInfo += OrderInfo + " ProductName: " + ProductName + ", Quantity: " + Quantity + ", Price: " + Price + " "
+											}
+
+											log.Printf("OrderInfo", OrderInfo)
+
 											Orders.IdOrders = idOrders
+											Orders.Details = OrderInfo
 											Orders.Sent = Sent
 											Orders.Paid = Paid
 

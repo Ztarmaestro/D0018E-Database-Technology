@@ -55,7 +55,7 @@ console.log("Time to display data");
         } else {
           var isPaid = "Not Paid";
         }
-        IdOrders.innerHTML = "OrderID: " + data[i].IdOrders + " | " + isPaid +  " | " + "PaymentType: " + data[i].PaymentType + " | " + "Sent" + " ";
+        IdOrders.innerHTML = "OrderID: " + data[i].IdOrders + " | " + data[i].Details +  " | " + isPaid +  " | " + "PaymentType: " + data[i].PaymentType + " | " + "Sent" + " ";
 
       }
     } else {
@@ -68,7 +68,7 @@ console.log("Time to display data");
         var t = document.createTextNode("Click to update order to sent");
         btn.appendChild(t);
         btn.id = "send/"+data[i].IdOrders;
-        IdOrders.innerHTML = "OrderId: " + data[i].IdOrders + " | " + isPaid + " | PaymentType: " + data[i].PaymentType + " | "+ " Order not sent " + " ";
+        IdOrders.innerHTML = "OrderId: " + data[i].IdOrders + " | " + data[i].Details +  " | " + isPaid + " | PaymentType: " + data[i].PaymentType + " | "+ " Order not sent " + " ";
         var addbutton = document.getElementById('Orderlist');
         if (addbutton != null) {
           document.getElementById('o'+i).appendChild(btn);
