@@ -717,7 +717,7 @@ func getAll(w http.ResponseWriter, r *http.Request) {
 
 												sQuantity := strconv.Itoa(Quantity)
 												sPrice := strconv.Itoa(Price)
-												OrderInfo += OrderInfo + " ProductName: " + ProductName + ", Quantity: " + sQuantity + ", Price: " + sPrice + "; "
+												OrderInfo += " ProductName: " + ProductName + ", Quantity: " + sQuantity + ", Price: " + sPrice + "; "
 											}
 
 											log.Printf("OrderInfo", OrderInfo)
